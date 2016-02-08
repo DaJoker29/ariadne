@@ -1,0 +1,19 @@
+{
+    "env": {
+        "browser": true,
+        "jquery": true
+    },
+    "rules": {
+        "quotes": [2, "single"],
+        "strict": 0,
+        "eol-last": 0,
+        "no-console": 0,
+        "no-trailing-spaces": 0,
+        "no-underscore-dangle": 0,
+        "no-spaced-func": 0,
+        "no-use-before-define": 'nofunc',
+        "no-shadow": 0,
+        "no-unused-vars": 1
+    },
+    "globals": {}
+}
