@@ -22,19 +22,94 @@
             </div>
         </nav>
 
-        <div class="list-group">
-            <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 1. Lorem ipsum dolor sit amet.</a>
-            <a href="#" class="list-group-item list-group-item-warning"><i class="fa fa-circle-o"></i> 2. Aut dignissimos veritatis laborum, ea?</a>
-            <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 3. Quos distinctio accusantium rem repellendus.</a>
-            <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 4. Reprehenderit et sapiente, quasi sint!</a>
-            <a href="#" class="list-group-item list-group-item-success"><i class="fa fa-circle-o"></i> 5. Nemo sed, illum doloribus soluta.</a>
-            <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 6. Tempore quas dignissimos vero, asperiores!</a>
-            <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 7. Sint repellat voluptates delectus excepturi?</a>
-            <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 8. Quisquam nesciunt dolore suscipit eveniet.</a>
-            <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 9. Hic odit repellendus itaque, quo.</a>
+        <!-- Dashboard -->
+        <div class="page-header">
+            <h3>The Dashboard</h3>
+        </div>
+        <div class="row">
+
+            <!-- Active List -->
+            <div class="list-group col-md-4">
+                <a href="#" class="list-group-item list-group-item-warning"><i class="fa fa-circle-o"></i> 2. Aut dignissimos veritatis laborum, ea?</a>
+                <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 3. Quos distinctio accusantium rem repellendus.</a>
+                <a href="#" class="list-group-item list-group-item-success"><i class="fa fa-circle-o"></i> 5. Nemo sed, illum doloribus soluta.</a>
+                <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 6. Tempore quas dignissimos vero, asperiores!</a>
+                <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 7. Sint repellat voluptates delectus excepturi?</a>
+                <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 9. Hic odit repellendus itaque, quo.</a>
+            </div>
+
+            <!-- Completed List -->
+            <div class="list-group col-md-4">
+                <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 1. Lorem ipsum dolor sit amet.</a>
+                <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 4. Reprehenderit et sapiente, quasi sint!</a>
+                <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 8. Quisquam nesciunt dolore suscipit eveniet.</a>
+            </div>
+
+            <!-- Notes -->
+            <div class="col-md-4">
+                <textarea name="notes" id="notes" cols="30" rows="10" placeholder="Notes go here" class="form-control"></textarea>
+            </div>
         </div>
 
-        <textarea name="notes" id="notes" cols="30" rows="10" placeholder="Notes go here" class="form-control"></textarea>
+        <!-- Vault Lists -->
+        <div class="page-header">
+            <h3>The Vault</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Personal</h3>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Work</h3>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item active list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item active list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Blog</h3>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Animations</h3>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item active list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item active list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                        <a href="#" class="list-group-item list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </main>
 
