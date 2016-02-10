@@ -1,6 +1,11 @@
 app.controller(
     'taskController',
     ['$scope', '$resource', function ($scope, $resource) {
+
+        // Defaults
+        $scope.taskName = '';
+        $scope.taskCategory = 'Personal';
+
         var Task = $resource('/api/tasks');
 
         Task.query(function ( results ) {
@@ -14,7 +19,7 @@ app.controller(
             task.$save(function ( result ) {
                 $scope.tasks.push( result );
                 $scope.taskName = '';
-                $scope.taskCategory = '';
+                $scope.taskCategory = 'Personal';
             });
         };
 }]);

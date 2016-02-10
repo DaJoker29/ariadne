@@ -1,0 +1,158 @@
+<html ng-app="taskApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ariadne</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+<body>
+    <main class="container" ng-controller="taskController">
+
+        <!-- Title -->
+        <div class="page-header">
+            <h1>Ariadne <small>An Intelligent Task List</small></h1>
+        </div>
+
+        <div class="page-header">
+            <h2>Prototype</h2>
+        </div>
+
+        <!-- Add New Task -->
+        <div class="page-header">
+            <h4>Create Task</h4>
+        </div>
+        <form ng-submit="createTask()">
+            <div class="form-group">
+                <input type="text" placeholder="Name" class="form-control" ng-model="taskName">
+            </div>
+            <div class="form-group">
+                <select class="form-control" ng-model="taskCategory">
+                    <option value="Personal" default>Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Blog">Blog</option>
+                    <option value="Animation">Animation</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary">Add</button>
+        </form>
+
+        <!-- Task List -->
+        <div class="page-header">
+            <h4>Task List</h4>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="task in tasks">
+                <span class="label label-default pull-right">{{task.category}}</span> {{task.name}}
+            </li>
+        </ul>
+
+        <div class="page-header">
+            <h2>Mockup</h2>
+        </div>
+
+        <div class="well">
+            <!-- Dashboard -->
+            <div class="row">
+                <div class="page-header">
+                    <h3 class="text-center">Dashboard</h3>
+                </div>
+                <!-- Active List -->
+                <div class="list-group col-md-4">
+                    <h4>Active</h4>
+                    <a href="#" class="list-group-item list-group-item-warning"><i class="fa fa-circle-o"></i> 2. Aut dignissimos veritatis laborum, ea?</a>
+                    <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 3. Quos distinctio accusantium rem repellendus.</a>
+                    <a href="#" class="list-group-item list-group-item-success"><i class="fa fa-circle-o"></i> 5. Nemo sed, illum doloribus soluta.</a>
+                    <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 6. Tempore quas dignissimos vero, asperiores!</a>
+                    <a href="#" class="list-group-item list-group-item-info"><i class="fa fa-circle-o"></i> 7. Sint repellat voluptates delectus excepturi?</a>
+                    <a href="#" class="list-group-item list-group-item-danger"><i class="fa fa-circle-o"></i> 9. Hic odit repellendus itaque, quo.</a>
+                </div>
+
+                <!-- Completed List -->
+                <div class="list-group col-md-4">
+                    <h4>Completed</h4>
+                    <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 1. Lorem ipsum dolor sit amet.</a>
+                    <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 4. Reprehenderit et sapiente, quasi sint!</a>
+                    <a href="#" class="list-group-item disabled strike"><i class="fa fa-circle"></i> 8. Quisquam nesciunt dolore suscipit eveniet.</a>
+                </div>
+
+                <!-- Notes -->
+                <div class="col-md-4">
+                    <h4>Notes</h4>
+                    <textarea name="notes" id="notes" cols="30" rows="10" placeholder="Notes go here" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <!-- Vault Lists -->
+            <div class="row">
+                <div class="page-header">
+                    <h3 class="text-center">The Vault</h3>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Personal</h3>
+                        </div>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item active list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-success">Lorem ipsum dolor sit amet.</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Work</h3>
+                        </div>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item active list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item active list-group-item-info">Lorem ipsum dolor sit amet.</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Blog</h3>
+                        </div>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item active list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-warning">Lorem ipsum dolor sit amet.</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Animations</h3>
+                        </div>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item active list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item active list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                            <a href="#" class="list-group-item list-group-item-danger">Lorem ipsum dolor sit amet.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-resource.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/controllers/taskController.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ mongoose.connect('mongodb://localhost:27017/ariadne');
 app.use(bodyParser());
 
 app.get('/', function ( req, res) {
-    res.sendFile(__dirname + '/dist/index.html');
+    res.sendFile(__dirname + '/client/views/index.html');
 });
 
 app.use('/js', express.static(__dirname + '/client/js'));
