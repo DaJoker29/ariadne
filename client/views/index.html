@@ -43,7 +43,13 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="task in tasks">
-                <span class="label label-default pull-right">{{task.category}}</span> {{task.name}}
+                {{task.name}}
+                <div class="pull-right">
+                    <span class="label label-default">{{task.category}}</span>
+                    <span class="label label-default">{{task.current ? 'Active': 'Inactive'}}</span>
+                    <span class="label label-default">{{task.completed ? 'Done' : 'Incomplete'}}</span>
+                    <span class="label label-default">{{task.createdOn | date: 'short'}}</span>
+                </div>
             </li>
         </ul>
 

@@ -5,7 +5,7 @@ var schema = new mongoose.Schema({
     createdOn:  { type: Date, default: Date.now},
     category:   String,
     current:    { type: Boolean, default: false },
-    complete:   { type: Boolean, default: false }
+    completed:   { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('Task', schema);
