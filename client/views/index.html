@@ -48,7 +48,8 @@
                 <span class="label label-default">{{task.current ? 'Active': 'Inactive'}}</span>
                 <span class="label label-default">{{task.completed ? 'Done' : 'Incomplete'}}</span>
                 <span class="label label-default">{{task.createdOn | date: 'short'}}</span>
-                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"> </a href="#">
+                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
+                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-cog pull-right"></a>
             </li>
         </ul>
 
