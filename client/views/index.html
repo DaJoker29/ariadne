@@ -29,9 +29,10 @@
         </div>
         <div class="list-group">
             <li class="list-group-item" ng-repeat="task in tasks | filter : {current: true}" ng-class="{disabled: task.completed}">
-                <span class="">{{task.name}} </span>
+                <span>{{task.name}} </span>
                 <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
-                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a>
+                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-if="!task.completed"></a>
+                <a href="#" ng-click="toggleCompletion(task._id)" class="text-muted fa fa-fw fa-check pull-right" ng-class="task.completed ? 'text-danger' : 'text-muted'"></a>
             </li>
         </div>
 
