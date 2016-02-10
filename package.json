@@ -27,5 +27,10 @@
   "bugs": {
     "url": "https://github.com/DaJoker29/ariadne/issues"
   },
-  "homepage": "https://github.com/DaJoker29/ariadne#readme"
+  "homepage": "https://github.com/DaJoker29/ariadne#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.3"
+  }
 }
