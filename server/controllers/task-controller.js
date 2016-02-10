@@ -30,3 +30,9 @@ module.exports.remove = function ( req, res ) {
         res.json ( result );
     });
 }
+
+module.exports.getCategory = function ( req, res ) {
+    Task.find({ category: new RegExp(req.params.category, "i") }, function ( err, results ) {
+        res.json( results );
+    });
+}

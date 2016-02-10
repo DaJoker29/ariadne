@@ -25,6 +25,8 @@ app.get('/api/tasks/:id', taskController.listOne);
 app.post('/api/tasks/:id', taskController.modify);
 app.delete('/api/tasks/:id', taskController.remove);
 
+app.get('/api/tasks/category/:category', taskController.getCategory);
+
 // Start listening
 app.listen(3000, function() {
     console.log('Listening');
