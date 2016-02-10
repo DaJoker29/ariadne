@@ -7,3 +7,7 @@
   opacity: 1;
   text-decoration: none;
 }
+
+.strike {
+  text-decoration: line-through;
+}

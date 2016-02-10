@@ -41,4 +41,12 @@ app.controller(
                 return;
             });
         };
+
+        $scope.toggleCompletion = function ( taskID ) {
+            var doc = $filter('filter')($scope.tasks, { _id: taskID })[0];
+            doc.completed = !doc.completed;
+            Task.save( {id: taskID}, doc, function() {
+                return;
+            });
+        };
 }]);
