@@ -29,6 +29,8 @@
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "body-parser": "^1.14.2",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.3"
   }
 }
