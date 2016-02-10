@@ -1,10 +1,11 @@
 app.controller(
     'taskController',
-    ['$scope', '$resource', function ($scope, $resource) {
+    ['$scope', '$resource', '$filter', function ($scope, $resource, $filter) {
 
         // Defaults
         $scope.taskName = '';
         $scope.taskCategory = 'Personal';
+        $scope.tasks = [];
 
         var Task = $resource('/api/tasks');
 
@@ -22,4 +23,14 @@ app.controller(
                 $scope.taskCategory = 'Personal';
             });
         };
+
+        $scope.removeTask = function ( taskID ) {
+            var Task = $resource('/api/tasks/:id', {id: '@id'});
+            var task = Task.remove({id: taskID}, function ( result ) {
+                $scope.tasks = $filter('filter')($scope.tasks, function (e) {
+                    return e._id !== result._id;
+                });
+
+            })
+        }
 }]);
