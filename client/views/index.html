@@ -5,6 +5,7 @@
     <title>Ariadne</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <main class="container" ng-controller="taskController">
@@ -17,6 +18,30 @@
         <div class="page-header">
             <h2>Prototype</h2>
         </div>
+
+        <!-- Active List -->
+        <div class="page-header">
+            <h4>Active</h4>
+        </div>
+        <div class="list-group">
+            <li class="list-group-item" ng-repeat="task in tasks | filter : {current: true}" ng-class="{disabled: task.completed}">
+                <span class="">{{task.name}} </span>
+                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
+                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a>
+            </li>
+        </div>
+
+        <!-- Task List -->
+        <div class="page-header">
+            <h4>Task List</h4>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="task in tasks | filter: {current: false}" data-id="{{task._id}}" ng-class="{active: task.current}">
+                <span class="">{{task.name}} </span>
+                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
+                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-plus pull-right" ng-if="!task.current"></a>
+            </li>
+        </ul>
 
         <!-- Add New Task -->
         <div class="page-header">
@@ -36,22 +61,6 @@
             </div>
             <button type="submit" class="btn btn-lg btn-primary">Add</button>
         </form>
-
-        <!-- Task List -->
-        <div class="page-header">
-            <h4>Task List</h4>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item" ng-repeat="task in tasks" data-id="{{task._id}}">
-                <span class="">{{task.name}} </span>
-                <span class="label label-default">{{task.category}}</span>
-                <span class="label label-default">{{task.current ? 'Active': 'Inactive'}}</span>
-                <span class="label label-default">{{task.completed ? 'Done' : 'Incomplete'}}</span>
-                <span class="label label-default">{{task.createdOn | date: 'short'}}</span>
-                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
-                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-cog pull-right"></a>
-            </li>
-        </ul>
 
         <div class="page-header">
             <h2>Mockup</h2>

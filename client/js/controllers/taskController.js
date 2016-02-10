@@ -38,7 +38,7 @@ app.controller(
             var doc = $filter('filter')($scope.tasks, { _id: taskID })[0];
             doc.current = !doc.current;
             Task.save( {id: taskID}, doc, function() {
-                console.log(doc._id + ' toggled (current)');
+                return;
             });
         };
 }]);
