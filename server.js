@@ -18,6 +18,11 @@ app.get('/', function ( req, res) {
 app.use('/js', express.static(__dirname + '/client/js'));
 
 // API
+
+// Not entirely sure why but these two calls have to come before the general calls below
+app.get('/api/tasks/completed', taskController.getCompleted);
+app.get('/api/tasks/current', taskController.getCurrent);
+
 app.post('/api/tasks', taskController.create);
 app.get('/api/tasks', taskController.list);
 
@@ -26,6 +31,7 @@ app.post('/api/tasks/:id', taskController.modify);
 app.delete('/api/tasks/:id', taskController.remove);
 
 app.get('/api/tasks/category/:category', taskController.getCategory);
+
 
 // Start listening
 app.listen(3000, function() {

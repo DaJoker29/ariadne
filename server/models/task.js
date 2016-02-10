@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 
-var schema = {
+var schema = new mongoose.Schema({
     name:       String,
-    createdOn:  Date,
+    createdOn:  { type: Date, default: Date.now},
     category:   String,
-    current:    Boolean,
-    complete:   Boolean
-}
+    current:    { type: Boolean, default: false },
+    complete:   { type: Boolean, default: false }
+});
 
 module.exports = mongoose.model('Task', schema);

@@ -36,3 +36,15 @@ module.exports.getCategory = function ( req, res ) {
         res.json( results );
     });
 }
+
+module.exports.getCompleted = function ( req, res ) {
+    Task.find( { complete: true } , function ( err, results ) {
+        res.json( results );
+    });
+}
+
+module.exports.getCurrent = function ( req, res ) {
+    Task.find( { current: true } , function ( err, results ) {
+        res.json( results );
+    });
+}
