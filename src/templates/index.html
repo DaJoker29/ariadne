@@ -1,7 +1,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ariadne</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
@@ -50,6 +52,24 @@
                 <textarea name="notes" id="notes" cols="30" rows="10" placeholder="Notes go here" class="form-control"></textarea>
             </div>
         </div>
+
+        <div class="page-header">
+            <h3>Add new task</h3>
+        </div>
+        <form>
+            <div class="form-group">
+                <input type="text" placeholder="Name" class="form-control">
+            </div>
+            <div class="form-group">
+                <select class="form-control">
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Blog">Blog</option>
+                    <option value="Animation">Animation</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary">Add</button>
+        </form>
 
         <!-- Vault Lists -->
         <div class="page-header">
