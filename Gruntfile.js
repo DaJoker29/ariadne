@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: 'src/scss',
                 src: ['**/*.scss'],
-                dest: 'dist',
+                dest: 'client/css',
                 ext: '.css',
                 options: {
                     style: 'expanded'
@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                expand: true,
                 cwd: 'src/scss',
                 src: ['**/*.scss'],
-                dest: 'dist',
+                dest: 'client/css',
                 ext: '.css',
                 options: {
                     style: 'compressed',
@@ -58,11 +58,11 @@ module.exports = function(grunt) {
                 ]
             },
             dev: {
-                src: 'dist/style.css',
+                src: 'client/css/style.css',
                 map: true
             },
             prod: {
-                src: 'dist/style.css'
+                src: 'client/css/style.css'
             }
         },
         clean: {

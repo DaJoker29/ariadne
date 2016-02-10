@@ -16,6 +16,7 @@ app.get('/', function ( req, res) {
 });
 
 app.use('/js', express.static(__dirname + '/client/js'));
+app.use('/css', express.static(__dirname + '/client/css'));
 
 // API
 
