@@ -42,8 +42,13 @@
             <h4>Task List</h4>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="task in tasks">
-                <span class="label label-default pull-right">{{task.category}}</span> {{task.name}}
+            <li class="list-group-item" ng-repeat="task in tasks" data-id="{{task._id}}">
+                <span class="">{{task.name}} </span>
+                <span class="label label-default">{{task.category}}</span>
+                <span class="label label-default">{{task.current ? 'Active': 'Inactive'}}</span>
+                <span class="label label-default">{{task.completed ? 'Done' : 'Incomplete'}}</span>
+                <span class="label label-default">{{task.createdOn | date: 'short'}}</span>
+                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"> </a href="#">
             </li>
         </ul>
 
