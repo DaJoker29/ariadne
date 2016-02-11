@@ -19,9 +19,20 @@
         </div>
 
         <!-- User -->
-        <section ng-controller="UserController as user">
+        <section ng-controller="UserController as users">
+            <a href="#" class="pull-right" ng-click="users.logOut()" ng-if="users.authenticated">Sign Out</a>
             <div class="page-header">
-                <h4>Welcome, {{ user.name }}</h2>
+                <div ng-if="users.authenticated">
+                    <h4>Welcome, {{ users.user.google.displayName }}</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="user in users.list">
+                            {{ user.name }}
+                        </li>
+                    </ul>
+                </div>
+                <div ng-if="!users.authenticated">
+                    <h4><a href="#" ng-click="users.signIn()"><i class="fa fa-google"></i> Log in with Google</a></h4>
+                </div>
             </div>
         </section>
 
@@ -175,6 +186,8 @@
     <!-- Third-Party Code -->
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-resource/angular-resource.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
     <script src="/vendor/jquery/dist/jquery.min.js"></script>
     <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
