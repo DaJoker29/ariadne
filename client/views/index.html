@@ -1,4 +1,4 @@
-<html ng-app="taskApp">
+<html ng-app="ariadne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <main class="container" ng-controller="taskController">
-
+    <main class="container" ng-controller="TaskController as tasks">
         <!-- Title -->
         <div class="page-header">
             <h1>Ariadne <small>An Intelligent Task List</small></h1>
@@ -28,11 +27,11 @@
             <h4>Active</h4>
         </div>
         <div class="list-group">
-            <li class="list-group-item" ng-repeat="task in tasks | filter : {current: true}" ng-class="{disabled: task.completed}">
+            <li class="list-group-item" ng-repeat="task in tasks.tasks | filter : {current: true}" ng-class="{disabled: task.completed}">
                 <span>{{task.name}} </span>
-                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
-                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-if="!task.completed"></a>
-                <a href="#" ng-click="toggleCompletion(task._id)" class="text-muted fa fa-fw fa-check pull-right" ng-class="task.completed ? 'text-danger' : 'text-muted'"></a>
+                <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
+                <a href="#" ng-click="tasks.toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-if="!task.completed"></a>
+                <a href="#" ng-click="tasks.toggleCompletion(task._id)" class="text-muted fa fa-fw fa-check pull-right" ng-class="task.completed ? 'text-danger' : 'text-muted'"></a>
             </li>
         </div>
 
@@ -41,10 +40,10 @@
             <h4>Task List</h4>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="task in tasks | filter: {current: false}" data-id="{{task._id}}" ng-class="{active: task.current}">
+            <li class="list-group-item" ng-repeat="task in tasks.tasks | filter: {current: false}" data-id="{{task._id}}" ng-class="{active: task.current}">
                 <span class="">{{task.name}} </span>
-                <a href="#" ng-click="removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
-                <a href="#" ng-click="toggleActive(task._id)" class="text-primary fa fa-fw fa-plus pull-right" ng-if="!task.current"></a>
+                <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
+                <a href="#" ng-click="tasks.toggleActive(task._id)" class="text-primary fa fa-fw fa-plus pull-right" ng-if="!task.current"></a>
             </li>
         </ul>
 
@@ -52,18 +51,18 @@
         <div class="page-header">
             <h4>Create Task</h4>
         </div>
-        <form ng-submit="createTask()">
+        <form ng-submit="tasks.createTask()">
             <div class="form-group">
-                <input type="text" placeholder="Name" class="form-control" ng-model="taskName">
+                <input type="text" placeholder="Name" class="form-control" ng-model="tasks.taskName">
             </div>
-            <div class="form-group">
-                <select class="form-control" ng-model="taskCategory">
+<!--             <div class="form-group">
+                <select class="form-control" ng-model="tasks.taskCategory">
                     <option value="Personal" default>Personal</option>
                     <option value="Work">Work</option>
                     <option value="Blog">Blog</option>
                     <option value="Animation">Animation</option>
                 </select>
-            </div>
+            </div> -->
             <button type="submit" class="btn btn-lg btn-primary">Add</button>
         </form>
 
@@ -175,5 +174,6 @@
     <!-- Application Code -->
     <script src="/js/app.js"></script>
     <script src="/js/controllers/taskController.js"></script>
+    <script src="/js/services/taskService.js"></script>
 </body>
 </html>
