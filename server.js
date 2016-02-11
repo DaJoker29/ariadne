@@ -15,8 +15,8 @@ app.get('/', function ( req, res) {
     res.sendFile(__dirname + '/client/views/index.html');
 });
 
-app.use('/js', express.static(__dirname + '/client/js'));
-app.use('/css', express.static(__dirname + '/client/css'));
+app.use('/js', express.static(__dirname + '/client/scripts'));
+app.use('/css', express.static(__dirname + '/client/stylesheets'));
 app.use('/vendor', express.static(__dirname + '/bower_components'));
 
 // API
