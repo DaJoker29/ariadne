@@ -7,9 +7,17 @@ module.exports = function(grunt) {
                 files: ['src/scss/**/*.scss'],
                 tasks: ['sass:dev', 'postcss:dev']
             },
-            js: {
-                files: ['src/js/**/*.js'],
-                tasks: ['eslint', 'uglify:dev']
+            client: {
+                files: ['client/scripts/**/*.js'],
+                tasks: ['eslint:client']
+            },
+            server: {
+                files: ['server/**/*.js'],
+                tasks: ['eslint:server']
+            },
+            src: {
+                files: ['src/**/*.js'],
+                tasks: ['eslint:source']
             },
             livereload: {
                 options: { livereload: true },
