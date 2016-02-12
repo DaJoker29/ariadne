@@ -11,11 +11,7 @@ angular
         User.then(function ( data ) {
             vm.uid = data.uid.slice(7);
             Task.query({uid: vm.uid}, function ( results ) {
-                results.forEach(function( element ) {
-                    if(element.tasks) {
-                        vm.tasks.push(element.tasks[0]);
-                    }
-                });
+                vm.tasks = results;
             });
         }).catch( function ( err ) {
             if ( err ) { return; }
@@ -26,6 +22,7 @@ angular
             var task = new Task();
             task.name = vm.taskName;
             task.category = vm.taskCategory;
+            task.owner = vm.uid;
             task.$save({uid: vm.uid}, function ( result ) {
                 vm.tasks.push( result );
                 vm.taskName = '';
@@ -34,7 +31,7 @@ angular
         };
 
         vm.removeTask = function ( taskID ) {
-            Task.remove({id: taskID}, function ( result ) {
+            Task.remove({uid: vm.uid, id: taskID}, function ( result ) {
                 vm.tasks = $filter('filter')(vm.tasks, function (e) {
                     return e._id !== result._id;
                 });
@@ -44,7 +41,7 @@ angular
         vm.toggleActive = function ( taskID ) {
             var doc = $filter('filter')(vm.tasks, { _id: taskID })[0];
             doc.current = !doc.current;
-            Task.save( {id: taskID}, doc, function() {
+            Task.save( {uid: vm.uid, id: taskID}, doc, function() {
                 return;
             });
         };
@@ -52,7 +49,7 @@ angular
         vm.toggleCompletion = function ( taskID ) {
             var doc = $filter('filter')(vm.tasks, { _id: taskID })[0];
             doc.completed = !doc.completed;
-            Task.save( {id: taskID}, doc, function() {
+            Task.save( {uid: vm.uid, id: taskID}, doc, function() {
                 return;
             });
         };
