@@ -1,15 +1,19 @@
+var User = require('../models/user');
 var Task = require('../models/task');
 
 module.exports.create = function ( req, res ) {
-    var task = new Task( req.body );
-    task.save(function ( err, result ) {
+
+    var user = new User( { user: req.params.uid } );
+    user.tasks.push ( req.body );
+    user.save ( function ( err, result ) {
         if (err) { return; }
         res.json( result );
     });
 };
 
 module.exports.list = function ( req, res ) {
-    Task.find({}, function ( err, results ) {
+
+    User.find({ user: req.params.uid }, function ( err, results ) {
         if (err) { return; }
         res.json( results );
     });

@@ -22,17 +22,17 @@ app.use('/vendor', express.static(__dirname + '/bower_components'));
 // API
 
 // Not entirely sure why but these two calls have to come before the general calls below
-app.get('/api/tasks/completed', taskController.getCompleted);
-app.get('/api/tasks/current', taskController.getCurrent);
+app.get('/api/users/:uid/tasks/completed', taskController.getCompleted);
+app.get('/api/users/:uid/tasks/current', taskController.getCurrent);
 
-app.post('/api/tasks', taskController.create);
-app.get('/api/tasks', taskController.list);
+app.post('/api/users/:uid/tasks', taskController.create);
+app.get('/api/users/:uid/tasks', taskController.list);
 
-app.get('/api/tasks/:id', taskController.listOne);
-app.post('/api/tasks/:id', taskController.modify);
-app.delete('/api/tasks/:id', taskController.remove);
+app.get('/api/users/:uid/tasks/:id', taskController.listOne);
+app.post('/api/users/:uid/tasks/:id', taskController.modify);
+app.delete('/api/users/:uid/tasks/:id', taskController.remove);
 
-app.get('/api/tasks/category/:category', taskController.getCategory);
+app.get('/api/users/:uid/tasks/category/:category', taskController.getCategory);
 
 
 // Start listening

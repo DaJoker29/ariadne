@@ -18,26 +18,10 @@
             <h1>Ariadne <small>An Intelligent Task List</small></h1>
         </div>
 
-        <!-- User -->
-        <section ng-controller="UserController as users">
-            <a href="#" class="pull-right" ng-click="users.logOut()" ng-if="users.authenticated">Sign Out</a>
-            <div class="page-header">
-                <div ng-if="users.authenticated">
-                    <h4>Welcome, {{ users.user.google.displayName }}</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="user in users.list">
-                            {{ user.name }}
-                        </li>
-                    </ul>
-                </div>
-                <div ng-if="!users.authenticated">
-                    <h4><a href="#" ng-click="users.signIn()"><i class="fa fa-google"></i> Log in with Google</a></h4>
-                </div>
-            </div>
-        </section>
-
         <!-- Tasks -->
         <section ng-controller="TaskController as tasks">
+            <!-- Authentication -->
+<!--             <span class="pull-right">{{ tasks.authenticated ? 'Signed In' : 'Not Signed In'}}</span> -->
             <!-- Active List -->
             <div class="page-header">
                 <h4>Active</h4>
@@ -196,5 +180,6 @@
     <script src="/js/controllers/userController.js"></script>
     <script src="/js/controllers/taskController.js"></script>
     <script src="/js/services/taskService.js"></script>
+    <script src="/js/services/userService.js"></script>
 </body>
 </html>

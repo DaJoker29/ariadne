@@ -1,23 +1,32 @@
 angular
     .module('ariadne')
-    .controller('TaskController', function ($filter, Task) {
+    .controller('TaskController', function ($filter, Task, User) {
 
-        // Defaults
+
         var vm = this;
-
         vm.taskName = '';
         vm.taskCategory = 'Personal';
         vm.tasks = [];
 
-        Task.query(function ( results ) {
-            vm.tasks = results;
+        User.then(function ( data ) {
+            vm.uid = data.uid.slice(7);
+            Task.query({uid: vm.uid}, function ( results ) {
+                results.forEach(function( element ) {
+                    if(element.tasks) {
+                        vm.tasks.push(element.tasks[0]);
+                    }
+                });
+            });
+        }).catch( function ( err ) {
+            if ( err ) { return; }
         });
+
 
         vm.createTask = function () {
             var task = new Task();
             task.name = vm.taskName;
             task.category = vm.taskCategory;
-            task.$save(function ( result ) {
+            task.$save({uid: vm.uid}, function ( result ) {
                 vm.tasks.push( result );
                 vm.taskName = '';
                 vm.taskCategory = 'Personal';
