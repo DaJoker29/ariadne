@@ -21,7 +21,7 @@ angular
         vm.createTask = function () {
             var task = new Task();
             task.name = vm.taskName;
-            task.category = vm.taskCategory;
+            task.category = vm.taskCategory || 'Personal';
             task.owner = vm.uid;
             task.$save({uid: vm.uid}, function ( result ) {
                 vm.tasks.push( result );

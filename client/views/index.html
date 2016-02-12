@@ -53,8 +53,25 @@
                 <div class="form-group">
                     <input type="text" placeholder="Name" class="form-control" ng-model="tasks.taskName">
                 </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Category" list="catList" ng-model="tasks.taskCategory">
+                    <datalist id="catList">
+                        <option ng-repeat="task in tasks.tasks | unique: 'category'">{{ task.category }}</option>
+                    </datalist>
+                </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
             </form>
+
+            <!-- The Vault -->
+            <div class="page-header">
+                <h4>The Vault</h4>
+            </div>
+            <div>
+                 <div class="list-group" ng-repeat="task in tasks.tasks | unique: 'category'">
+                    <strong class="list-group-item">{{ task.category }}</strong>
+                    <a href="#" class="list-group-item" ng-repeat="sub in tasks.tasks | filter : { category: task.category}">{{ sub.name }}</a>
+                </div>
+            </div>
         </section>
 
 
@@ -153,13 +170,12 @@
                 </div>
             </div>
         </div>
-
-
     </main>
 
     <!-- Third-Party Code -->
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-resource/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
     <script src="/vendor/jquery/dist/jquery.min.js"></script>
