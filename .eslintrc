@@ -1,7 +1,8 @@
 {
     "env": {
         "browser": true,
-        "jquery": true
+        "jquery": true,
+        "node": true
     },
     "rules": {
         "quotes": [2, "single"],
@@ -13,7 +14,9 @@
         "no-spaced-func": 0,
         "no-use-before-define": 'nofunc',
         "no-shadow": 0,
-        "no-unused-vars": 1
+        "no-unused-vars": 1,
+        "angular/log": 0
     },
-    "globals": {}
+    "globals": {},
+    "extends": "angular"
 }
