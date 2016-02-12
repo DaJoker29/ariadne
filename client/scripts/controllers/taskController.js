@@ -1,23 +1,29 @@
 angular
     .module('ariadne')
-    .controller('TaskController', function ($filter, Task) {
+    .controller('TaskController', function ($filter, Task, User) {
 
-        // Defaults
+
         var vm = this;
-
         vm.taskName = '';
         vm.taskCategory = 'Personal';
         vm.tasks = [];
 
-        Task.query(function ( results ) {
-            vm.tasks = results;
+        User.then(function ( data ) {
+            vm.uid = data.uid.slice(7);
+            Task.query({uid: vm.uid}, function ( results ) {
+                vm.tasks = results;
+            });
+        }).catch( function ( err ) {
+            if ( err ) { return; }
         });
+
 
         vm.createTask = function () {
             var task = new Task();
             task.name = vm.taskName;
             task.category = vm.taskCategory;
-            task.$save(function ( result ) {
+            task.owner = vm.uid;
+            task.$save({uid: vm.uid}, function ( result ) {
                 vm.tasks.push( result );
                 vm.taskName = '';
                 vm.taskCategory = 'Personal';
@@ -25,7 +31,7 @@ angular
         };
 
         vm.removeTask = function ( taskID ) {
-            Task.remove({id: taskID}, function ( result ) {
+            Task.remove({uid: vm.uid, id: taskID}, function ( result ) {
                 vm.tasks = $filter('filter')(vm.tasks, function (e) {
                     return e._id !== result._id;
                 });
@@ -35,7 +41,7 @@ angular
         vm.toggleActive = function ( taskID ) {
             var doc = $filter('filter')(vm.tasks, { _id: taskID })[0];
             doc.current = !doc.current;
-            Task.save( {id: taskID}, doc, function() {
+            Task.save( {uid: vm.uid, id: taskID}, doc, function() {
                 return;
             });
         };
@@ -43,7 +49,7 @@ angular
         vm.toggleCompletion = function ( taskID ) {
             var doc = $filter('filter')(vm.tasks, { _id: taskID })[0];
             doc.completed = !doc.completed;
-            Task.save( {id: taskID}, doc, function() {
+            Task.save( {uid: vm.uid, id: taskID}, doc, function() {
                 return;
             });
         };
