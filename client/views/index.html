@@ -21,42 +21,48 @@
         <!-- Tasks -->
         <section ng-controller="TaskController as tasks">
             <!-- Active List -->
-            <div class="page-header">
-                <h4>Active</h4>
-            </div>
             <div class="list-group">
-                <li class="list-group-item" ng-repeat="task in tasks.tasks | filter : {current: true, completed: false}">
-                    <span>{{task.name}} </span>
-                    <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
-                    <a href="#" ng-click="tasks.toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-if="!task.completed"></a>
-                    <a href="#" ng-click="tasks.toggleCompletion(task._id)" class="text-muted fa fa-fw fa-check pull-right" ng-class="task.completed ? 'text-danger' : 'text-muted'"></a>
+                <div class="page-header">
+                    <h4>Active</h4>
+                </div>
+                <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter : { flags: { isActive: true, isComplete: false } }">
+                    <span>{{task.name}}</span>&nbsp;&nbsp;&nbsp;
+                    <span ng-if="task.label" class="label label-default">{{task.label}}</span>
+                    <div class="pull-right">
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isComplete');" class="text-success fa fa-fw fa-check"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-primary fa fa-fw fa-minus" ng-if="!task.flags.isComplete"></a>
+                        <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o" ng-if="!task.flags.isComplete"></a href="#">
+                    </div>
                 </li>
             </div>
 
             <!-- Task List -->
-            <div class="page-header">
-                <h4>Task List</h4>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item" ng-repeat="task in tasks.tasks | filter: {current: false}" data-id="{{task._id}}" ng-class="{active: task.current}">
-                    <span class="">{{task.name}} </span>
-                    <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right"></a href="#">
-                    <a href="#" ng-click="tasks.toggleActive(task._id)" class="text-primary fa fa-fw fa-plus pull-right" ng-if="!task.current"></a>
+            <div class="list-group">
+                <div class="page-header">
+                    <h4>Task List</h4>
+                </div>
+                <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: false } }">
+                    <span>{{task.name}}</span>&nbsp;&nbsp;&nbsp;
+                    <span ng-if="task.label" class="label label-default">{{task.label}}</span>
+                    <div class="pull-right">
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-primary fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
+                        <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o"></a href="#">
+                    </div>
                 </li>
-            </ul>
 
+            </div>
             <!-- Add New Task -->
             <div class="page-header">
                 <h4>Create Task</h4>
             </div>
-            <form ng-submit="tasks.createTask()">
+            <form ng-submit="tasks.createTask(); console.log(tasks.taskList);">
                 <div class="form-group">
-                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.taskName">
+                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Category" list="catList" ng-model="tasks.taskCategory">
-                    <datalist id="catList">
-                        <option ng-repeat="task in tasks.tasks | unique: 'category'">{{ task.category }}</option>
+                    <input type="text" class="form-control" placeholder="Label (optional)" list="labelList" ng-model="tasks.newTask.label">
+                    <datalist id="labelList">
+                        <option ng-repeat="task in tasks.taskList | unique: 'label'" ng-if="task.label">{{ task.label }}</option>
                     </datalist>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
@@ -74,14 +80,17 @@
             </div>
 
             <!-- Completed List -->
-            <div class="page-header">
-                <h4>Completed Tasks</h4>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item disabled" ng-repeat="task in tasks.tasks | filter: { 'current': true, 'completed': true }">
+            <div class="list-group">
+                <div class="page-header">
+                    <h4>Completed Tasks</h4>
+                </div>
+                <li class="list-group-item disabled" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: true, isComplete: true} }">
                     {{ task.name }}
+                    <div class="pull-right">
+                        <a href="#" class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
+                    </div>
                 </li>
-            </ul>
+            </div>
 
         </section>
 
