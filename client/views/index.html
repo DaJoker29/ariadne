@@ -25,7 +25,7 @@
                 <h4>Active</h4>
             </div>
             <div class="list-group">
-                <li class="list-group-item" ng-repeat="task in tasks.tasks | filter : {current: true}" ng-class="{disabled: task.completed}">
+                <li class="list-group-item" ng-repeat="task in tasks.tasks | filter : {current: true, completed: false}">
                     <span>{{task.name}} </span>
                     <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o pull-right" ng-class="{disabled: task.completed}" ng-if="!task.completed"></a href="#">
                     <a href="#" ng-click="tasks.toggleActive(task._id)" class="text-primary fa fa-fw fa-minus pull-right" ng-if="!task.completed"></a>
@@ -72,6 +72,17 @@
                     <a href="#" class="list-group-item" ng-repeat="sub in tasks.tasks | filter : { category: task.category}">{{ sub.name }}</a>
                 </div>
             </div>
+
+            <!-- Completed List -->
+            <div class="page-header">
+                <h4>Completed Tasks</h4>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item disabled" ng-repeat="task in tasks.tasks | filter: { 'current': true, 'completed': true }">
+                    {{ task.name }}
+                </li>
+            </ul>
+
         </section>
 
 
