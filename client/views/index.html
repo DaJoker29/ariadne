@@ -18,16 +18,49 @@
             <h1>Ariadne <small>An Intelligent Task List</small></h1>
         </div>
 
+        <div id="instructions" class="panel panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a href="#instructionsCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="instructionsCollapse">Instructions</a>
+                </h4>
+            </div>
+            <div id="instructionsCollapse" class="panel-collapse collapse">
+                <div class="list-group-item">
+                    <p class="lead">Step One: Create Tasks</p>
+                    <p>Use the form below to create new tasks (ie. 'Do Laundry', 'Meditate with a Homeless Person', 'Develop Mood Board about Cheese').</p>
+                    <p>Add an optional <strong>Label</strong> to organize tasks into specific concerns (ie. 'Work', 'Home', 'Sex Dungeon').</p>
+                    <p>New tasks will appear in the <strong>Task List</strong>.</p>
+                </div>
+                <div class="list-group-item">
+                    <p class="lead">Step Two: Set Priority</p>
+                    <p>Click the <i class="fa fa-exclamation"></i> button to mark a task as <strong>Important (critical)</strong></p>
+                    <p>Click the <i class="fa fa-clock-o"></i> button to mark a task as <strong>Urgent (time-sensitive)</strong></p>
+                    <p>Otherwise leave the tasks alone</p>
+                </div>
+                <div class="list-group-item">
+                    <p class="lead">Step Three: Your Active List</p>
+                    <p>Once priorities are set, you can use the <i class="fa fa-plus"></i> button to add tasks to your <strong>Active List</strong>.</p>
+                    <p>This is a list containing the tasks that you will focus on today, organized by priority.</p>
+                    <p>When you've completed a task use the <i class="fa fa-check"></i> button to mark it as completed. It will then be added to your completed list.</p>
+                    <p> There is a maximum limit of 9 active/completed tasks per day. Every day your completed list is cleared allowing you to add more tasks to your active list.</p>
+                </div>
+                <div class="list-group-item">
+                    <p class="lead">Step Four: Boss Ass Shit</p>
+                    <p>You are now a dynamic, productive titan of industry doing boss ass shit on a daily basis. You're welcome.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Tasks -->
         <section ng-controller="TaskController as tasks">
             <!-- Active List -->
             <div class="list-group">
                 <div class="page-header">
-                    <h4>Active <small>Limit of {{ tasks.taskLimit }}</small></h4>
+                    <h4>Active <small ng-class="{ 'text-success': tasks.activeCount === tasks.taskLimit, 'text-danger': tasks.activeCount === 0, 'text-info': tasks.activeCount > 0 && tasks.activeCount < tasks.taskLimit }" ng-bind-template="{{ tasks.activeCount}} of {{ tasks.taskLimit }} ({{ tasks.completeCount }} complete)"></small></h4>
                 </div>
                 <li class="list-group-item task" ng-class="{ 'list-group-item-warning': task.flags.isImportant && !task.flags.isUrgent, 'list-group-item-info': task.flags.isUrgent && !task.flags.isImportant, 'list-group-item-danger': task.flags.isUrgent && task.flags.isImportant }" ng-repeat="task in tasks.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
-                    <span>{{task.name}}</span>
-                    <span ng-if="task.label" class="badge">{{task.label}}</span>
+                    <span ng-bind="task.name"></span>
+                    <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
                         <a href="#" ng-click="tasks.toggle(task._id, 'isComplete');" class="text-muted fa fa-fw fa-check"></a>
                         <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-info fa fa-fw fa-minus" ng-if="!task.flags.isComplete"></a>
@@ -45,10 +78,10 @@
                     <h4>Task List</h4>
                 </div>
                 <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: false } } | orderBy: 'label'">
-                    <span>{{task.name}}</span>
+                    <span ng-bind="task.name"></span>
                     <span ng-if="task.flags.isImportant" class="label label-warning">Important</span>
                     <span ng-if="task.flags.isUrgent" class="label label-info">Urgent</span>
-                    <span ng-if="task.label" class="badge">{{task.label}}</span>
+                    <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
                         <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-info fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
                         <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="text-warning fa fa-fw fa-exclamation"></a>
@@ -70,7 +103,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Label (optional)" list="labelList" ng-model="tasks.newTask.label">
                     <datalist id="labelList">
-                        <option ng-repeat="task in tasks.taskList | unique: 'label'" ng-if="task.label">{{ task.label }}</option>
+                        <option ng-repeat="task in tasks.taskList | unique: 'label'" ng-if="task.label" ng-bind="task.label"></option>
                     </datalist>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>

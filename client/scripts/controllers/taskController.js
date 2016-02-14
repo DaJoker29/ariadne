@@ -1,10 +1,20 @@
 angular
     .module('ariadne')
-    .controller('TaskController', function ($filter, Task, User) {
+    .controller('TaskController', function ($filter, Task, User, $scope) {
 
         var vm = this;
         vm.taskLimit = 9;
         vm.taskList = [];
+        vm.activeCount = $filter('filter')(vm.taskList, { flags: { isActive: true } } ).length;
+        vm.completeCount = $filter('filter')(vm.taskList, { flags: { isComplete: true } } ).length;
+
+
+        $scope.$watch(function () {
+             return vm.taskList;
+        }, function() {
+            vm.activeCount = $filter('filter')(vm.taskList, { flags: { isActive: true } } ).length;
+            vm.completeCount = $filter('filter')(vm.taskList, { flags: { isComplete: true } } ).length;
+        });
 
         vm.newTask = {
             name: '',
@@ -44,13 +54,30 @@ angular
 
         vm.toggle = function ( taskID, flag ) {
             // Check against task limit before moving to active
-            if(
-                'isActive' === flag &&
-                !$filter('filter')(vm.taskList, { _id: taskID })[0].flags.isActive &&
-                $filter('filter')(vm.taskList, { flags: { isActive: true } } ).length >= vm.taskLimit
+            if('isActive' === flag) {
+                if(
+                    !$filter('filter')(vm.taskList, { _id: taskID })[0].flags.isActive &&
+                    $filter('filter')(vm.taskList, { flags: { isActive: true } } ).length >= vm.taskLimit
                 ) {
-                console.log('Active Task Limit Reached');
-                return;
+                    console.log('Active Task Limit Reached');
+                    return;
+                } else if (
+                    !$filter('filter')(vm.taskList, { _id: taskID })[0].flags.isActive
+                    ) {
+                    vm.activeCount++;
+                } else if (
+                    $filter('filter')(vm.taskList, { _id: taskID })[0].flags.isActive
+                    ) {
+                    vm.activeCount--;
+                }
+            }
+
+            if('isComplete' === flag) {
+                if (!$filter('filter')(vm.taskList, { _id: taskID })[0].flags.isComplete) {
+                    vm.completeCount++;
+                } else if ($filter('filter')(vm.taskList, { _id: taskID })[0].flags.isComplete ) {
+                    vm.completeCount--;
+                }
             }
 
             var doc = $filter('filter')(vm.taskList, { _id: taskID })[0];
