@@ -1,8 +1,10 @@
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
+var express        = require('express');
+var app            = express();
+var mongoose       = require('mongoose');
 var taskController = require('./server/controllers/task-controller');
-var bodyParser = require('body-parser');
+var bodyParser     = require('body-parser');
+
+var port = 1337;
 
 // Connect to DB
 mongoose.connect('mongodb://localhost:27017/ariadne');
@@ -32,10 +34,7 @@ app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks/:id', taskController.modify);
 app.delete('/api/users/:uid/tasks/:id', taskController.remove);
 
-app.get('/api/users/:uid/tasks/category/:category', taskController.getCategory);
-
-
 // Start listening
-app.listen(3000, function() {
-    console.log('Listening');
+app.listen(port, function() {
+    console.log('Server running at http://localhost:' + port);
 });
