@@ -34,9 +34,6 @@ app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks/:id', taskController.modify);
 app.delete('/api/users/:uid/tasks/:id', taskController.remove);
 
-app.get('/api/users/:uid/tasks/category/:category', taskController.getCategory);
-
-
 // Start listening
 app.listen(port, function() {
     console.log('Server running at http://localhost:' + port);

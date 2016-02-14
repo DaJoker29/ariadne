@@ -1,9 +1,9 @@
-.list-group-item > a {
+.task a {
     opacity: 0;
     transition: .3s;
 }
 
-.list-group-item:hover > a {
+.task:hover a {
     opacity: 1;
     text-decoration: none;
 }
