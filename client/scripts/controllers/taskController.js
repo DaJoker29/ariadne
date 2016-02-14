@@ -3,11 +3,12 @@ angular
     .controller('TaskController', function ($filter, Task, User) {
 
         var vm = this;
+        vm.taskLimit = 9;
         vm.taskList = [];
 
         vm.newTask = {
-            name: null,
-            label: null
+            name: '',
+            label: ''
         };
 
         User.then(function ( data ) {
@@ -42,6 +43,16 @@ angular
         };
 
         vm.toggle = function ( taskID, flag ) {
+            // Check against task limit before moving to active
+            if(
+                'isActive' === flag &&
+                !$filter('filter')(vm.taskList, { _id: taskID })[0].flags.isActive &&
+                $filter('filter')(vm.taskList, { flags: { isActive: true } } ).length >= vm.taskLimit
+                ) {
+                console.log('Active Task Limit Reached');
+                return;
+            }
+
             var doc = $filter('filter')(vm.taskList, { _id: taskID })[0];
             doc.flags[flag] = !doc.flags[flag];
             Task.save( {uid: vm.uid, id: taskID}, doc);

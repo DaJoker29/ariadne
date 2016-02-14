@@ -16,7 +16,8 @@
         "no-shadow": 0,
         "no-unused-vars": 1,
         "angular/log": 0,
-        "key-spacing": 0
+        "key-spacing": 0,
+        "yoda": "always"
     },
     "globals": {},
     "extends": "angular"
