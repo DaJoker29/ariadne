@@ -3,6 +3,7 @@ var app            = express();
 var mongoose       = require('mongoose');
 var taskController = require('./server/controllers/task-controller');
 var bodyParser     = require('body-parser');
+var schedule       = require('node-schedule');
 
 var port = 1337;
 
@@ -33,6 +34,10 @@ app.get('/api/users/:uid/tasks', taskController.list);
 app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks/:id', taskController.modify);
 app.delete('/api/users/:uid/tasks/:id', taskController.remove);
+// app.get('/api/archive', taskController.archive);
+
+// Archive Completed Once a Day
+var j = schedule.scheduleJob('0 5 * * *', taskController.archive);
 
 // Start listening
 app.listen(port, function() {
