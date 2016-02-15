@@ -33,6 +33,7 @@ app.get('/api/users/:uid/tasks', taskController.list);
 app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks/:id', taskController.modify);
 app.delete('/api/users/:uid/tasks/:id', taskController.remove);
+app.get('/api/archive', taskController.archive);
 
 // Start listening
 app.listen(port, function() {
