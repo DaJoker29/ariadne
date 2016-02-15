@@ -14,7 +14,7 @@
     "grunt-postcss": "^0.5.1",
     "load-grunt-tasks": "3.2.0"
   },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "name": "ariadne",
   "description": "A TODO list application",
   "main": "Gruntfile.js",
@@ -34,6 +34,7 @@
   "dependencies": {
     "body-parser": "^1.14.2",
     "express": "^4.13.4",
-    "mongoose": "^4.4.3"
+    "mongoose": "^4.4.3",
+    "node-schedule": "^1.0.0"
   }
 }

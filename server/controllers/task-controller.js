@@ -55,3 +55,20 @@ module.exports.getCurrent = function ( req, res ) {
         res.json( results );
     });
 };
+
+module.exports.archive = function ( req, res ) {
+    Task.update(
+        { 'flags.isComplete': true, 'flags.isArchived': false },
+        { 'flags.isArchived': true, 'flags.isActive': false },
+        { multi: true },
+        function ( err, result ) {
+            if (err) {
+                res.sendStatus(400).end();
+            } else {
+                var today = new Date();
+                console.log('\n' + today.toDateString() + ': Archived ' + result.n + ' tasks.');
+                res.json( result );
+            }
+        }
+    );
+};
