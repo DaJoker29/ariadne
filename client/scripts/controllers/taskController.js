@@ -21,15 +21,7 @@ angular
             label: ''
         };
 
-        User.then(function ( data ) {
-            vm.uid = data.uid.slice(7);
-            Task.query({uid: vm.uid}, function ( results ) {
-                vm.taskList = results;
-            });
-        }).catch( function ( err ) {
-            if ( err ) { return; }
-        });
-
+        vm.user = User.get();
 
         vm.createTask = function () {
             var task = new Task();
