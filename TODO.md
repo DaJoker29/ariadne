@@ -8,3 +8,5 @@
 - [ ] Switch to `process.env.SETTING || default` convention
 - [ ] Password Hashing
 - [ ] Passport HTTP Strategy (for native clients)
+- [ ] Deployment Script
+- [ ] Optimize Folder Structure
