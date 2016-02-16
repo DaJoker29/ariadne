@@ -102,7 +102,7 @@
                     <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Label (optional)" list="labelList" ng-model="tasks.newTask.label">
+                    <input type="text" class="form-control" placeholder="Label (optional)" list="labelList" ng-model="tasks.newTask.label" ng-if="tasks.newTask.name !== ''">
                     <datalist id="labelList">
                         <option ng-repeat="task in tasks.taskList | unique: 'label'" ng-if="task.label" ng-bind="task.label"></option>
                     </datalist>

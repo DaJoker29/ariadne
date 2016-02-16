@@ -31,9 +31,9 @@ app.use(bodyParser.urlencoded( { extended: true } ));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressSession( {
-    secret: process.env.SESSION_SECRET || 'secret',
-    resave: false,
-    saveUninitialized: false
+    secret            : process.env.SESSION_SECRET || 'secret',
+    resave            : false,
+    saveUninitialized : false
 } ));
 
 // Passport
@@ -71,8 +71,8 @@ app.get('/login', function ( req, res ) {
 app.post('/register', userController.create);
 app.post('/login', passport.authenticate('local',
     {
-        failureRedirect: '/login',
-        successRedirect: '/'
+        failureRedirect : '/login',
+        successRedirect : '/'
     })
 );
 

@@ -17,11 +17,15 @@ angular
         });
 
         vm.newTask = {
-            name: '',
-            label: ''
+            name  : '',
+            label : ''
         };
 
-        vm.user = User.get();
+        vm.user = User.get( function () {
+            Task.query({ _id: vm.user._id }, function ( results ) {
+                vm.taskList = results;
+            })
+        });
 
         vm.createTask = function () {
             var task = new Task();
@@ -37,7 +41,7 @@ angular
         };
 
         vm.removeTask = function ( taskID ) {
-            Task.remove({uid: vm.uid, id: taskID}, function ( result ) {
+            Task.remove({_id: vm.user._id, id: taskID}, function ( result ) {
                 vm.taskList = $filter('filter')(vm.taskList, function (e) {
                     return e._id !== result._id;
                 });
@@ -74,6 +78,6 @@ angular
 
             var doc = $filter('filter')(vm.taskList, { _id: taskID })[0];
             doc.flags[flag] = !doc.flags[flag];
-            Task.save( {uid: vm.uid, id: taskID}, doc);
+            Task.save( {_id: vm.user._id, id: taskID}, doc);
         };
     });
