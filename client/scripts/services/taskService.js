@@ -2,5 +2,5 @@ angular
     .module('ariadne')
     .factory('Task', function ($resource) {
 
-        return $resource('/api/users/:uid/tasks/:id', {uid: '@uid', id: '@id'});
+        return $resource('/api/users/:_id/tasks/:id', {_id: '@_id', id: '@id'});
     });

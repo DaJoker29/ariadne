@@ -17,27 +17,23 @@ angular
         });
 
         vm.newTask = {
-            name: '',
-            label: ''
+            name  : '',
+            label : ''
         };
 
-        User.then(function ( data ) {
-            vm.uid = data.uid.slice(7);
-            Task.query({uid: vm.uid}, function ( results ) {
+        vm.user = User.get( function () {
+            Task.query({ _id: vm.user._id }, function ( results ) {
                 vm.taskList = results;
-            });
-        }).catch( function ( err ) {
-            if ( err ) { return; }
+            })
         });
-
 
         vm.createTask = function () {
             var task = new Task();
 
             angular.merge(task, vm.newTask);
-            task.owner = vm.uid;
+            task.owner = vm.user._id;
 
-            task.$save({uid: vm.uid}, function ( result ) {
+            task.$save({_id: vm.user._id}, function ( result ) {
                 vm.taskList.push( result );
                 vm.newTask.name = '';
                 vm.newTask.label = '';
@@ -45,7 +41,7 @@ angular
         };
 
         vm.removeTask = function ( taskID ) {
-            Task.remove({uid: vm.uid, id: taskID}, function ( result ) {
+            Task.remove({_id: vm.user._id, id: taskID}, function ( result ) {
                 vm.taskList = $filter('filter')(vm.taskList, function (e) {
                     return e._id !== result._id;
                 });
@@ -82,6 +78,6 @@ angular
 
             var doc = $filter('filter')(vm.taskList, { _id: taskID })[0];
             doc.flags[flag] = !doc.flags[flag];
-            Task.save( {uid: vm.uid, id: taskID}, doc);
+            Task.save( {_id: vm.user._id, id: taskID}, doc);
         };
     });
