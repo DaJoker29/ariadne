@@ -27,9 +27,9 @@ angular
             var task = new Task();
 
             angular.merge(task, vm.newTask);
-            task.owner = vm.uid;
+            task.owner = vm.user._id;
 
-            task.$save({uid: vm.uid}, function ( result ) {
+            task.$save({_id: vm.user._id}, function ( result ) {
                 vm.taskList.push( result );
                 vm.newTask.name = '';
                 vm.newTask.label = '';
