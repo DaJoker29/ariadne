@@ -3,7 +3,7 @@
 - [x] Build Project To-Do List (ironic)
 - [X] Add Logging (morgan)
 - [X] Angular.UI (Typeahead for `Label` field)
-- [ ] `angular.filter` to clean up HTML attributes
+- [X] `angular.filter` to clean up HTML attributes
 - [X] Edge Browser Header
 - [X] Switch to `process.env.SETTING || default` convention
 - [ ] Password Hashing
