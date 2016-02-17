@@ -100,13 +100,10 @@
             </div>
             <form ng-submit="tasks.createTask(); console.log(tasks.taskList);">
                 <div class="form-group">
-                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name">
+                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name" autofocus>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Label (optional)" list="labelList" ng-model="tasks.newTask.label" ng-if="tasks.newTask.name !== ''">
-                    <datalist id="labelList">
-                        <option ng-repeat="task in tasks.taskList | unique: 'label'" ng-if="task.label" ng-bind="task.label"></option>
-                    </datalist>
+                    <input type="text" class="form-control" placeholder="Label (optional)" ng-model="tasks.newTask.label" uib-typeahead="task.label for task in tasks.taskList | unique: 'label' | filter: $viewValue" typeahead-editable="true">
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
             </form>
@@ -129,6 +126,7 @@
     <!-- Third-Party Code -->
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-resource/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
