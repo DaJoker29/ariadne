@@ -6,7 +6,7 @@
     <title>Ariadne &mdash; An Intelligent Task List</title>
 
     <!-- Third-Party Stylesheets -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/superhero/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Application Stylesheets -->
@@ -16,14 +16,17 @@
     <main class="container">
         <!-- Title -->
         <div class="page-header">
+            <div class="pull-right">
+                <a href="/logout">Log Out</a>
+            </div>
             <h1>Ariadne <small>An Intelligent Task List</small></h1>
         </div>
 
 
-        <div id="instructions" class="panel panel-info">
+        <div id="instructions" class="panel panel-success">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a href="#instructionsCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="instructionsCollapse">Instructions</a>
+                    <a href="#instructionsCollapse" data-toggle="collapse" aria-expanded="false" aria-controls="instructionsCollapse">Instructions <i class="fa fa-caret-down fa-fw"></i></a>
                 </h4>
             </div>
             <div id="instructionsCollapse" class="panel-collapse collapse">
@@ -60,17 +63,21 @@
                 <div class="page-header">
                     <h4>Active <small ng-class="{ 'text-success': tasks.activeCount === tasks.taskLimit, 'text-danger': tasks.activeCount === 0, 'text-info': tasks.activeCount > 0 && tasks.activeCount < tasks.taskLimit }" ng-bind-template="{{ tasks.activeCount}} of {{ tasks.taskLimit }} ({{ tasks.completeCount }} complete)"></small></h4>
                 </div>
-                <li class="list-group-item task" ng-class="{ 'list-group-item-warning': task.flags.isImportant && !task.flags.isUrgent, 'list-group-item-info': task.flags.isUrgent && !task.flags.isImportant, 'list-group-item-danger': task.flags.isUrgent && task.flags.isImportant }" ng-repeat="task in tasks.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
-                    <span ng-bind="task.name"></span>
+                <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
+                    <span class="label" ng-class="{
+                    'label-danger': task.flags.isImportant && task.flags.isUrgent, 'label-warning': task.flags.isImportant && !task.flags.isUrgent, 'label-info': !task.flags.isImportant && task.flags.isUrgent }" ng-bind="task.name"></span>
+                    <i class="fa fa-fw fa-exclamation text-warning" ng-if="task.flags.isImportant"></i>
+                    <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                     <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isComplete');" class="text-muted fa fa-fw fa-check"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-info fa fa-fw fa-minus" ng-if="!task.flags.isComplete"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="text-warning fa fa-fw fa-exclamation"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="text-success fa fa-fw fa-clock-o"></a>
-                        <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o" ng-if="!task.flags.isComplete"></a href="#">
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isComplete');" class="fa fa-fw fa-check"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-minus" ng-if="task.flags.isActive"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
+                        <a href="#" ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a href="#">
                         &nbsp;&nbsp;&nbsp;
                     </div>
+
                 </li>
             </div>
 
@@ -81,14 +88,14 @@
                 </div>
                 <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: false } } | orderBy: 'label'">
                     <span ng-bind="task.name"></span>
-                    <span ng-if="task.flags.isImportant" class="label label-warning">Important</span>
-                    <span ng-if="task.flags.isUrgent" class="label label-info">Urgent</span>
+                    <i class="fa fa-fw fa-exclamation text-warning" ng-if="task.flags.isImportant"></i>
+                    <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                     <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="text-info fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="text-warning fa fa-fw fa-exclamation"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="text-success fa fa-fw fa-clock-o"></a>
-                        <a href="#" ng-click="tasks.removeTask(task._id)" class="text-danger fa fa-fw fa-trash-o"></a href="#">
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
+                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
+                        <a href="#" ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a href="#">
                         &nbsp;&nbsp;&nbsp;
                     </div>
                 </li>
