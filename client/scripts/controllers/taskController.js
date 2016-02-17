@@ -24,7 +24,7 @@ angular
         vm.user = User.get( function () {
             Task.query({ _id: vm.user._id }, function ( results ) {
                 vm.taskList = results;
-            })
+            });
         });
 
         vm.createTask = function () {
