@@ -12,12 +12,12 @@
         "no-trailing-spaces": 0,
         "no-underscore-dangle": 0,
         "no-spaced-func": 0,
-        "no-use-before-define": 'nofunc',
+        "no-use-before-define": [2, "nofunc"],
         "no-shadow": 0,
         "no-unused-vars": 1,
         "angular/log": 0,
         "key-spacing": 0,
-        "yoda": "always"
+        "yoda": [2, "always"]
     },
     "globals": {},
     "extends": "angular"

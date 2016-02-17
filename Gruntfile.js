@@ -71,12 +71,12 @@ module.exports = function(grunt) {
                     compress: false
                 },
                 files: {
-                    'dist/script.js': ['src/js/**/*.js']
+                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
                 }
             },
             prod: {
                 files: {
-                    'dist/script.js': ['src/js/**/*.js']
+                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
                 }
             }
         },
