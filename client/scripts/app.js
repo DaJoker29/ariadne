@@ -1,1 +1,1 @@
-angular.module('ariadne', ['ngResource', 'firebase', 'angular.filter']);
+angular.module('ariadne', ['ngResource', 'angular.filter', 'ui.bootstrap']);
