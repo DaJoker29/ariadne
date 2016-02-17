@@ -71,6 +71,12 @@ node server
 # Change Log
 
 ## [Unreleased]
+
+## [v0.2.3] - 2016-16-02
+### Added
+- Server Logging
+- Project Documentation
+
 ### Changed
 - Firebase => Local User Database
 - Google Auth => Local Authentication (Passport)
@@ -105,7 +111,8 @@ node server
 - Assign Category
 - REST API
 
-[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v0.2.3...HEAD
+[v0.2.3]: https://github.com/DaJoker29/ariadne/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/DaJoker29/ariadne/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/DaJoker29/ariadne/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/DaJoker29/ariadne/compare/v0.1.0...v0.2.0
