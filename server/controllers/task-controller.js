@@ -42,18 +42,18 @@ module.exports.remove = function ( req, res ) {
     });
 };
 
-module.exports.archive = function ( req, res ) {
+module.exports.archive = function () {
     Task.update(
         { 'flags.isComplete': true, 'flags.isArchived': false },
         { 'flags.isArchived': true, 'flags.isActive': false },
         { multi: true },
         function ( err, result ) {
+            var today = new Date();
+            console.log('\nArchive Started -- ' + today.toString());
             if (err) {
-                res.sendStatus(400).end();
+                console.log('Archive Failure:', err);
             } else {
-                var today = new Date();
-                console.log('\n' + today.toDateString() + ': Archived ' + result.n + ' tasks.');
-                res.json( result );
+                console.log('Archive Success: ' + result.n + ' tasks archived.');
             }
         }
     );
