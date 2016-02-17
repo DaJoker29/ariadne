@@ -1,10 +1,10 @@
+- [x] Build Project Roadmap
+- [x] Build Change Log
+- [x] Build Project To-Do List (ironic)
 - [ ] Add Logging (morgan)
 - [ ] Angular.UI (Typeahead for `Label` field)
 - [ ] `angular.filter` to clean up HTML attributes
 - [ ] Edge Browser Header
-- [ ] Build Project Roadmap
-- [ ] Build Change Log
-- [X] Build Project To-Do List (ironic)
 - [ ] Switch to `process.env.SETTING || default` convention
 - [ ] Password Hashing
 - [ ] Passport HTTP Strategy (for native clients)
