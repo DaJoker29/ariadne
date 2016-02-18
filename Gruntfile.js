@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         watch: {
             sass: {
                 files: ['src/scss/**/*.scss'],
-                tasks: ['sass:dev', 'postcss:dev']
+                tasks: ['sass', 'postcss']
             },
             client: {
                 files: [
@@ -35,7 +35,8 @@ module.exports = function(grunt) {
                 dest: 'client/stylesheets',
                 ext: '.css',
                 options: {
-                    style: 'expanded'
+                    style: 'expanded',
+                    sourcemap: 'none'
                 }
             },
             prod: {
@@ -43,10 +44,9 @@ module.exports = function(grunt) {
                 cwd: 'src/scss',
                 src: ['**/*.scss'],
                 dest: 'client/stylesheets',
-                ext: '.css',
+                ext: '.min.css',
                 options: {
-                    style: 'compressed',
-                    sourcemap: 'none'
+                    style: 'compressed'
                 }
             }
         },
@@ -57,11 +57,11 @@ module.exports = function(grunt) {
                 ]
             },
             dev: {
-                src: 'client/stylesheets/style.css',
-                map: true
+                src: 'client/stylesheets/style.css'
             },
             prod: {
-                src: 'client/stylesheets/style.css'
+                src: 'client/stylesheets/style.min.css',
+                map: true
             }
         },
         uglify: {
@@ -101,7 +101,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('dev', 'Build development version of project', ['eslint', 'uglify', 'sass:dev', 'postcss:dev']);
-    grunt.registerTask('prod', 'Build production version of project', ['eslint', 'uglify', 'sass:prod', 'postcss:prod']);
-    grunt.registerTask('default', 'Build development version and run watch server', ['dev', 'watch']);
+    grunt.registerTask('build', 'Build project', ['eslint', 'uglify', 'sass', 'postcss']);
+    grunt.registerTask('default', 'Build development version and run watch server', ['build', 'watch']);
 };
