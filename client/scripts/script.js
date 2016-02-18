@@ -1,6 +1,6 @@
 angular.module("ariadne", [ "ngResource", "angular.filter", "ui.bootstrap" ]);
 
-angular.module("ariadne").controller("TaskController", function($filter, Task, User, $scope) {
+angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "User", "$scope", function($filter, Task, User, $scope) {
     var vm = this;
     vm.taskLimit = 9;
     vm.taskList = [];
@@ -103,16 +103,16 @@ angular.module("ariadne").controller("TaskController", function($filter, Task, U
             id: taskID
         }, doc);
     };
-});
+} ]);
 
-angular.module("ariadne").factory("Task", function($resource) {
+angular.module("ariadne").factory("Task", [ "$resource", function($resource) {
     return $resource("/api/users/:_id/tasks/:id", {
         _id: "@_id",
         id: "@id"
     });
-});
+} ]);
 
-angular.module("ariadne").factory("User", function($resource) {
+angular.module("ariadne").factory("User", [ "$resource", function($resource) {
     return $resource("/api/users/");
-});
+} ]);
 //# sourceMappingURL=script.js.map
