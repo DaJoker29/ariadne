@@ -8,8 +8,11 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev', 'postcss:dev']
             },
             client: {
-                files: ['client/scripts/**/*.js'],
-                tasks: ['eslint:client']
+                files: [
+                    'client/scripts/**/*.js',
+                    '!client/scripts/script.*js'
+                ],
+                tasks: ['eslint:client', 'uglify']
             },
             server: {
                 files: ['server/**/*.js'],
@@ -62,32 +65,43 @@ module.exports = function(grunt) {
             }
         },
         uglify: {
-            dev: {
+            uncompressed: {
                 options: {
-                    sourceMap: true,
                     mangle: false,
                     beautify: true,
                     preserveComments: 'all',
                     compress: false
                 },
                 files: {
-                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
+                    'client/scripts/script.js': [
+                        'client/scripts/**/*.js',
+                        '!client/scripts/script.*js'
+                    ]
                 }
             },
-            prod: {
+            compressed: {
+                options: {
+                    sourceMap: true
+                },
                 files: {
-                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
+                    'client/scripts/script.min.js': [
+                        'client/scripts/**/*.js',
+                        '!client/scripts/script.*js'
+                    ]
                 }
             }
         },
         eslint: {
+            options: {
+                quiet: true
+            },
             client: ['client/scripts/**/*.js'],
             server: ['server/**/*.js'],
             source: ['src/js/**/*.js']
         }
     });
 
-    grunt.registerTask('dev', 'Build development version of project', ['eslint', 'uglify:dev', 'sass:dev', 'postcss:dev']);
-    grunt.registerTask('prod', 'Build production version of project', ['eslint', 'uglify:prod', 'sass:prod', 'postcss:prod']);
+    grunt.registerTask('dev', 'Build development version of project', ['eslint', 'uglify', 'sass:dev', 'postcss:dev']);
+    grunt.registerTask('prod', 'Build production version of project', ['eslint', 'uglify', 'sass:prod', 'postcss:prod']);
     grunt.registerTask('default', 'Build development version and run watch server', ['dev', 'watch']);
 };

@@ -115,4 +115,3 @@ angular.module("ariadne").factory("Task", [ "$resource", function($resource) {
 angular.module("ariadne").factory("User", [ "$resource", function($resource) {
     return $resource("/api/users/");
 } ]);
-//# sourceMappingURL=script.js.map
