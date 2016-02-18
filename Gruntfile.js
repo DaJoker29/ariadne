@@ -23,8 +23,10 @@ module.exports = function(grunt) {
                 tasks: ['eslint:source']
             },
             livereload: {
-                options: { livereload: true },
-                files: ['client/**/*']
+                options: {
+                    livereload: true,
+                },
+                files: ['client/**/*', '.rebooted']
             },
             grunt: {
                 files: ['Gruntfile.js']
@@ -101,9 +103,49 @@ module.exports = function(grunt) {
             client: ['client/scripts/**/*.js'],
             server: ['server/**/*.js'],
             source: ['src/js/**/*.js']
+        },
+        concurrent: {
+            dev: {
+                tasks: ['nodemon', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'server.js',
+                options: {
+                    watch: [
+                        'server.js',
+                        'server/'
+                    ],
+                    nodeArgs: ['--debug'],
+                    env: {
+                        PORT: '1337'
+                    },
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
+
+                        nodemon.on('config:update', function() {
+                            setTimeout(function() {
+                                require('open')('http://localhost:1337')
+                            }, 1000)
+                        });
+
+                        nodemon.on('restart', function() {
+                            setTimeout(function() {
+                                require('fs').writeFileSync('.rebooted', 'reboot');
+                            }, 1000)
+                        });
+                    }
+                }
+            }
         }
     });
 
     grunt.registerTask('build', 'Build project', ['eslint', 'uglify', 'sass', 'postcss']);
-    grunt.registerTask('default', 'Build development version and run watch server', ['build', 'watch']);
+    grunt.registerTask('default', 'Build development version and run watch server', ['build', 'concurrent']);
 };

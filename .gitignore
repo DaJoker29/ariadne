@@ -36,3 +36,6 @@ dist
 
 # Documentation
 doc
+
+# Reboot Watch Thing
+.rebooted

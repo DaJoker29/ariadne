@@ -97,14 +97,13 @@ var archive = schedule.scheduleJob('0 5 * * *', taskController.archive);
 /*              Run                     */
 var port = process.env.PORT || 1337;
 app.listen(port, function() {
-    console.log('Server running at http://localhost:' + port);
+    console.log('EXPRESS: running on http://localhost:' + port);
 });
 
 /*              Helpers               */
 function ensureAuth( req, res, next ) {
-    if( req.user ) {
-        next();
-    } else {
+    if( req.user ) { next(); }
+    else {
         res.redirect('/login');
     }
 }
