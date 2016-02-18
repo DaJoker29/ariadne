@@ -25,6 +25,9 @@ module.exports = function(grunt) {
             livereload: {
                 options: { livereload: true },
                 files: ['client/**/*']
+            },
+            grunt: {
+                files: ['Gruntfile.js']
             }
         },
         sass: {
