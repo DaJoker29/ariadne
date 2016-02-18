@@ -37,23 +37,19 @@ node server
     - Google
     - Facebook
     - Github
-  - Github Assigned Issues
-  - Trello Cards
 - Tasks
-  - Auto-Populated
+  - Auto-Generated Lists
   - Sub-Tasks
+  - Imported Tasks(Github Issues, Trello Cards)
   - Multiple Lists
     - Routines (Repeated on a regular basis)
-    - Checklists (For set procedures, such as 'deploying a new release'
+    - Checklists (For set procedures, such as 'deploying a new release')
   - Task Dependencies
-  - Collaborative Projects
-    - Shared Lists
-    - Task Delegation
+
 - Events
   - SMS/Push Notifications
   - Reminders
-  - Google Calendar
-  - Facebook Events
+  - Imported Events (Google Calender, Facebook Events)
 
 ## Future
 
@@ -61,10 +57,23 @@ node server
   - Daily Planning
   - Task Analysis and Prediction
   - Automated Priority
+  - Collaborative Projects
+    - Shared Lists
+    - Task Delegation
 
 # Change Log
 
 ## [Unreleased]
+
+## [v1.0.0] - 2016-18-02
+### Security
+- Passwords are now hashed
+
+### Changed
+- Streamlined Build Process
+
+### Added
+- Auto Version Bumps
 
 ## [v0.2.4] - 2016-17-02
 ### Fixed
@@ -112,7 +121,8 @@ node server
 - Assign Category
 - REST API
 
-[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/DaJoker29/ariadne/compare/v0.2.4...v1.0.0
 [v0.2.4]: https://github.com/DaJoker29/ariadne/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/DaJoker29/ariadne/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/DaJoker29/ariadne/compare/v0.2.1...v0.2.2
