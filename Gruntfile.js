@@ -5,11 +5,14 @@ module.exports = function(grunt) {
         watch: {
             sass: {
                 files: ['src/scss/**/*.scss'],
-                tasks: ['sass:dev', 'postcss:dev']
+                tasks: ['sass', 'postcss']
             },
             client: {
-                files: ['client/scripts/**/*.js'],
-                tasks: ['eslint:client']
+                files: [
+                    'client/scripts/**/*.js',
+                    '!client/scripts/script.*js'
+                ],
+                tasks: ['eslint:client', 'uglify']
             },
             server: {
                 files: ['server/**/*.js'],
@@ -20,8 +23,13 @@ module.exports = function(grunt) {
                 tasks: ['eslint:source']
             },
             livereload: {
-                options: { livereload: true },
-                files: ['client/**/*']
+                options: {
+                    livereload: true,
+                },
+                files: ['client/**/*', '.rebooted']
+            },
+            grunt: {
+                files: ['Gruntfile.js']
             }
         },
         sass: {
@@ -32,7 +40,8 @@ module.exports = function(grunt) {
                 dest: 'client/stylesheets',
                 ext: '.css',
                 options: {
-                    style: 'expanded'
+                    style: 'expanded',
+                    sourcemap: 'none'
                 }
             },
             prod: {
@@ -40,10 +49,9 @@ module.exports = function(grunt) {
                 cwd: 'src/scss',
                 src: ['**/*.scss'],
                 dest: 'client/stylesheets',
-                ext: '.css',
+                ext: '.min.css',
                 options: {
-                    style: 'compressed',
-                    sourcemap: 'none'
+                    style: 'compressed'
                 }
             }
         },
@@ -54,40 +62,90 @@ module.exports = function(grunt) {
                 ]
             },
             dev: {
-                src: 'client/stylesheets/style.css',
-                map: true
+                src: 'client/stylesheets/style.css'
             },
             prod: {
-                src: 'client/stylesheets/style.css'
+                src: 'client/stylesheets/style.min.css',
+                map: true
             }
         },
         uglify: {
-            dev: {
+            uncompressed: {
                 options: {
-                    sourceMap: true,
                     mangle: false,
                     beautify: true,
                     preserveComments: 'all',
                     compress: false
                 },
                 files: {
-                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
+                    'client/scripts/script.js': [
+                        'client/scripts/**/*.js',
+                        '!client/scripts/script.*js'
+                    ]
                 }
             },
-            prod: {
+            compressed: {
+                options: {
+                    sourceMap: true
+                },
                 files: {
-                    'client/scripts/script.js': ['client/scripts/**/*.js', '!client/scripts/script.js']
+                    'client/scripts/script.min.js': [
+                        'client/scripts/**/*.js',
+                        '!client/scripts/script.*js'
+                    ]
                 }
             }
         },
         eslint: {
+            options: {
+                quiet: true
+            },
             client: ['client/scripts/**/*.js'],
             server: ['server/**/*.js'],
             source: ['src/js/**/*.js']
+        },
+        concurrent: {
+            dev: {
+                tasks: ['nodemon', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'server.js',
+                options: {
+                    watch: [
+                        'server.js',
+                        'server/'
+                    ],
+                    nodeArgs: ['--debug'],
+                    env: {
+                        PORT: '1337'
+                    },
+                    callback: function (nodemon) {
+                        nodemon.on('log', function (event) {
+                            console.log(event.colour);
+                        });
+
+                        nodemon.on('config:update', function() {
+                            setTimeout(function() {
+                                require('open')('http://localhost:1337')
+                            }, 1000)
+                        });
+
+                        nodemon.on('restart', function() {
+                            setTimeout(function() {
+                                require('fs').writeFileSync('.rebooted', 'reboot');
+                            }, 1000)
+                        });
+                    }
+                }
+            }
         }
     });
 
-    grunt.registerTask('dev', 'Build development version of project', ['eslint', 'uglify:dev', 'sass:dev', 'postcss:dev']);
-    grunt.registerTask('prod', 'Build production version of project', ['eslint', 'uglify:prod', 'sass:prod', 'postcss:prod']);
-    grunt.registerTask('default', 'Build development version and run watch server', ['dev', 'watch']);
+    grunt.registerTask('build', 'Build project', ['eslint', 'uglify', 'sass', 'postcss']);
+    grunt.registerTask('default', 'Build development version and run watch server', ['build', 'concurrent']);
 };

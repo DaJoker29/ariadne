@@ -1,6 +1,6 @@
 angular
     .module('ariadne')
-    .controller('TaskController', function ($filter, Task, User, $scope) {
+    .controller('TaskController', [ '$filter', 'Task', 'User', '$scope', function ($filter, Task, User, $scope) {
 
         var vm = this;
         vm.taskLimit = 9;
@@ -80,4 +80,4 @@ angular
             doc.flags[flag] = !doc.flags[flag];
             Task.save( {_id: vm.user._id, id: taskID}, doc);
         };
-    });
+    }]);
