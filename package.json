@@ -37,6 +37,7 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
+    "grunt-bump": "^0.7.0",
     "grunt-concurrent": "^2.1.0",
     "grunt-nodemon": "^0.4.1",
     "mongoose": "^4.4.3",
