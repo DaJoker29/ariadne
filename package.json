@@ -14,7 +14,7 @@
     "grunt-postcss": "^0.5.1",
     "load-grunt-tasks": "3.2.0"
   },
-  "version": "0.2.4",
+  "version": "1.0.0",
   "name": "ariadne",
   "description": "A TODO list application",
   "main": "Gruntfile.js",
