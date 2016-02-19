@@ -1,13 +1,7 @@
-- [x] Build Project Roadmap
-- [x] Build Change Log
-- [x] Build Project To-Do List (ironic)
-- [X] Add Logging (morgan)
-- [X] Angular.UI (Typeahead for `Label` field)
-- [X] `angular.filter` to clean up HTML attributes
-- [X] Edge Browser Header
-- [X] Switch to `process.env.SETTING || default` convention
-- [ ] Password Hashing
-- [ ] Passport HTTP Strategy (for native clients)
 - [ ] Deployment Script
-- [ ] Optimize Folder Structure
-- [X] More External Assets from CDN
+- [ ] Build a Feature List
+- [ ] Write Unit Tests
+- [x] Benchmark Hashing function
+- [ ] Event Models
+- [ ] Task Models
+- [ ] Notification System
