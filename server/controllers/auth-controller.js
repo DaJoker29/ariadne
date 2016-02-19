@@ -11,7 +11,7 @@ var config = {
   // individual password, so larger is better. however, larger also means longer
   // to hash the password. tune so that hashing the password takes about a
   // second
-  iterations: 872791
+  iterations: 400000
 };
 
 /**
@@ -24,6 +24,7 @@ var config = {
  * @param {!function(?Error, ?Buffer=)} callback
  */
 function hashPassword(password, callback) {
+  console.time('hashing');
   // generate a salt for pbkdf2
   crypto.randomBytes(config.saltBytes, function(err, salt) {
     if (err) {
@@ -47,6 +48,7 @@ function hashPassword(password, callback) {
 
       salt.copy(combined, 8);
       hash.copy(combined, salt.length + 8);
+      console.timeEnd('hashing');
       callback(null, combined);
     });
   });
