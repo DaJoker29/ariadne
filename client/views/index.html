@@ -13,15 +13,18 @@
     <link rel="stylesheet" href="/css/style.min.css">
 </head>
 <body>
-    <main class="container">
-        <!-- Title -->
-        <div class="page-header">
-            <div class="pull-right">
-                <a href="/logout">Log Out</a>
+    <main class="container" ng-controller="MainController as main">
+        <!-- User Controller -->
+        <div ng-controller="UserController as user">
+            <!-- Title -->
+            <div class="page-header">
+                <div class="pull-right">
+                    <a href="/admin">Admin Panel</a>
+                    <a href="/logout">Log Out</a>
+                </div>
+                <h1>Ariadne <small>An Intelligent Task List</small></h1>
             </div>
-            <h1>Ariadne <small>An Intelligent Task List</small></h1>
         </div>
-
 
         <div id="instructions" class="panel panel-success">
             <div class="panel-heading">

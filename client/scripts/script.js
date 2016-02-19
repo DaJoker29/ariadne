@@ -1,5 +1,7 @@
 angular.module("ariadne", [ "ngResource", "angular.filter", "ui.bootstrap" ]);
 
+angular.module("ariadne").controller("MainController", [ function() {} ]);
+
 angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "User", "$scope", function($filter, Task, User, $scope) {
     var vm = this;
     vm.taskLimit = 9;
@@ -104,6 +106,8 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "Use
         }, doc);
     };
 } ]);
+
+angular.module("ariadne").controller("UserController", [ function() {} ]);
 
 angular.module("ariadne").factory("Task", [ "$resource", function($resource) {
     return $resource("/api/users/:_id/tasks/:id", {
