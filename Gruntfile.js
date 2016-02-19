@@ -120,7 +120,7 @@ module.exports = function(grunt) {
                         'server.js',
                         'server/'
                     ],
-                    nodeArgs: ['--debug'],
+                    // nodeArgs: ['--debug'],
                     env: {
                         PORT: '1337'
                     },
