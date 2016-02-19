@@ -75,7 +75,11 @@ app.get('/login', function ( req, res ) {
 app.get('/logout', function ( req, res ) {
     req.logout();
     res.redirect('/');
-})
+});
+
+app.get('/admin', ensureAdmin, function ( req, res) {
+    res.render('admin.html');
+});
 
 app.post('/register', userController.create);
 app.post('/login', passport.authenticate('local', {
@@ -105,6 +109,21 @@ function ensureAuth( req, res, next ) {
     if( req.user ) { next(); }
     else {
         res.redirect('/login');
+    }
+}
+
+function ensureAdmin( req, res, next ) {
+    if( req.user && req.user.flags.isAdmin ) {
+        // Verify Admin flag on the server before allowing access
+        User.findOne( { username: req.user.username }, function( err, user) {
+            if(user.flags.isAdmin) {
+                return next();
+            }
+
+            res.redirect('/');
+        });
+    } else {
+        res.redirect('/');
     }
 }
 
