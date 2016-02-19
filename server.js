@@ -97,14 +97,13 @@ var archive = schedule.scheduleJob('0 5 * * *', taskController.archive);
 /*              Run                     */
 var port = process.env.PORT || 1337;
 app.listen(port, function() {
-    console.log('Server running at http://localhost:' + port);
+    console.log('EXPRESS: running on http://localhost:' + port);
 });
 
 /*              Helpers               */
 function ensureAuth( req, res, next ) {
-    if( req.user ) {
-        next();
-    } else {
+    if( req.user ) { next(); }
+    else {
         res.redirect('/login');
     }
 }
@@ -113,7 +112,14 @@ function verifyCredentials ( username, password, done ) {
     User.findOne( { username: username }, function (err, user) {
         if( err ) { return done( err ); }
         if( !user ) { return done(null, false); }
-        if( user.password !== password) { return done(null, false); }
-        return done(null, user);
+        authController.verifyPassword( password, user.password,
+            function ( err, flag ) {
+                if(err) { return done(err); }
+                if (flag) {
+                    return done(null, user);
+                } else {
+                    return done(null, false);
+                }
+            });
     })
 }

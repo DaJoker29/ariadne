@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <!-- Application Stylesheets -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style.min.css">
 </head>
 <body>
     <main class="container">
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Tasks -->
-        <section ng-controller="TaskController as tasks">
+        <section ng-controller="TaskController as tasks" ng-cloak>
             <!-- Active List -->
             <div class="list-group">
                 <div class="page-header">
@@ -70,11 +70,11 @@
                     <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                     <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isComplete');" class="fa fa-fw fa-check"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-minus" ng-if="task.flags.isActive"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
-                        <a href="#" ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a href="#">
+                        <a ng-click="tasks.toggle(task._id, 'isComplete');" class="fa fa-fw fa-check"></a>
+                        <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-minus" ng-if="task.flags.isActive"></a>
+                        <a ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
+                        <a ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
+                        <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
                         &nbsp;&nbsp;&nbsp;
                     </div>
 
@@ -92,10 +92,10 @@
                     <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                     <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
-                        <a href="#" ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
-                        <a href="#" ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a href="#">
+                        <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
+                        <a ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
+                        <a ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
+                        <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
                         &nbsp;&nbsp;&nbsp;
                     </div>
                 </li>
@@ -123,7 +123,7 @@
                 <li class="list-group-item disabled" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: true, isComplete: true} }">
                     {{ task.name }}
                     <div class="pull-right">
-                        <a href="#" class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
+                        <a class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
                     </div>
                 </li>
             </div>
@@ -139,6 +139,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <!-- Application Code -->
-    <script src="/js/script.js"></script>
+    <script src="/js/script.min.js"></script>
 </body>
 </html>

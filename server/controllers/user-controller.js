@@ -1,13 +1,19 @@
 var User = require('../models/user');
+var authController = require('./auth-controller.js');
 
 module.exports.create = function ( req, res ) {
-
-    var user = new User( req.body );
-    user.save(function( err ) {
-        if (err) {
-            res.status(400).send('User name already taken');
-        } else {
-            res.redirect('/login');
+    authController.hashPassword( req.body.password, function( err, hash ) {
+        if (err) { res.status(500).send('Error generating Hash'); }
+        else {
+            req.body.password = hash;
+            var user = new User( req.body );
+            user.save(function( err ) {
+                if (err) {
+                    res.status(400).send('User name already taken');
+                } else {
+                    res.redirect('/login');
+                }
+            });
         }
     });
 };
