@@ -69,7 +69,11 @@ app.get('/register', function ( req, res ) {
 });
 
 app.get('/login', function ( req, res ) {
-    res.render('login.html');
+    if( req.user ) {
+        res.redirect('/');
+    } else {
+        res.render('login.html');
+    }
 });
 
 app.get('/logout', function ( req, res ) {
