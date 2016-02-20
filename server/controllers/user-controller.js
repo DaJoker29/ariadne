@@ -31,3 +31,30 @@ module.exports.list = function ( req, res ) {
         });
     }
 };
+
+module.exports.listAll = function ( req, res ) {
+    if( !req.user || !req.user.flags.isAdmin ) {
+        res.status(400).send('You do not have permission');
+    } else {
+        User.find({}, function (err, results) {
+            if(err) {res.status(400).send('No Users Found'); }
+            else {
+                res.send(results);
+            }
+        });
+    }
+};
+
+// module.exports.modify = function ( req, res ) {
+//     Task.where( { _id: req.params.id } ).update( req.body, function ( err, result ) {
+//         if (err) { return; }
+//         res.json ( result );
+//     });
+// };
+
+// module.exports.remove = function ( req, res ) {
+//     Task.findOneAndRemove({ _id: req.params.id }, function ( err, result ) {
+//         if (err) { return; }
+//         res.json ( result );
+//     });
+// };

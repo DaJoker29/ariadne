@@ -13,15 +13,24 @@
     <link rel="stylesheet" href="/css/style.min.css">
 </head>
 <body>
-    <main class="container">
-        <!-- Title -->
-        <div class="page-header">
-            <div class="pull-right">
-                <a href="/logout">Log Out</a>
+    <main class="container" ng-controller="MainController as main">
+        <!-- User Controller -->
+        <div ng-controller="UserController as user">
+            <!-- Title -->
+            <div class="page-header">
+                <div class="pull-right">
+                    <p ng-bind-template="Welcome, {{ main.user.username }}"></p>
+                    <p>
+                        <a href="/admin" ng-if="main.user.flags.isAdmin">Admin Dashboard</a>
+                        &bull;
+                        <a href="/feedback">Feedback</a>
+                        &bull;
+                        <a href="/logout">Log Out</a>
+                    </p>
+                </div>
+                <h1>Ariadne <small>An Intelligent Task List</small></h1>
             </div>
-            <h1>Ariadne <small>An Intelligent Task List</small></h1>
         </div>
-
 
         <div id="instructions" class="panel panel-success">
             <div class="panel-heading">
@@ -63,7 +72,7 @@
                 <div class="page-header">
                     <h4>Active <small ng-class="{ 'text-success': tasks.activeCount === tasks.taskLimit, 'text-danger': tasks.activeCount === 0, 'text-info': tasks.activeCount > 0 && tasks.activeCount < tasks.taskLimit }" ng-bind-template="{{ tasks.activeCount}} of {{ tasks.taskLimit }} ({{ tasks.completeCount }} complete)"></small></h4>
                 </div>
-                <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
+                <li class="list-group-item task" ng-repeat="task in main.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
                     <span class="label" ng-class="{
                     'label-danger': task.flags.isImportant && task.flags.isUrgent, 'label-warning': task.flags.isImportant && !task.flags.isUrgent, 'label-info': !task.flags.isImportant && task.flags.isUrgent }" ng-bind="task.name"></span>
                     <i class="fa fa-fw fa-exclamation text-warning" ng-if="task.flags.isImportant"></i>
@@ -86,7 +95,7 @@
                 <div class="page-header">
                     <h4>Task List</h4>
                 </div>
-                <li class="list-group-item task" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: false } } | orderBy: 'label'">
+                <li class="list-group-item task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: 'label'">
                     <span ng-bind="task.name"></span>
                     <i class="fa fa-fw fa-exclamation text-warning" ng-if="task.flags.isImportant"></i>
                     <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
@@ -101,16 +110,16 @@
                 </li>
 
             </div>
-            <!-- Add New Task -->
+            <!-- Create Task -->
             <div class="page-header">
                 <h4>Create Task</h4>
             </div>
-            <form ng-submit="tasks.createTask(); console.log(tasks.taskList);">
+            <form ng-submit="tasks.createTask(); console.log(main.taskList);">
                 <div class="form-group">
                     <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name" autofocus>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Label (optional)" ng-model="tasks.newTask.label" uib-typeahead="task.label for task in tasks.taskList | unique: 'label' | filter: $viewValue" typeahead-editable="true">
+                    <input type="text" class="form-control" placeholder="Label (optional)" ng-model="tasks.newTask.label" uib-typeahead="task.label for task in main.taskList | unique: 'label' | filter: $viewValue" typeahead-editable="true">
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
             </form>
@@ -120,7 +129,7 @@
                 <div class="page-header">
                     <h4>Completed Tasks</h4>
                 </div>
-                <li class="list-group-item disabled" ng-repeat="task in tasks.taskList | filter: { flags: { isActive: true, isComplete: true} }">
+                <li class="list-group-item disabled" ng-repeat="task in main.taskList | filter: { flags: { isActive: true, isComplete: true} }">
                     {{ task.name }}
                     <div class="pull-right">
                         <a class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
@@ -139,6 +148,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <!-- Application Code -->
-    <script src="/js/script.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
