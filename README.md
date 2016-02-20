@@ -25,6 +25,9 @@ node server
 # Change Log
 
 ## [Unreleased]
+### Added
+- Admin Dashboard
+- Feedback System
 
 ## [v1.0.0] - 2016-18-02
 ### Security
