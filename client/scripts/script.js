@@ -38,6 +38,20 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Tas
     vm.toggleUser = function(id) {};
 } ]);
 
+angular.module("ariadne").controller("FeedbackController", [ "Feedback", "$scope", function(Feedback, $scope) {
+    var vm = this;
+    vm.comments = Feedback.query();
+    vm.createComment = function() {
+        var feedback = new Feedback();
+        feedback.message = vm.newMessage;
+        feedback.name = $scope.main.user.username;
+        feedback.$save(function(result) {
+            vm.comments.push(result);
+            vm.newMessage = "";
+        });
+    };
+} ]);
+
 angular.module("ariadne").controller("MainController", [ "User", "Task", "$scope", "$filter", function(User, Task, $scope, $filter) {
     var vm = this;
     vm.taskList = [];
@@ -148,6 +162,10 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
 } ]);
 
 angular.module("ariadne").controller("UserController", [ function() {} ]);
+
+angular.module("ariadne").factory("Feedback", [ "$resource", function($resource) {
+    return $resource("/api/feedback");
+} ]);
 
 angular.module("ariadne").factory("Task", [ "$resource", function($resource) {
     return $resource("/api/users/:_id/tasks/:id", {

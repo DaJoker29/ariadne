@@ -10,10 +10,11 @@ var cookieParser   = require('cookie-parser');
 var passportLocal  = require('passport-local');
 
 // Local Modules
-var User           = require('./server/models/user');
-var authController = require('./server/controllers/auth-controller');
-var taskController = require('./server/controllers/task-controller');
-var userController = require('./server/controllers/user-controller');
+var User               = require('./server/models/user');
+var authController     = require('./server/controllers/auth-controller');
+var taskController     = require('./server/controllers/task-controller');
+var userController     = require('./server/controllers/user-controller');
+var feedbackController = require('./server/controllers/feedback-controller');
 
 /*              Initialization          */
 // Initialize Express
@@ -76,13 +77,17 @@ app.get('/login', function ( req, res ) {
     }
 });
 
-app.get('/logout', function ( req, res ) {
+app.get('/logout', ensureAuth, function ( req, res ) {
     req.logout();
     res.redirect('/');
 });
 
 app.get('/admin', ensureAdmin, function ( req, res) {
     res.render('admin.html');
+});
+
+app.get('/feedback', ensureAuth, function (req, res) {
+    res.render('feedback.html');
 });
 
 app.post('/register', userController.create);
@@ -101,6 +106,9 @@ app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks', taskController.create);
 app.post('/api/users/:uid/tasks/:id', taskController.modify);
 app.delete('/api/users/:uid/tasks/:id', taskController.remove);
+
+app.get('/api/feedback', feedbackController.fetch);
+app.post('/api/feedback', feedbackController.create);
 
 /*              Scheduling              */
 var archive = schedule.scheduleJob('0 5 * * *', taskController.archive);
