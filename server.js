@@ -93,6 +93,9 @@ app.post('/login', passport.authenticate('local', {
 
 // Server
 app.get('/api/users/', userController.list);
+app.get('/api/users/all', userController.listAll);
+app.get('/api/users/tasks', taskController.listAll);
+app.get('/api/users/archive', taskController.archive);
 app.get('/api/users/:uid/tasks', taskController.list);
 app.get('/api/users/:uid/tasks/:id', taskController.listOne);
 app.post('/api/users/:uid/tasks', taskController.create);

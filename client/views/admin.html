@@ -1,4 +1,4 @@
-<html>
+<html ng-app="ariadne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,14 +8,69 @@
     <!-- Third-Party Stylesheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/superhero/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <!-- Application Stylesheets -->
+    <link rel="stylesheet" href="/css/style.min.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" ng-controller="MainController as main">
         <!-- Title -->
         <div class="page-header">
+            <div class="pull-right">
+                <p ng-bind-template="Welcome, {{ main.user.username }}"></p>
+                <p>
+                    <a href="/">Dashboard</a>
+                    &bull;
+                    <a href="/logout">Log Out</a>
+                </p>
+            </div>
             <h1>Ariadne <small>An Intelligent Productivity Manager</small></h1>
         </div>
         <!-- Admin Dashboard -->
+        <div ng-controller="AdminController as admin">
+            <div class="label" ng-bind-template="Total Users: {{admin.stats.totalUsers}}"></div>
+            <div class="label" ng-bind-template="Total Tasks: {{admin.stats.totalTasks}}"></div>
+            <div class="label" ng-bind-template="Archived Tasks: {{admin.stats.archivedTasks}}"></div>
+            <div class="label" ng-bind-template="Current Tasks: {{admin.stats.currentTasks}}"></div>
+            <div class="label" ng-bind-template="Active Tasks: {{admin.stats.activeTasks}}"></div>
+            <div class="label" ng-bind-template="Complete Tasks: {{admin.stats.completeTasks}}"></div>
+            <table class="table table-striped table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Flags</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="user in admin.userList">
+                        <td ng-bind="user._id"></td>
+                        <td ng-bind="user.username"></td>
+                        <td>
+                            <span class="" ng-if="user.flags.isAdmin"><i class="fa fa-fw fa-users"></i> Admin</span>
+                        </td>
+                        <td>
+                            <a ng-click="admin.toggleUser(user._id)">Toggle Admin</a>
+                            <a ng-click="admin.deleteUser(user._id)">Remove User</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-danger" ng-click="admin.archive()">Archive Completed Tasks</button>
+        </div>
     </div>
+
+    <!-- Third-Party Code -->
+    <script src="/vendor/angular/angular.min.js"></script>
+    <script src="/vendor/angular-resource/angular-resource.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.1.2/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.8/angular-filter.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <!-- Application Code -->
+    <script src="/js/script.js"></script>
+
 </body>
 </html>

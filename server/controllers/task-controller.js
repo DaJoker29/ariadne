@@ -25,6 +25,19 @@ module.exports.listOne = function ( req, res ) {
     });
 };
 
+module.exports.listAll = function ( req, res ) {
+    if( !req.user || !req.user.flags.isAdmin ) {
+        res.status(400).send('You do not have permission');
+    } else {
+        Task.find({}, function (err, results) {
+            if(err) {res.status(400).send('No Tasks Found'); }
+            else {
+                res.send(results);
+            }
+        });
+    }
+};
+
 module.exports.modify = function ( req, res ) {
     Task.where( { owner: req.params.uid, _id: req.params.id } ).update( req.body, function ( err, result ) {
         if (err) { return; }
