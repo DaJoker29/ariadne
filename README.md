@@ -22,48 +22,12 @@ Finally, launch the server via [Node](https://nodejs.org/)
 node server
 ```
 
-# Roadmap
-## Initial Release
-
-- Tasks
-  - Active List
-  - Priority
-  - Labels
-
-## Next Release
-
-- APIs
-  - Social Authentication
-    - Google
-    - Facebook
-    - Github
-- Tasks
-  - Auto-Generated Lists
-  - Sub-Tasks
-  - Imported Tasks(Github Issues, Trello Cards)
-  - Multiple Lists
-    - Routines (Repeated on a regular basis)
-    - Checklists (For set procedures, such as 'deploying a new release')
-  - Task Dependencies
-
-- Events
-  - SMS/Push Notifications
-  - Reminders
-  - Imported Events (Google Calender, Facebook Events)
-
-## Future
-
-  - Goal Monitoring
-  - Daily Planning
-  - Task Analysis and Prediction
-  - Automated Priority
-  - Collaborative Projects
-    - Shared Lists
-    - Task Delegation
-
 # Change Log
 
 ## [Unreleased]
+### Added
+- Admin Dashboard
+- Feedback System
 
 ## [v1.0.0] - 2016-18-02
 ### Security
