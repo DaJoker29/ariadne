@@ -15,6 +15,8 @@ I'm looking to incorporate a few social APIs for two purposes. One is social aut
   - Events -> Events
 - Trello
   - Cards -> Tasks
+
+
 ## Native Clients
 Eventually I want to port the application to native applications, allowing for more robust integration with mobile devices. At that point we can provide extended location support.
 ## Reminders & Notifications
