@@ -1,5 +1,5 @@
 angular.module('ariadne').controller('AdminController',
-    [ '$scope', 'User', 'Task', '$filter', function( $scope, User, Task, $filter) {
+    [ '$scope', 'User', 'Task', 'Feedback', '$filter', function( $scope, User, Task, Feedback, $filter) {
 
         var vm = this;
 
@@ -15,6 +15,8 @@ angular.module('ariadne').controller('AdminController',
             vm.stats.completeTasks = $filter('filter')(vm.taskList, { flags: { isArchived: false, isComplete: true } } ).length;
             vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
         });
+
+        vm.feedbackList = Feedback.query();
 
         vm.archive = function() {
             User.get({id: 'archive'}, function() {

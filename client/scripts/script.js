@@ -1,6 +1,6 @@
 angular.module("ariadne", [ "ngResource", "angular.filter", "ui.bootstrap" ]);
 
-angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Task", "$filter", function($scope, User, Task, $filter) {
+angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Task", "Feedback", "$filter", function($scope, User, Task, Feedback, $filter) {
     var vm = this;
     vm.stats = {};
     vm.userList = User.query({
@@ -30,6 +30,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Tas
         }).length;
         vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
     });
+    vm.feedbackList = Feedback.query();
     vm.archive = function() {
         User.get({
             id: "archive"
@@ -40,7 +41,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Tas
 
 angular.module("ariadne").controller("FeedbackController", [ "Feedback", "$scope", function(Feedback, $scope) {
     var vm = this;
-    vm.comments = Feedback.query();
+    // vm.comments = Feedback.query();
     vm.createComment = function() {
         var feedback = new Feedback();
         feedback.message = vm.newMessage;

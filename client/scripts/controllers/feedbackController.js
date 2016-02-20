@@ -2,7 +2,7 @@ angular.module('ariadne').controller('FeedbackController',
     [ 'Feedback', '$scope', function(Feedback, $scope) {
         var vm = this;
 
-        vm.comments = Feedback.query();
+        // vm.comments = Feedback.query();
 
         vm.createComment = function() {
             var feedback = new Feedback();
