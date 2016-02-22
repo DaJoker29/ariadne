@@ -3,8 +3,10 @@ var User               = require('./server/models/user');
 var taskController     = require('./server/controllers/task-controller');
 var userController     = require('./server/controllers/user-controller');
 var feedbackController = require('./server/controllers/feedback-controller');
+var adminController = require('./server/controllers/admin-controller');
 
 /*              Routes                  */
+
 // Client
 app.get('/', ensureAuth, function ( req, res ) {
     res.render('index.html');
@@ -38,19 +40,50 @@ app.get('/feedback', ensureAuth, function (req, res) {
 app.post('/register', userController.create);
 
 
-// Server
-app.get('/api/users/', userController.list);
-app.get('/api/users/all', userController.listAll);
-app.get('/api/users/tasks', taskController.listAll);
-app.get('/api/users/archive', taskController.archive);
-app.get('/api/users/:uid/tasks', taskController.list);
-app.get('/api/users/:uid/tasks/:id', taskController.listOne);
-app.post('/api/users/:uid/tasks', taskController.create);
-app.post('/api/users/:uid/tasks/:id', taskController.modify);
-app.delete('/api/users/:uid/tasks/:id', taskController.remove);
+// Server (API)
 
+// Old Routes
+// app.get('/api/users/', userController.list);
+// app.get('/api/users/all', userController.listAll);
+// app.get('/api/users/tasks', taskController.listAll);
+// app.get('/api/users/archive', taskController.archive);
+// app.get('/api/users/:uid/tasks', taskController.list);
+// app.get('/api/users/:uid/tasks/:id', taskController.listOne);
+// app.post('/api/users/:uid/tasks', taskController.create);
+// app.post('/api/users/:uid/tasks/:id', taskController.modify);
+// app.delete('/api/users/:uid/tasks/:id', taskController.remove);
+
+// app.get('/api/feedback', feedbackController.fetch);
+// app.post('/api/feedback', feedbackController.create);
+
+// Users
+app.get('/api/users', userController.fetch);
+app.post('/api/users', userController.create);
+app.post('/api/users/:id', userController.update);
+app.delete('/api/users/:id', userController.disable);
+
+// Tasks
+app.get('/api/tasks', taskController.fetch);
+app.post('/api/tasks', taskController.create);
+app.post('/api/tasks/:id', taskController.update);
+app.delete('/api/tasks/:id', taskController.delete);
+
+// Feedback
 app.get('/api/feedback', feedbackController.fetch);
 app.post('/api/feedback', feedbackController.create);
+
+// Admin
+app.get('/api/admin/users/:id', adminController.fetchUser);
+app.get('/api/admin/tasks/:id', adminController.fetchTask);
+
+app.post('/api/admin/tasks/:id', adminController.updateTask);
+app.post('/api/admin/users/:id', adminController.updateUser);
+
+app.delete('/api/admin/tasks/:id', adminController.deleteTask);
+app.delete('/api/admin/users/:id', adminController.disableUser);
+
+app.get('/api/admin/stats', adminController.fetchStats);
+app.post('/api/admin/archive', adminController.runArchive);
 
 /*              Helpers               */
 function ensureAuth( req, res, next ) {

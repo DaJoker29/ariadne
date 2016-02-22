@@ -4,7 +4,8 @@ var userSchema = new mongoose.Schema({
     username : { type: String, required: true, unique: true, lowercase: true },
     password : { type: Buffer, required: true },
     flags    : {
-        isAdmin: { type: Boolean, required: true, default: false }
+        isAdmin    : { type: Boolean, required: true, default: false },
+        isDisabled : { type: Boolean, required: true, default: false }
     }
 });
 

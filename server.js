@@ -10,9 +10,10 @@ var cookieParser   = require('cookie-parser');
 var passportLocal  = require('passport-local');
 
 // Local Modules
-var User               = require('./server/models/user');
-var authController     = require('./server/controllers/auth-controller');
-var userController     = require('./server/controllers/user-controller');
+var User           = require('./server/models/user');
+var authController = require('./server/controllers/auth-controller');
+var taskController = require('./server/controllers/task-controller');
+var userController = require('./server/controllers/user-controller');
 
 /*              Initialization          */
 // Initialize Express
