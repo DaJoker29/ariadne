@@ -18,7 +18,7 @@ module.exports.create = function ( req, res ) {
     });
 };
 
-module.exports.list = function ( req, res ) {
+module.exports.fetch = function ( req, res ) {
     if( !req.user ) {
         res.status(400).send('Not Logged In.');
     } else {
@@ -32,29 +32,30 @@ module.exports.list = function ( req, res ) {
     }
 };
 
-module.exports.listAll = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin ) {
-        res.status(400).send('You do not have permission');
+module.exports.update = function ( req, res ) {
+    if( !req.user ) {
+        res.status(400).send('Not logged in');
     } else {
-        User.find({}, function (err, results) {
-            if(err) {res.status(400).send('No Users Found'); }
-            else {
-                res.send(results);
+        User.findByIdAndUpdate( req.params.id, { $set: req.body }, function( err, result ) {
+            if(err) {
+                res.status(400).send(err);
+            } else {
+                res.send( result );
             }
         });
     }
 };
 
-// module.exports.modify = function ( req, res ) {
-//     Task.where( { _id: req.params.id } ).update( req.body, function ( err, result ) {
-//         if (err) { return; }
-//         res.json ( result );
-//     });
-// };
-
-// module.exports.remove = function ( req, res ) {
-//     Task.findOneAndRemove({ _id: req.params.id }, function ( err, result ) {
-//         if (err) { return; }
-//         res.json ( result );
-//     });
-// };
+module.exports.disable = function( req, res ) {
+    if( !req.user ) {
+        res.status(400).send('Not logged in');
+    } else {
+        User.findByIdAndUpdate( req.params.id, { $set: { flags: { isDisabled: true } } }, function(err, result) {
+            if(err) {
+                res.status(400).send(err);
+            } else {
+                res.send( result );
+            }
+        });
+    }
+};

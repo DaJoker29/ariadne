@@ -10,15 +10,14 @@ var cookieParser   = require('cookie-parser');
 var passportLocal  = require('passport-local');
 
 // Local Modules
-var User               = require('./server/models/user');
-var authController     = require('./server/controllers/auth-controller');
-var taskController     = require('./server/controllers/task-controller');
-var userController     = require('./server/controllers/user-controller');
-var feedbackController = require('./server/controllers/feedback-controller');
+var User           = require('./server/models/user');
+var authController = require('./server/controllers/auth-controller');
+var taskController = require('./server/controllers/task-controller');
+var userController = require('./server/controllers/user-controller');
 
 /*              Initialization          */
 // Initialize Express
-var app = express();
+var app = module.exports = express();
 
 // Connect to Database
 mongoose.connect('mongodb://localhost:27017/ariadne');
@@ -59,57 +58,11 @@ passport.deserializeUser( function( id, done ) {
     })
 });
 
-/*              Routes                  */
-// Client
-app.get('/', ensureAuth, function ( req, res ) {
-    res.render('index.html');
-});
-
-app.get('/register', function ( req, res ) {
-    res.render('register.html');
-});
-
-app.get('/login', function ( req, res ) {
-    if( req.user ) {
-        res.redirect('/');
-    } else {
-        res.render('login.html');
-    }
-});
-
-app.get('/logout', ensureAuth, function ( req, res ) {
-    req.logout();
-    res.redirect('/');
-});
-
-app.get('/admin', ensureAdmin, function ( req, res) {
-    res.render('admin.html');
-});
-
-app.get('/feedback', ensureAuth, function (req, res) {
-    res.render('feedback.html');
-});
-
-app.post('/register', userController.create);
+// Passport Authentication Route
 app.post('/login', passport.authenticate('local', {
     failureRedirect : '/login',
     successRedirect : '/'
 }));
-
-// Server
-app.get('/api/users/', userController.list);
-app.get('/api/users/all', userController.listAll);
-app.get('/api/users/tasks', taskController.listAll);
-app.get('/api/users/archive', taskController.archive);
-app.get('/api/users/:uid/tasks', taskController.list);
-app.get('/api/users/:uid/tasks/:id', taskController.listOne);
-app.post('/api/users/:uid/tasks', taskController.create);
-app.post('/api/users/:uid/tasks/:id', taskController.modify);
-app.delete('/api/users/:uid/tasks/:id', taskController.remove);
-
-app.get('/api/feedback', feedbackController.fetch);
-app.post('/api/feedback', feedbackController.create);
-
 /*              Scheduling              */
 var archive = schedule.scheduleJob('0 5 * * *', taskController.archive);
 
@@ -119,29 +72,8 @@ app.listen(port, function() {
     console.log('EXPRESS: running on http://localhost:' + port);
 });
 
-/*              Helpers               */
-function ensureAuth( req, res, next ) {
-    if( req.user ) { next(); }
-    else {
-        res.redirect('/login');
-    }
-}
 
-function ensureAdmin( req, res, next ) {
-    if( req.user && req.user.flags.isAdmin ) {
-        // Verify Admin flag on the server before allowing access
-        User.findOne( { username: req.user.username }, function( err, user) {
-            if(user.flags.isAdmin) {
-                return next();
-            }
-
-            res.redirect('/');
-        });
-    } else {
-        res.redirect('/');
-    }
-}
-
+/*              Helpers                 */
 function verifyCredentials ( username, password, done ) {
     User.findOne( { username: new RegExp('^' + username +'$', 'i') }, function (err, user) {
         if( err ) { return done( err ); }
@@ -157,3 +89,6 @@ function verifyCredentials ( username, password, done ) {
             });
     })
 }
+
+module.exports.app = app;
+var routes = require('./routes');

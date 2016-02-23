@@ -11,60 +11,41 @@ module.exports.create = function ( req, res ) {
     });
 };
 
-module.exports.list = function ( req, res ) {
-    Task.find({ owner: req.params.uid, 'flags.isArchived': false }, function( err, results ) {
-        if (err) { return; }
-        res.json( results );
-    });
-};
-
-module.exports.listOne = function ( req, res ) {
-    Task.findOne({ owner: req.params.uid, _id: req.params.id }, function ( err, result ) {
-        if (err) { return; }
-        res.json ( result );
-    });
-};
-
-module.exports.listAll = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin ) {
-        res.status(400).send('You do not have permission');
+module.exports.fetch = function ( req, res ) {
+    if ( !req.user ) {
+        res.status(400).send('Not logged in');
     } else {
-        Task.find({}, function (err, results) {
-            if(err) {res.status(400).send('No Tasks Found'); }
-            else {
-                res.send(results);
+        Task.find({ owner: req.user._id, 'flags.isArchived': false }, function( err, results ) {
+            if (err) { return; }
+            res.json( results );
+        });
+    }
+};
+
+module.exports.update = function ( req, res ) {
+    if( !req.user ) {
+        res.status(400).send('Not logged in');
+    } else {
+        Task.findByIdAndUpdate( req.params.id, { $set: req.body }, function( err, result ) {
+            if(err) {
+                res.status(400).send(err);
+            } else {
+                res.send( result );
             }
         });
     }
 };
 
-module.exports.modify = function ( req, res ) {
-    Task.where( { owner: req.params.uid, _id: req.params.id } ).update( req.body, function ( err, result ) {
-        if (err) { return; }
-        res.json ( result );
-    });
-};
-
-module.exports.remove = function ( req, res ) {
-    Task.findOneAndRemove({ owner: req.params.uid, _id: req.params.id }, function ( err, result ) {
-        if (err) { return; }
-        res.json ( result );
-    });
-};
-
-module.exports.archive = function () {
-    Task.update(
-        { 'flags.isComplete': true, 'flags.isArchived': false },
-        { 'flags.isArchived': true, 'flags.isActive': false },
-        { multi: true },
-        function ( err, result ) {
-            var today = new Date();
-            console.log('\nArchive Started -- ' + today.toString());
-            if (err) {
-                console.log('Archive Failure:', err);
+module.exports.delete = function( req, res ) {
+    if( !req.user ) {
+        res.status(400).send('Not logged in');
+    } else {
+        Task.remove({ _id: req.params.id }, function(err, result) {
+            if(err) {
+                res.status(400).send(err);
             } else {
-                console.log('Archive Success: ' + result.n + ' tasks archived.');
+                res.send( result );
             }
-        }
-    );
+        });
+    }
 };

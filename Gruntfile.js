@@ -118,6 +118,7 @@ module.exports = function(grunt) {
                 options: {
                     watch: [
                         'server.js',
+                        'routes.js',
                         'server/'
                     ],
                     // nodeArgs: ['--debug'],

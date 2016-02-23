@@ -27,7 +27,7 @@ angular
             angular.merge(task, vm.newTask);
             task.owner = $scope.main.user._id;
 
-            task.$save({_id: $scope.main.user._id}, function ( result ) {
+            task.$save(function ( result ) {
                 $scope.main.taskList.push( result );
                 vm.newTask.name = '';
                 vm.newTask.label = '';
@@ -35,9 +35,9 @@ angular
         };
 
         vm.removeTask = function ( taskID ) {
-            Task.remove({_id: $scope.main.user._id, id: taskID}, function ( result ) {
+            Task.remove({id: taskID}, { justOne: true }, function ( result ) {
                 $scope.main.taskList = $filter('filter')($scope.main.taskList, function (e) {
-                    return e._id !== result._id;
+                    return e._id !== taskID;
                 });
             });
         };
@@ -62,6 +62,7 @@ angular
                 }
             }
 
+            // Adjust Complete Counter
             if('isComplete' === flag) {
                 if (!$filter('filter')($scope.main.taskList, { _id: taskID })[0].flags.isComplete) {
                     vm.completeCount++;
