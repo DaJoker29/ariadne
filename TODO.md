@@ -1,6 +1,6 @@
 ## Important
-- [ ] Update REST API
-- [ ] Create Admin View
+- [x] Update REST API
+- [x] Create Admin View
 - [ ] Update User View
 - [ ] Update User Model
 - [ ] Update User Controllers
