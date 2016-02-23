@@ -1,7 +1,9 @@
-var User = require('../models/user.js');
-var Task = require('../models/task.js');
+var User     = require('../models/user.js');
+var Task     = require('../models/task.js');
+var Feedback = require('../models/feedback.js');
 
 module.exports.fetchUser = function ( req, res ) {
+    console.log('Fetch user');
     if( !req.user || !req.user.flags.isAdmin) {
         res.status(400).send('Unauthorized');
     } else if( req.params.id ) {
@@ -101,7 +103,21 @@ module.exports.disableUser = function ( req, res ) {
     }
 };
 
-module.exports.fetchStats = function ( req, res ) {
+module.exports.fetchFeedback = function ( req, res ) {
+    if( !req.user || !req.user.flags.isAdmin) {
+        res.status(400).send('Unauthorized');
+    } else {
+        Feedback.find({}, function( err, results ) {
+            if (err) {
+                res.status(400).send(err);
+            } else {
+                res.json(results);
+            }
+        });
+    }
+};
+
+module.exports.fetchStats = function( req, res ) {
     if( !req.user || !req.user.flags.isAdmin) {
         res.status(400).send('Unauthorized');
     } else {

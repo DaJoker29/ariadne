@@ -1,14 +1,16 @@
 angular.module("ariadne", [ "ngResource", "angular.filter", "ui.bootstrap" ]);
 
-angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Task", "Feedback", "$filter", function($scope, User, Task, Feedback, $filter) {
+angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$filter", function($scope, Admin, $filter) {
     var vm = this;
     vm.stats = {};
-    vm.userList = User.query({
-        id: "all"
+    vm.userList = Admin.query({
+        tag: "users"
     }, function() {
         vm.stats.totalUsers = vm.userList.length;
     });
-    vm.taskList = Task.query({}, function() {
+    vm.taskList = Admin.query({
+        tag: "tasks"
+    }, function() {
         vm.stats.totalTasks = vm.taskList.length;
         vm.stats.archivedTasks = $filter("filter")(vm.taskList, {
             flags: {
@@ -30,11 +32,20 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "User", "Tas
         }).length;
         vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
     });
-    vm.feedbackList = Feedback.query();
+    vm.feedbackList = Admin.query({
+        tag: "feedback"
+    }, function() {
+        console.log("Feedback Queried");
+    });
+    vm.stats = Admin.query({
+        tag: "stats"
+    });
     vm.archive = function() {
-        User.get({
-            id: "archive"
-        }, function() {});
+        Admin.save({
+            tag: "archive"
+        }, function() {
+            console.log("Archive Run");
+        });
     };
     vm.toggleUser = function(id) {};
 } ]);
@@ -98,9 +109,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
         var task = new Task();
         angular.merge(task, vm.newTask);
         task.owner = $scope.main.user._id;
-        task.$save({
-            _id: $scope.main.user._id
-        }, function(result) {
+        task.$save(function(result) {
             $scope.main.taskList.push(result);
             vm.newTask.name = "";
             vm.newTask.label = "";
@@ -108,11 +117,12 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
     };
     vm.removeTask = function(taskID) {
         Task.remove({
-            _id: $scope.main.user._id,
             id: taskID
+        }, {
+            justOne: true
         }, function(result) {
             $scope.main.taskList = $filter("filter")($scope.main.taskList, function(e) {
-                return e._id !== result._id;
+                return e._id !== taskID;
             });
         });
     };
@@ -138,6 +148,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
                 vm.activeCount--;
             }
         }
+        // Adjust Complete Counter
         if ("isComplete" === flag) {
             if (!$filter("filter")($scope.main.taskList, {
                 _id: taskID
@@ -162,13 +173,19 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
 
 angular.module("ariadne").controller("UserController", [ function() {} ]);
 
+angular.module("ariadne").factory("Admin", [ "$resource", function($resource) {
+    return $resource("/api/admin/:tag/:id", {
+        tag: "@tag",
+        id: "@id"
+    });
+} ]);
+
 angular.module("ariadne").factory("Feedback", [ "$resource", function($resource) {
     return $resource("/api/feedback");
 } ]);
 
 angular.module("ariadne").factory("Task", [ "$resource", function($resource) {
-    return $resource("/api/users/:_id/tasks/:id", {
-        _id: "@_id",
+    return $resource("/api/tasks/:id", {
         id: "@id"
     });
 } ]);
