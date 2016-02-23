@@ -67,7 +67,7 @@ app.post('/api/admin/users/:id', adminController.updateUser);
 app.delete('/api/admin/tasks/:id', adminController.deleteTask);
 app.delete('/api/admin/users/:id', adminController.disableUser);
 
-app.get('/api/admin/stats', adminController.fetchStats);
+// app.get('/api/admin/stats', adminController.fetchStats);
 app.get('/api/admin/feedback', adminController.fetchFeedback);
 app.post('/api/admin/archive', adminController.runArchive);
 

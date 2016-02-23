@@ -20,7 +20,7 @@ angular.module('ariadne').controller('AdminController',
             console.log('Feedback Queried');
         });
 
-        vm.stats = Admin.query({ tag: 'stats' });
+        // vm.stats = Admin.query({ tag: 'stats' });
 
         vm.archive = function() {
             Admin.save({tag: 'archive'}, function() {
