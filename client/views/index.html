@@ -108,9 +108,9 @@
                             <td ng-bind="task.name"></td>
                             <td ng-bind="task.label"></td>
                             <td>
-                                <i class="fa fa-fw fa-star" ng-if="task.flags.isStarred"></i>
-                                <i class="fa fa-fw fa-exclamation" ng-if="task.flags.isImportant"></i>
-                                <i class="fa fa-fw fa-clock-o" ng-if="task.flags.isUrgent"></i>
+                                <i class="fa fa-fw fa-star text-warning" ng-if="task.flags.isStarred"></i>
+                                <i class="fa fa-fw fa-exclamation text-danger" ng-if="task.flags.isImportant"></i>
+                                <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                             </td>
                             <td>
                                 <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>

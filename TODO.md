@@ -5,7 +5,7 @@
 - [ ] Update User Model
 - [ ] Update User Controllers
 - [ ] Update Task View
-- [ ] Update Task Model
+- [x] Update Task Model
 - [ ] Update Task Controllers
 - [ ] Create Events View
 - [ ] Create Event Model
