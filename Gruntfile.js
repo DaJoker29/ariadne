@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         watch: {
             sass: {
-                files: ['src/scss/**/*.scss'],
+                files: ['client/stylesheets/scss/**/*.scss'],
                 tasks: ['sass', 'postcss']
             },
             client: {
@@ -35,7 +35,7 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 expand: true,
-                cwd: 'src/scss',
+                cwd: 'client/stylesheets/scss',
                 src: ['**/*.scss'],
                 dest: 'client/stylesheets',
                 ext: '.css',
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
             },
             prod: {
                expand: true,
-                cwd: 'src/scss',
+                cwd: 'client/stylesheets/scss',
                 src: ['**/*.scss'],
                 dest: 'client/stylesheets',
                 ext: '.min.css',

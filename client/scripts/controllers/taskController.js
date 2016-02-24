@@ -31,6 +31,7 @@ angular
                 $scope.main.taskList.push( result );
                 vm.newTask.name = '';
                 vm.newTask.label = '';
+                vm.newTask.notes = '';
             });
         };
 

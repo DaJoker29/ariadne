@@ -117,14 +117,14 @@ module.exports.fetchFeedback = function ( req, res ) {
     }
 };
 
-module.exports.fetchStats = function( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        res.send('Authorized');
-        // Fetch Stats Code Here
-    }
-};
+// module.exports.fetchStats = function( req, res ) {
+//     if( !req.user || !req.user.flags.isAdmin) {
+//         res.status(400).send('Unauthorized');
+//     } else {
+//         res.send('Authorized');
+//         // Fetch Stats Code Here
+//     }
+// };
 
 module.exports.runArchive = function ( req, res ) {
     if( !req.user || !req.user.flags.isAdmin) {

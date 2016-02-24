@@ -37,9 +37,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
     }, function() {
         console.log("Feedback Queried");
     });
-    vm.stats = Admin.query({
-        tag: "stats"
-    });
+    // vm.stats = Admin.query({ tag: 'stats' });
     vm.archive = function() {
         Admin.save({
             tag: "archive"
@@ -113,6 +111,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             $scope.main.taskList.push(result);
             vm.newTask.name = "";
             vm.newTask.label = "";
+            vm.newTask.notes = "";
         });
     };
     vm.removeTask = function(taskID) {
