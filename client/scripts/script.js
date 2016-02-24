@@ -111,6 +111,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             $scope.main.taskList.push(result);
             vm.newTask.name = "";
             vm.newTask.label = "";
+            vm.newTask.notes = "";
         });
     };
     vm.removeTask = function(taskID) {

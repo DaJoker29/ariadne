@@ -1,11 +1,6 @@
-.task a {
-  opacity: 0;
-  transition: .3s;
-}
-
-.task:hover a {
-  opacity: 1;
-  text-decoration: none;
+a {
+  text-decoration: none !important;
+  color: #df691a !important;
 }
 
 .strike {
