@@ -4,7 +4,7 @@ angular
 
         var vm = this;
 
-        vm.taskLimit = 9;
+        vm.taskLimit = 5;
         vm.activeCount = $filter('filter')($scope.main.taskList, { flags: { isActive: true } } ).length;
         vm.completeCount = $filter('filter')($scope.main.taskList, { flags: { isComplete: true } } ).length;
 
@@ -31,6 +31,7 @@ angular
                 $scope.main.taskList.push( result );
                 vm.newTask = {};
             });
+            $('#createTask').modal('hide');
         };
 
         vm.removeTask = function ( taskID ) {
