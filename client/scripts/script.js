@@ -71,7 +71,7 @@ angular.module("ariadne").controller("MainController", [ "User", "Task", "$scope
 
 angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$scope", function($filter, Task, $scope) {
     var vm = this;
-    vm.taskLimit = 9;
+    vm.taskLimit = 5;
     vm.activeCount = $filter("filter")($scope.main.taskList, {
         flags: {
             isActive: true
@@ -108,6 +108,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             $scope.main.taskList.push(result);
             vm.newTask = {};
         });
+        $("#createTask").modal("hide");
     };
     vm.removeTask = function(taskID) {
         Task.remove({
