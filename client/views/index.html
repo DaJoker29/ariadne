@@ -96,28 +96,29 @@
                     <h4>Task List</h4>
                 </div>
 
-                <table class="table table-striped table-hover">
+                <table id="tasks" class="table table-striped table-hover">
                     <thead>
                         <th>Task</th>
                         <th>Label</th>
                         <th>Flags</th>
+                        <th>Due Date</th>
                         <th>Actions</th>
                     </thead>
                     <tbody>
-                        <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: 'createdOn'" data-toggle="tooltip" data-placement="top" title="{{ task.notes }}">
+                        <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: ['-flags.isStarred', 'dueDate', 'createdOn']">
                             <td ng-bind="task.name"></td>
                             <td ng-bind="task.label"></td>
                             <td>
-                                <i class="fa fa-fw fa-star text-warning" ng-if="task.flags.isStarred"></i>
-                                <i class="fa fa-fw fa-exclamation text-danger" ng-if="task.flags.isImportant"></i>
-                                <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
+                                <i class="fa fa-fw fa-star" ng-class="{ hide: !task.flags.isStarred }" title="Important"></i>
+                                <i class="fa fa-fw fa-info-circle" ng-class="{ hide: !task.notes }" title="{{task.notes}}"></i>
                             </td>
                             <td>
-                                <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isStarred');" class="fa fa-fw fa-star"></a>
-                                <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
+                                <span ng-if="task.dueDate" ng-bind="task.dueDate | date: 'mediumDate'"></span>
+                            </td>
+                            <td>
+                                <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive" title="Add to Active"></a>
+                                <a ng-click="tasks.toggle(task._id, 'isStarred');" class="fa fa-fw fa-star" title="Mark Important"></a>
+                                <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o" title="Delete Task"></a>
                             </td>
                         </tr>
                     </tbody>
@@ -137,6 +138,9 @@
                 </div>
                 <div class="form-group">
                     <textarea name="notes" placeholder="Notes (optional)" id="" cols="30" rows="4" class="form-control" ng-model="tasks.newTask.notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" uib-datepicker-popup="MMM d, yyyy" ng-model="tasks.newTask.dueDate" ng-focus="datePopup.open = true" is-open="datePopup.open" placeholder="Due Date (optional)">
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
             </form>
@@ -166,5 +170,11 @@
 
     <!-- Application Code -->
     <script src="/js/script.js"></script>
+    <script>
+        $(function() {
+            $('[data-toggle="popover"]').popover();
+            $("[data-toggle=tooltip]").tooltip();
+        });
+    </script>
 </body>
 </html>
