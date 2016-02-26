@@ -85,10 +85,8 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             isComplete: true
         }
     }).length;
-    vm.newTask = {
-        name: "",
-        label: ""
-    };
+    vm.newTask = {};
+    vm.newParent = null;
     $scope.$watch(function() {
         return $scope.main.taskList;
     }, function() {
@@ -107,9 +105,18 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
         var task = new Task();
         angular.merge(task, vm.newTask);
         task.owner = $scope.main.user._id;
+        if (vm.newParent) {
+            task.parent = vm.newParent._id;
+        }
         task.$save(function(result) {
             $scope.main.taskList.push(result);
             vm.newTask = {};
+            vm.newParent = {};
+            // Set Parent
+            if (result.parent) {
+                vm.addChild(result.parent, result._id);
+            }
+            console.log(result);
         });
         $("#createTask").modal("hide");
     };
@@ -124,6 +131,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             });
         });
     };
+    vm.addChild = function(parentID, childID) {};
     vm.toggle = function(taskID, flag) {
         // Check against task limit before moving to active
         if ("isActive" === flag) {
