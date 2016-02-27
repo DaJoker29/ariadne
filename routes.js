@@ -6,6 +6,8 @@ var feedbackController = require('./server/controllers/feedback-controller');
 var adminController    = require('./server/controllers/admin-controller');
 
 /*              Routes                  */
+app.use('/api/admin', ensureAdmin);
+app.use('/api', ensureAuth);
 
 // Client
 app.get('/', ensureAuth, function ( req, res ) {
@@ -69,6 +71,7 @@ app.delete('/api/admin/users/:id', adminController.disableUser);
 
 // app.get('/api/admin/stats', adminController.fetchStats);
 app.get('/api/admin/feedback', adminController.fetchFeedback);
+app.get('/api/admin/archive', adminController.fetchArchive);
 app.post('/api/admin/archive', adminController.runArchive);
 
 /*              Helpers               */

@@ -4,7 +4,7 @@ angular.module('ariadne').controller(
         vm.taskList = [];
 
         vm.user = User.get( function () {
-            Task.query({ _id: vm.user._id }, function ( results ) {
+            Task.query(function ( results ) {
                 vm.taskList = results;
             });
         });

@@ -19,43 +19,31 @@ module.exports.create = function ( req, res ) {
 };
 
 module.exports.fetch = function ( req, res ) {
-    if( !req.user ) {
-        res.status(400).send('Not Logged In.');
-    } else {
-        User.findOne({ _id: req.user._id}, function ( err, result ) {
-            if ( err ) {
-                res.status(400).send('User Not Found');
-            } else {
-                res.send( result );
-            }
-        });
-    }
+    User.findOne({ _id: req.user._id}, function ( err, result ) {
+        if ( err ) {
+            res.status(400).send('User Not Found');
+        } else {
+            res.send( result );
+        }
+    });
 };
 
 module.exports.update = function ( req, res ) {
-    if( !req.user ) {
-        res.status(400).send('Not logged in');
-    } else {
-        User.findByIdAndUpdate( req.params.id, { $set: req.body }, function( err, result ) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.send( result );
-            }
-        });
-    }
+    User.findByIdAndUpdate( req.params.id, { $set: req.body }, function( err, result ) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.send( result );
+        }
+    });
 };
 
 module.exports.disable = function( req, res ) {
-    if( !req.user ) {
-        res.status(400).send('Not logged in');
-    } else {
-        User.findByIdAndUpdate( req.params.id, { $set: { flags: { isDisabled: true } } }, function(err, result) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.send( result );
-            }
-        });
-    }
+    User.findByIdAndUpdate( req.params.id, { $set: { flags: { isDisabled: true } } }, function(err, result) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.send( result );
+        }
+    });
 };

@@ -1,12 +1,10 @@
 var User     = require('../models/user.js');
 var Task     = require('../models/task.js');
 var Feedback = require('../models/feedback.js');
+var Archive  = require('../models/archive.js');
 
 module.exports.fetchUser = function ( req, res ) {
-    console.log('Fetch user');
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else if( req.params.id ) {
+    if( req.params.id ) {
         User.find({ _id: req.params.id }, function( err, result ) {
             if(err) {
                 res.status(400).send(err);
@@ -26,9 +24,7 @@ module.exports.fetchUser = function ( req, res ) {
 };
 
 module.exports.fetchTask = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else if( req.params.id ) {
+    if( req.params.id ) {
         Task.find({ _id: req.params.id }, function( err, result ) {
             if(err) {
                 res.status(400).send(err);
@@ -48,73 +44,53 @@ module.exports.fetchTask = function ( req, res ) {
 };
 
 module.exports.updateUser = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        User.update({ _id: req.params.id }, { $set: req.body }, function( err, result ) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.json(result);
-            }
-        });
-    }
+    User.update({ _id: req.params.id }, { $set: req.body }, function( err, result ) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.json(result);
+        }
+    });
 };
 
 module.exports.updateTask = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        Task.update({ _id: req.params.id }, { $set: req.body }, function( err, result ) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.json(result);
-            }
-        });
-    }
+    Task.update({ _id: req.params.id }, { $set: req.body }, function( err, result ) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.json(result);
+        }
+    });
 };
 
 module.exports.deleteTask = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        Task.remove({ _id: req.params.id }, function( err, result ) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.json(result);
-            }
-        });
-    }
+    Task.remove({ _id: req.params.id }, function( err, result ) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.json(result);
+        }
+    });
 };
 
 module.exports.disableUser = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        User.findByIdAndUpdate( req.params.id, { $set: { flags: { isDisabled: true } } }, function(err, result) {
-            if(err) {
-                res.status(400).send(err);
-            } else {
-                res.json(result);
-            }
-        });
-    }
+    User.findByIdAndUpdate( req.params.id, { $set: { flags: { isDisabled: true } } }, function(err, result) {
+        if(err) {
+            res.status(400).send(err);
+        } else {
+            res.json(result);
+        }
+    });
 };
 
 module.exports.fetchFeedback = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        Feedback.find({}, function( err, results ) {
-            if (err) {
-                res.status(400).send(err);
-            } else {
-                res.json(results);
-            }
-        });
-    }
+    Feedback.find({}, function( err, results ) {
+        if (err) {
+            res.status(400).send(err);
+        } else {
+            res.json(results);
+        }
+    });
 };
 
 // module.exports.fetchStats = function( req, res ) {
@@ -127,24 +103,40 @@ module.exports.fetchFeedback = function ( req, res ) {
 // };
 
 module.exports.runArchive = function ( req, res ) {
-    if( !req.user || !req.user.flags.isAdmin) {
-        res.status(400).send('Unauthorized');
-    } else {
-        Task.update(
-            { 'flags.isComplete': true, 'flags.isArchived': false },
-            { 'flags.isArchived': true, 'flags.isActive': false },
-            { multi: true },
-            function ( err, result ) {
-                var today = new Date();
-                console.log('\nArchive Started -- ' + today.toString());
-                if (err) {
-                    console.log('Archive Failure:', err);
-                    res.status(400).send(err);
-                } else {
-                    console.log('Archive Success: ' + result.n + ' tasks archived.');
-                    res.json(result);
-                }
+    Task.find({'flags.isComplete': true}, function( err, results ) {
+        var today = new Date();
+        console.log('Archiving Started -- ' + results.length + ' -- ' + today.toString() );
+
+        if (err) {
+            console.log('Archive Failure: ', err);
+        } else {
+            results.forEach(function( doc ) {
+
+                // Add to Archive Collection
+                var archive = new Archive( doc );
+                archive.flags.isArchived = true;
+                archive.flags.isComplete = true;
+                archive.flags.isActive = false;
+                archive.save();
+
+                // Remove from Task Collection
+                Task.remove({ _id: doc._id }, function(err, results) {
+                    if(err) {
+                        return err;
+                    }
+                });
+            });
+            res.status(200).end();
+        }
+    });
+};
+
+module.exports.fetchArchive = function ( req, res ) {
+        Archive.find({}, function( err, results ) {
+            if (err) {
+                res.status(400).send(err);
+            } else {
+                res.json(results);
             }
-        );
-    }
+        });
 };
