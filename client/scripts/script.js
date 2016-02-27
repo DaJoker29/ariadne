@@ -12,7 +12,6 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
         tag: "tasks"
     }, function() {
         vm.stats.totalTasks = vm.taskList.length;
-        vm.stats.archivedTasks = vm.archiveList;
         vm.stats.activeTasks = $filter("filter")(vm.taskList, {
             flags: {
                 isActive: true,
@@ -26,7 +25,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
                 isComplete: true
             }
         }).length;
-        vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
+        vm.stats.currentTasks = vm.stats.totalTasks - vm.archiveList.length;
     });
     vm.feedbackList = Admin.query({
         tag: "feedback"
@@ -108,7 +107,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
         task.$save(function(result) {
             $scope.main.taskList.push(result);
             vm.newTask = {};
-            vm.newParent = {};
+            delete vm.newParent;
             // Set Parent
             if (result.parent) {
                 vm.addChild(result.parent, result._id);

@@ -94,7 +94,6 @@
             </div>
 
             <!-- Task List -->
-
             <div class="list-group">
                 <div class="page-header">
                     <h4>Task List</h4>
@@ -104,6 +103,7 @@
                 <table id="tasks" class="table table-striped table-hover">
                     <thead>
                         <th>Task</th>
+                        <th>Created On</th>
                         <th>Parent</th>
                         <th>Children</th>
                         <th>Label</th>
@@ -114,6 +114,7 @@
                     <tbody>
                         <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: ['-flags.isStarred', 'dueDate', 'createdOn']">
                             <td ng-bind="task.name"></td>
+                            <td ng-bind="task.createdOn | date: 'medium'"></td>
                             <td ng-bind="task.parent"></td>
                             <td>
                                 <span ng-repeat="child in task.children">

@@ -32,7 +32,7 @@ angular
             task.$save(function ( result ) {
                 $scope.main.taskList.push( result );
                 vm.newTask = {};
-                vm.newParent = {};
+                delete vm.newParent;
 
                 // Set Parent
                 if(result.parent) {

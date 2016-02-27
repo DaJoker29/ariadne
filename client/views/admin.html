@@ -32,12 +32,11 @@
             <div class="page-header">
                 <h3>Stats</h3>
             </div>
-            <div class="label" ng-bind-template="Total Users: {{admin.stats.totalUsers}}"></div>
-            <div class="label" ng-bind-template="Total Tasks: {{admin.stats.totalTasks}}"></div>
+            <div class="label" ng-bind-template="Total Users: {{admin.userList.length}}"></div>
+            <div class="label" ng-bind-template="Total Tasks: {{admin.taskList.length}}"></div>
             <div class="label" ng-bind-template="Archived Tasks: {{admin.archiveList.length}}"></div>
-            <div class="label" ng-bind-template="Current Tasks: {{admin.stats.currentTasks}}"></div>
-            <div class="label" ng-bind-template="Active Tasks: {{admin.stats.activeTasks}}"></div>
-            <div class="label" ng-bind-template="Complete Tasks: {{admin.stats.completeTasks}}"></div>
+            <div class="label" ng-bind-template="Active Tasks: {{ (admin.taskList | filter: { flags: { isActive: true } } ).length }}"></div>
+            <div class="label" ng-bind-template="Completed Tasks: {{ (admin.taskList | filter: { flags: { isComplete: true } } ).length }}"></div>
 
             <!-- User Management -->
             <div class="page-header">

@@ -10,10 +10,9 @@ angular.module('ariadne').controller('AdminController',
 
         vm.taskList = Admin.query({ tag: 'tasks'}, function() {
             vm.stats.totalTasks = vm.taskList.length;
-            vm.stats.archivedTasks = vm.archiveList;
             vm.stats.activeTasks = $filter('filter')(vm.taskList, { flags: { isActive: true, isArchived: false, isComplete: false } } ).length;
             vm.stats.completeTasks = $filter('filter')(vm.taskList, { flags: { isArchived: false, isComplete: true } } ).length;
-            vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
+            vm.stats.currentTasks = vm.stats.totalTasks - vm.archiveList.length;
         });
 
         vm.feedbackList = Admin.query({ tag: 'feedback'}, function() {
