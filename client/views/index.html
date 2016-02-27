@@ -104,6 +104,8 @@
                 <table id="tasks" class="table table-striped table-hover">
                     <thead>
                         <th>Task</th>
+                        <th>Parent</th>
+                        <th>Children</th>
                         <th>Label</th>
                         <th>Flags</th>
                         <th>Due Date</th>
@@ -112,6 +114,12 @@
                     <tbody>
                         <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: ['-flags.isStarred', 'dueDate', 'createdOn']">
                             <td ng-bind="task.name"></td>
+                            <td ng-bind="task.parent"></td>
+                            <td>
+                                <span ng-repeat="child in task.children">
+                                    {{ child }}
+                                </span>
+                            </td>
                             <td ng-bind="task.label"></td>
                             <td>
                                 <i class="fa fa-fw fa-star" ng-class="{ hide: !task.flags.isStarred }" title="Important"></i>
@@ -152,6 +160,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input class="form-control" type="text" uib-datepicker-popup="MMM d, yyyy" ng-model="tasks.newTask.dueDate" ng-focus="datePopup.open = true" is-open="datePopup.open" placeholder="Due Date (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Parent (optional)" ng-model="tasks.newParent" uib-typeahead="task as task.name for task in main.taskList | filter: $viewValue">
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-primary">Add</button>
                             </form>

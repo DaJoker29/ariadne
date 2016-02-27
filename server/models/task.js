@@ -9,8 +9,8 @@ var taskSchema = new mongoose.Schema({
     dueDate      : { type: Date },
     label        : { type: String },
     location     : { type: String },
-    parentTask   : { type: String },
-    subTasks     : { type: Array },
+    parent       : { type: String },
+    children     : { type: Array },
     flags        : {
         isActive      : { type: Boolean, default: false },
         isComplete    : { type: Boolean, default: false },

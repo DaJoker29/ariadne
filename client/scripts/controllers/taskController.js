@@ -8,10 +8,8 @@ angular
         vm.activeCount = $filter('filter')($scope.main.taskList, { flags: { isActive: true } } ).length;
         vm.completeCount = $filter('filter')($scope.main.taskList, { flags: { isComplete: true } } ).length;
 
-        vm.newTask = {
-            name  : '',
-            label : ''
-        };
+        vm.newTask = {};
+        vm.newParent = null;
 
         $scope.$watch(function () {
              return $scope.main.taskList;
@@ -27,9 +25,20 @@ angular
             angular.merge(task, vm.newTask);
             task.owner = $scope.main.user._id;
 
+            if(vm.newParent) {
+                task.parent = vm.newParent._id;
+            }
+
             task.$save(function ( result ) {
                 $scope.main.taskList.push( result );
                 vm.newTask = {};
+                vm.newParent = {};
+
+                // Set Parent
+                if(result.parent) {
+                    vm.addChild( result.parent, result._id);
+                }
+                console.log(result);
             });
             $('#createTask').modal('hide');
         };
@@ -40,6 +49,19 @@ angular
                     return e._id !== taskID;
                 });
             });
+        };
+
+        vm.addChild = function ( parentID, childID ) {
+            // // Add Parent to Child
+            // Task.save({id: childID}, { parent: parentID });
+
+            // var parentChildren = $filter('filter')($scope.main.taskList, { _id: parent })[0].children;
+            // parentChildren.push(childID);
+            // // Add Child to Parent's Children
+            // Task.save({id: parentID}, { $push children: parentChildren });
+
+            // $filter('filter')($scope.main.taskList, { _id: parentID })[0].children.push(childID);
+
         };
 
         vm.toggle = function ( taskID, flag ) {
