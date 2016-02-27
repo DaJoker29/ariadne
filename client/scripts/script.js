@@ -12,11 +12,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
         tag: "tasks"
     }, function() {
         vm.stats.totalTasks = vm.taskList.length;
-        vm.stats.archivedTasks = $filter("filter")(vm.taskList, {
-            flags: {
-                isArchived: true
-            }
-        }).length;
+        vm.stats.archivedTasks = vm.archiveList;
         vm.stats.activeTasks = $filter("filter")(vm.taskList, {
             flags: {
                 isActive: true,
@@ -36,6 +32,9 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
         tag: "feedback"
     }, function() {
         console.log("Feedback Queried");
+    });
+    vm.archiveList = Admin.query({
+        tag: "archive"
     });
     // vm.stats = Admin.query({ tag: 'stats' });
     vm.archive = function() {
@@ -64,9 +63,7 @@ angular.module("ariadne").controller("MainController", [ "User", "Task", "$scope
     var vm = this;
     vm.taskList = [];
     vm.user = User.get(function() {
-        Task.query({
-            _id: vm.user._id
-        }, function(results) {
+        Task.query(function(results) {
             vm.taskList = results;
         });
     });
