@@ -31,7 +31,9 @@
                 <h1>Ariadne <small>An Intelligent Task List</small></h1>
             </div>
         </div>
-
+        <!-- Quote of the Day -->
+        <div class="quote"></div>
+        <!-- Instructions -->
         <div id="instructions" class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -188,7 +190,8 @@
     <script>
         $(function() {
             $('[data-toggle="popover"]').popover();
-            $("[data-toggle=tooltip]").tooltip();
+            $('[data-toggle="tooltip"]').tooltip();
+            $('.quote').qod();
         });
     </script>
 </body>
