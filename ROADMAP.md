@@ -20,6 +20,7 @@ Here is the official project roadmap.
 - [Chat Communication](#chat-communication)
 - [File Sharing](#file-sharing)
 - [Collaborative Editing](#collaborative-editing)
+- [Continuous Integration](#continuous-integration)
 
 ## Descriptions
 
@@ -74,3 +75,6 @@ A business/organization feature. Allow users within an organization to share/syn
 
 ### Collaborative Editing
 Tied to [File Sharing](#file-sharing). Allow users to concurrently editing documents through the application in real-time, allowing them to collaborate in tandem while communicating (externally).
+
+### Continuous Integration
+CI should be implemented into the application. The current deployment process is too much for me and I would like to learn about how CI is done.
