@@ -3,9 +3,9 @@ Here is the official project roadmap.
 
 ### Next Release
 - [Switch to React](#switch-to-react)
-- [Notes](#notes)
 
 ### Release + 1
+- [Notes](#notes)
 
 ### Future
 - [Upgraded Tasks](#upgraded-tasks)
