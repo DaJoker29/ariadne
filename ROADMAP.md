@@ -5,6 +5,7 @@ Here is the official project roadmap.
 - [Switch to React](#switch-to-react)
 
 ### Release + 1
+- [Projects](#projects)
 - [Notes](#notes)
 
 ### Future
@@ -23,6 +24,8 @@ Here is the official project roadmap.
 - [Continuous Integration](#continuous-integration)
 
 ## Descriptions
+
+### After some thought, I think this will be the main conceit of this app. User builds a project and manages all of the aspects below within said project. Project chat, project to-dos, project events and file sharing, etc. Kind of like Basecamp only I'm going to gear it more towards my needs and preferences.
 
 ### Switch to React
 Moving from AngularJS to ReactJS single-page application. No technical reasons really. I just kind of want to build something with ReactJS.
