@@ -1,5 +1,5 @@
 # Ariadne
-> A simple tool to help manage productivity.
+> A simple tool for managing projects collaboratively.
 
 ## Build Instructions
 
