@@ -12,7 +12,6 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
         tag: "tasks"
     }, function() {
         vm.stats.totalTasks = vm.taskList.length;
-        vm.stats.archivedTasks = vm.archiveList;
         vm.stats.activeTasks = $filter("filter")(vm.taskList, {
             flags: {
                 isActive: true,
@@ -26,7 +25,7 @@ angular.module("ariadne").controller("AdminController", [ "$scope", "Admin", "$f
                 isComplete: true
             }
         }).length;
-        vm.stats.currentTasks = vm.stats.totalTasks - vm.stats.archivedTasks;
+        vm.stats.currentTasks = vm.stats.totalTasks - vm.archiveList.length;
     });
     vm.feedbackList = Admin.query({
         tag: "feedback"
@@ -71,7 +70,7 @@ angular.module("ariadne").controller("MainController", [ "User", "Task", "$scope
 
 angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$scope", function($filter, Task, $scope) {
     var vm = this;
-    vm.taskLimit = 9;
+    vm.taskLimit = 5;
     vm.activeCount = $filter("filter")($scope.main.taskList, {
         flags: {
             isActive: true
@@ -82,10 +81,8 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             isComplete: true
         }
     }).length;
-    vm.newTask = {
-        name: "",
-        label: ""
-    };
+    vm.newTask = {};
+    vm.newParent = null;
     $scope.$watch(function() {
         return $scope.main.taskList;
     }, function() {
@@ -104,12 +101,20 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
         var task = new Task();
         angular.merge(task, vm.newTask);
         task.owner = $scope.main.user._id;
+        if (vm.newParent) {
+            task.parent = vm.newParent._id;
+        }
         task.$save(function(result) {
             $scope.main.taskList.push(result);
-            vm.newTask.name = "";
-            vm.newTask.label = "";
-            vm.newTask.notes = "";
+            vm.newTask = {};
+            delete vm.newParent;
+            // Set Parent
+            if (result.parent) {
+                vm.addChild(result.parent, result._id);
+            }
+            console.log(result);
         });
+        $("#createTask").modal("hide");
     };
     vm.removeTask = function(taskID) {
         Task.remove({
@@ -122,6 +127,7 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
             });
         });
     };
+    vm.addChild = function(parentID, childID) {};
     vm.toggle = function(taskID, flag) {
         // Check against task limit before moving to active
         if ("isActive" === flag) {
@@ -168,6 +174,35 @@ angular.module("ariadne").controller("TaskController", [ "$filter", "Task", "$sc
 } ]);
 
 angular.module("ariadne").controller("UserController", [ function() {} ]);
+
+/*
+    Github: jQuery plugin
+ */
+(function($) {
+    $.fn.qod = function(options) {
+        // Parameters
+        var settings = $.extend({}, options);
+        // Variables
+        var rootURL = "http://quotes.rest";
+        var endpoint = "/qod.json";
+        var that = this;
+        // Fetch Data
+        $.ajax({
+            url: rootURL + endpoint,
+            success: function(data) {
+                that.prepend(buildDOM(data));
+            },
+            error: function() {
+                console.log("Problem fetching quote");
+            }
+        });
+        function buildDOM(data) {
+            var quote = data.contents.quotes[0];
+            return $("<div>").addClass("well").append("<blockquote>").find("blockquote").append("<p>" + quote.quote + "</p>").append("<footer>" + quote.author + "</footer>").append('<span style="z-index:50;font-size:0.9em;"><img src="https://theysaidso.com/branding/theysaidso.png" height="20" width="20" alt="theysaidso.com"/><a href="https://theysaidso.com" title="Powered by quotes from theysaidso.com" style="color: #9fcc25; margin-left: 4px; vertical-align: middle;">theysaidso.com</a></span>');
+        }
+        return this;
+    };
+})(jQuery);
 
 angular.module("ariadne").factory("Admin", [ "$resource", function($resource) {
     return $resource("/api/admin/:tag/:id", {

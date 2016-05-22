@@ -31,7 +31,9 @@
                 <h1>Ariadne <small>An Intelligent Task List</small></h1>
             </div>
         </div>
-
+        <!-- Quote of the Day -->
+        <div class="quote"></div>
+        <!-- Instructions -->
         <div id="instructions" class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -65,25 +67,28 @@
             </div>
         </div>
 
+        <button class="btn btn-default" data-toggle="modal" data-target="#createTask">
+            Create New Task
+        </button>
         <!-- Tasks -->
         <section ng-controller="TaskController as tasks" ng-cloak>
             <!-- Active List -->
             <div class="list-group">
                 <div class="page-header">
-                    <h4>Active <small ng-class="{ 'text-success': tasks.activeCount === tasks.taskLimit, 'text-danger': tasks.activeCount === 0, 'text-info': tasks.activeCount > 0 && tasks.activeCount < tasks.taskLimit }" ng-bind-template="{{ tasks.activeCount}} of {{ tasks.taskLimit }} ({{ tasks.completeCount }} complete)"></small></h4>
+                    <h4>Active <small ng-class="{ 'text-success': tasks.activeCount === tasks.taskLimit, 'text-danger': tasks.activeCount === 0, 'text-info': tasks.activeCount > 0 && tasks.activeCount < tasks.taskLimit }" ng-bind-template="{{ tasks.activeCount}} of {{ tasks.taskLimit }} - {{ tasks.completeCount }} complete"></small></h4>
                 </div>
-                <li class="list-group-item task" ng-repeat="task in main.taskList | filter : { flags: { isActive: true, isComplete: false } } | orderBy: 'name' | orderBy: '-flags.isUrgent' | orderBy: '-flags.isImportant'">
-                    <span class="label" ng-class="{
-                    'label-danger': task.flags.isImportant && task.flags.isUrgent, 'label-warning': task.flags.isImportant && !task.flags.isUrgent, 'label-info': !task.flags.isImportant && task.flags.isUrgent }" ng-bind="task.name"></span>
+                <li class="list-group-item task" ng-repeat="task in main.taskList | filter : { flags: { isActive: true } } | orderBy: ['flags.isComplete', 'name', 'flags.isStarred']" ng-class="{disabled: task.flags.isComplete}">
+                    <span class="label" ng-bind="task.name"></span>
                     <i class="fa fa-fw fa-exclamation text-warning" ng-if="task.flags.isImportant"></i>
                     <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
                     <span ng-if="task.label" class="badge" ng-bind="task.label"></span>
                     <div class="pull-right">
-                        <a ng-click="tasks.toggle(task._id, 'isComplete');" class="fa fa-fw fa-check"></a>
-                        <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-minus" ng-if="task.flags.isActive"></a>
-                        <a ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
-                        <a ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
-                        <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
+                        <a ng-if="!task.flags.isComplete" ng-click="tasks.toggle(task._id, 'isComplete');" class="fa fa-fw fa-check"></a>
+                        <a ng-if="!task.flags.isComplete" ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-minus" ng-if="task.flags.isActive"></a>
+                        <a ng-if="!task.flags.isComplete" ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
+                        <a ng-if="!task.flags.isComplete" ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
+                        <a ng-if="!task.flags.isComplete" ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
+                        <a ng-if="task.flags.isComplete" class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
                         &nbsp;&nbsp;&nbsp;
                     </div>
 
@@ -96,65 +101,81 @@
                     <h4>Task List</h4>
                 </div>
 
-                <table class="table table-striped table-hover">
+
+                <table id="tasks" class="table table-striped table-hover">
                     <thead>
                         <th>Task</th>
+                        <th>Created On</th>
+                        <th>Parent</th>
+                        <th>Children</th>
                         <th>Label</th>
                         <th>Flags</th>
+                        <th>Due Date</th>
                         <th>Actions</th>
                     </thead>
                     <tbody>
-                        <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: 'createdOn'" data-toggle="tooltip" data-placement="top" title="{{ task.notes }}">
+                        <tr class="task" ng-repeat="task in main.taskList | filter: { flags: { isActive: false } } | orderBy: ['-flags.isStarred', 'dueDate', 'createdOn']">
                             <td ng-bind="task.name"></td>
+                            <td ng-bind="task.createdOn | date: 'medium'"></td>
+                            <td ng-bind="task.parent"></td>
+                            <td>
+                                <span ng-repeat="child in task.children">
+                                    {{ child }}
+                                </span>
+                            </td>
                             <td ng-bind="task.label"></td>
                             <td>
-                                <i class="fa fa-fw fa-star text-warning" ng-if="task.flags.isStarred"></i>
-                                <i class="fa fa-fw fa-exclamation text-danger" ng-if="task.flags.isImportant"></i>
-                                <i class="fa fa-fw fa-clock-o text-info" ng-if="task.flags.isUrgent"></i>
+                                <i class="fa fa-fw fa-star" ng-class="{ hide: !task.flags.isStarred }" title="Important"></i>
+                                <i class="fa fa-fw fa-info-circle" ng-class="{ hide: !task.notes }" title="{{task.notes}}"></i>
                             </td>
                             <td>
-                                <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isImportant');" class="fa fa-fw fa-exclamation"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isUrgent');" class="fa fa-fw fa-clock-o"></a>
-                                <a ng-click="tasks.toggle(task._id, 'isStarred');" class="fa fa-fw fa-star"></a>
-                                <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o"></a>
+                                <span ng-if="task.dueDate" ng-bind="task.dueDate | date: 'mediumDate'"></span>
+                            </td>
+                            <td>
+                                <a ng-click="tasks.toggle(task._id, 'isActive');" class="fa fa-fw fa-plus" ng-if="!task.flags.isActive" title="Add to Active"></a>
+                                <a ng-click="tasks.toggle(task._id, 'isStarred');" class="fa fa-fw fa-star" title="Mark Important"></a>
+                                <a ng-click="tasks.removeTask(task._id)" class="fa fa-fw fa-trash-o" title="Delete Task"></a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
             </div>
-            <!-- Create Task -->
-            <div class="page-header">
-                <h4>Create Task</h4>
-            </div>
-            <form ng-submit="tasks.createTask(); console.log(main.taskList);">
-                <div class="form-group">
-                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name" autofocus>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Label (optional)" ng-model="tasks.newTask.label" uib-typeahead="task.label for task in main.taskList | unique: 'label' | filter: $viewValue" typeahead-editable="true">
-                </div>
-                <div class="form-group">
-                    <textarea name="notes" placeholder="Notes (optional)" id="" cols="30" rows="4" class="form-control" ng-model="tasks.newTask.notes"></textarea>
-                </div>
-                <button type="submit" class="btn btn-lg btn-primary">Add</button>
-            </form>
 
-            <!-- Completed List -->
-            <div class="list-group">
-                <div class="page-header">
-                    <h4>Completed Tasks</h4>
-                </div>
-                <li class="list-group-item disabled" ng-repeat="task in main.taskList | filter: { flags: { isActive: true, isComplete: true} }">
-                    {{ task.name }}
-                    <div class="pull-right">
-                        <a class="fa fa-undo fa-fw text-muted" ng-click="tasks.toggle(task._id, 'isComplete');"></a>
+            <!-- Create Task Modal -->
+            <div id="createTask" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Create Task</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form ng-submit="tasks.createTask()">
+                                <div class="form-group">
+                                    <input type="text" placeholder="Name" class="form-control" ng-model="tasks.newTask.name" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Label (optional)" ng-model="tasks.newTask.label" uib-typeahead="task.label for task in main.taskList | unique: 'label' | filter: $viewValue" typeahead-editable="true">
+                                </div>
+                                <div class="form-group">
+                                    <textarea name="notes" placeholder="Notes (optional)" id="" cols="30" rows="4" class="form-control" ng-model="tasks.newTask.notes"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" uib-datepicker-popup="MMM d, yyyy" ng-model="tasks.newTask.dueDate" ng-focus="datePopup.open = true" is-open="datePopup.open" placeholder="Due Date (optional)">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Parent (optional)" ng-model="tasks.newParent" uib-typeahead="task as task.name for task in main.taskList | filter: $viewValue">
+                                </div>
+                                <button type="submit" class="btn btn-lg btn-primary">Add</button>
+                            </form>
+                        </div>
                     </div>
-                </li>
+                </div>
             </div>
         </section>
     </main>
+
 
     <!-- Third-Party Code -->
     <script src="/vendor/angular/angular.min.js"></script>
@@ -166,5 +187,12 @@
 
     <!-- Application Code -->
     <script src="/js/script.js"></script>
+    <script>
+        $(function() {
+            $('[data-toggle="popover"]').popover();
+            $('[data-toggle="tooltip"]').tooltip();
+            $('.quote').qod();
+        });
+    </script>
 </body>
 </html>
