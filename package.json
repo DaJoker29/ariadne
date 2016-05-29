@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Productivity and Collaboration App",
   "main": "ariadne.js",
+  "engines": {
+    "node": "6.2.0"
+  }
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nf start"
