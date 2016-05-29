@@ -9,6 +9,7 @@
   },
   "scripts": {
     "eslint": "eslint --fix bin",
+    "lint": "npm run eslint",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nf start"
   },
@@ -28,6 +29,7 @@
     "eslint-plugin-import": "1.8.1",
     "eslint-plugin-jsx-a11y": "1.2.2",
     "eslint-plugin-react": "5.1.1",
-    "foreman": "1.4.1"
+    "foreman": "1.4.1",
+    "throng": "4.0.0"
   }
 }
