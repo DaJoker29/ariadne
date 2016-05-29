@@ -1,1 +1,0 @@
-angular.module('ariadne', ['ngResource', 'angular.filter', 'ui.bootstrap']);

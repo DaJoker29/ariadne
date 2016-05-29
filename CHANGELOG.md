@@ -1,11 +1,13 @@
 # Change Log
 
 ## [Unreleased]
-### Added
-- Admin Dashboard
-- Feedback System
+### Removed
+- Most of the project in prep for redesign
 
 ## [v1.0.0] - 2016-18-02
+### Added
+- Feedback System
+- Admin Dashboard
 ### Security
 - Passwords are now hashed
 

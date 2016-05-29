@@ -1,26 +1,14 @@
 {
-    "env": {
-        "browser": true,
-        "jquery": true,
-        "node": true
-    },
-    "rules": {
-        "quotes": [2, "single"],
-        "strict": 0,
-        "eol-last": 0,
-        "no-console": 0,
-        "no-trailing-spaces": 0,
-        "no-underscore-dangle": 0,
-        "no-spaced-func": 0,
-        "no-use-before-define": [2, "nofunc"],
-        "no-shadow": 0,
-        "no-unused-vars": 1,
-        "angular/log": 0,
-        "angular/di": [2, "array"],
-        "key-spacing": 0,
-        "yoda": [2, "always"],
-        "no-multi-spaces": 0
-    },
-    "globals": {},
-    "extends": "angular"
+  "env": {
+      "browser": true,
+      "jquery": true
+  },
+  "plugins": [
+      "react"
+  ],
+  "extends": "airbnb",
+  "rules": {
+      "react/jsx-indent": [2, 2],
+      "react/prefer-stateless-function": 0,
+  }
 }
