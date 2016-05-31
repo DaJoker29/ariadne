@@ -2,7 +2,7 @@
   "name": "ariadne",
   "version": "1.0.0",
   "description": "Productivity and Collaboration App",
-  "main": "ariadne.js",
+  "main": "bin/server.js",
   "private": true,
   "engines": {
     "node": "4.4.5"
@@ -11,7 +11,8 @@
     "eslint": "eslint --fix bin server",
     "lint": "npm run eslint",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nf start"
+    "start": "nf start server",
+    "dev": "nf start dev"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "express-session": "1.13.0",
     "foreman": "1.4.1",
     "morgan": "1.7.0",
+    "nodemon": "1.9.2",
     "throng": "4.0.0"
   }
 }

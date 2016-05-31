@@ -1,2 +1,3 @@
 client: node bin/client.js
-api: node bin/api.js
+server: node bin/server.js
+dev: nodemon bin/server.js
