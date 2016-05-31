@@ -18,6 +18,7 @@ module.exports = (id) => {
   const app = express();
   const PORT = process.env.SERVER_PORT || 3000;
   const LOG_FORMAT = process.env.LOG_FORMAT || 'combined';
+  const clientDir = path.join(__dirname, '..', 'client');
 
   /**
    * Environment
@@ -37,6 +38,15 @@ module.exports = (id) => {
   /**
    * Configuration
    */
+
+  app.set('views', clientDir + '/views');
+  app.engine('html', require('ejs').renderFile);
+  app.set('view engine', 'html');
+
+  app.use('/js', express.static(clientDir + 'scripts'));
+  app.use('/css', express.static(clientDir + 'stylesheets'));
+  app.use('/vendor', express.static(__dirname + '../bower_components'));
+
   app.use(session({
     store: new RedisStore({
       host: process.env.REDIS_HOST || '127.0.0.1',
@@ -48,22 +58,12 @@ module.exports = (id) => {
   }));
 
   /**
-   * Routes
+   * Start
    */
 
   app.get('/', (req, res) => {
-    const sess = req.session;
-    if (sess.views) {
-      sess.views++;
-    } else {
-      sess.views = 1;
-    }
-    res.send(`Worker #${id}\nView Count ${sess.views}`);
+    res.render('index.html')
   });
-
-  /**
-   * Start
-   */
 
   app.listen(PORT, () => {
     console.log(`Instance ${id} on PORT ${PORT}`);

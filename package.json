@@ -26,6 +26,7 @@
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
     "connect-redis": "3.0.2",
+    "ejs": "2.4.2",
     "eslint": "2.11.0",
     "eslint-config-airbnb": "9.0.1",
     "eslint-plugin-import": "1.8.1",
