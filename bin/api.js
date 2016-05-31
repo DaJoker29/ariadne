@@ -2,6 +2,15 @@ const throng = require('throng');
 const server = require('../server/ariadne');
 
 function startMaster() {
+  // Check if environment variables are defined.
+  if (!process.env.SESSION_SECRET) {
+    throw Error('SESSION_SECRET not defined.');
+  }
+
+  if (!process.env.NODE_ENV) {
+    throw Error('NODE_ENV not defined');
+  }
+
   console.log('Start Master');
 }
 
