@@ -10,6 +10,11 @@ module.exports = (id) => {
   const path = require('path');
   const session = require('express-session');
   const RedisStore = require('connect-redis')(session);
+  const webpack = require('webpack');
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const config = require('../webpack.config.js');
+  const historyApiFallback = require('connect-history-api-fallback');
 
   /**
    * Variables
@@ -24,27 +29,59 @@ module.exports = (id) => {
    * Environment
    */
 
+
   if (process.env.NODE_ENV === 'development') {
     // Development Settings
     app.use(morgan(LOG_FORMAT));
+
+    // Configure Webpack Dev Server
+    app.use(historyApiFallback({
+      verbose: false
+    }));
+    const compiler = webpack(config);
+    const middleware = webpackMiddleware(compiler, {
+      publicPath: config.output.publicPath,
+      contentBase: '../client',
+      stats: {
+        colors: true,
+        hash: false,
+        timings: true,
+        chunks: false,
+        chunkModules: false,
+        modules: false
+      }
+    });
+
+    app.use(middleware);
+    app.use(webpackHotMiddleware(compiler));
+    app.get('*', (req, res) => {
+      res.write(middleware.fileSystem.readFileSync(path.resolve(__dirname, '..', 'client', 'index.html')));
+      res.end();
+    });
+
   } else {
     // Production Settings
     const accessLogStream = fs.createWriteStream(path.join(__dirname,
       '..', 'access.log'), { flags: 'a' });
 
     app.use(morgan(LOG_FORMAT, { stream: accessLogStream }));
+
+    app.use(express.static(__dirname + '/client'));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '..', 'build/index.html'));
+    });
   }
 
   /**
    * Configuration
    */
 
-  app.set('views', clientDir + '/views');
+  app.set('views', clientDir);
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
 
-  app.use('/js', express.static(clientDir + 'scripts'));
-  app.use('/css', express.static(clientDir + 'stylesheets'));
+  app.use('/js', express.static(clientDir + '/scripts'));
+  app.use('/css', express.static(clientDir + '/stylesheets'));
   app.use('/vendor', express.static(__dirname + '../bower_components'));
 
   app.use(session({
@@ -61,9 +98,9 @@ module.exports = (id) => {
    * Start
    */
 
-  app.get('/', (req, res) => {
-    res.render('index.html')
-  });
+  // app.get('/', (req, res) => {
+  //   res.render('index.html')
+  // });
 
   app.listen(PORT, () => {
     console.log(`Instance ${id} on PORT ${PORT}`);

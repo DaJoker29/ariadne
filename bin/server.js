@@ -1,5 +1,5 @@
 const throng = require('throng');
-const server = require('../server/ariadne');
+const server = require('../app/ariadne');
 
 function startMaster() {
   // Check if environment variables are defined.
