@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nf start server",
     "dev": "nf start dev",
-    "build": "nf start build"
+    "build": "nf start build",
+    "clean": "rm *.log"
   },
   "repository": {
     "type": "git",
