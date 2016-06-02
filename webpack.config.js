@@ -1,16 +1,16 @@
-var debug = process.env.NODE_ENV !== "production";
-var webpack = require('webpack');
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const debug = process.env.NODE_ENV !== 'production';
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PATHS = {
   client: path.join(__dirname, 'client'),
   scripts: path.join(__dirname, 'client/scripts'),
-  build: path.join(__dirname, 'build')
-}
+  build: path.join(__dirname, 'build'),
+};
 
 module.exports = {
-  devtool: debug ? "inline-sourcemap" : null,
+  devtool: debug ? 'inline-sourcemap' : null,
   // devServer: {
   //   contentBase: 'build',
   //   historyApiFallback: true,
@@ -23,47 +23,47 @@ module.exports = {
   // },
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(PATHS.client, 'main.jsx')
+    path.join(PATHS.client, 'main.jsx'),
   ],
   eslint: {
     configFile: '.eslintrc',
-    fix: true
+    fix: true,
   },
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
         loader: 'babel?cacheDirectory',
-        include: PATHS.client
-      }
-    ]
+        include: PATHS.client,
+      },
+    ],
   },
   output: {
     path: PATHS.build,
     filename: '[name].js',
-    publicPath: '/'
+    publicPath: '/',
   },
   plugins: debug ? [
     new HtmlWebpackPlugin({
       template: 'client/index.html',
       inject: 'body',
-      filename: 'index.html'
+      filename: 'index.html',
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
   ] : [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
-      sourcemap: false
-    })
+      sourcemap: false,
+    }),
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx']
-  }
-}
+    extensions: ['', '.js', '.jsx'],
+  },
+};

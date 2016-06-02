@@ -36,7 +36,7 @@ module.exports = (id) => {
 
     // Configure Webpack Dev Server
     app.use(historyApiFallback({
-      verbose: false
+      verbose: false,
     }));
     const compiler = webpack(config);
     const middleware = webpackMiddleware(compiler, {
@@ -48,17 +48,17 @@ module.exports = (id) => {
         timings: true,
         chunks: false,
         chunkModules: false,
-        modules: false
-      }
+        modules: false,
+      },
     });
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
     app.get('*', (req, res) => {
-      res.write(middleware.fileSystem.readFileSync(path.resolve(__dirname, '..', 'client', 'index.html')));
+      res.write(middleware.fileSystem.readFileSync(path.resolve(__dirname, '..',
+       'client', 'index.html')));
       res.end();
     });
-
   } else {
     // Production Settings
     const accessLogStream = fs.createWriteStream(path.join(__dirname,
@@ -66,7 +66,7 @@ module.exports = (id) => {
 
     app.use(morgan(LOG_FORMAT, { stream: accessLogStream }));
 
-    app.use(express.static(__dirname + '/client'));
+    app.use(express.static(clientDir));
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '..', 'build/index.html'));
     });
@@ -80,9 +80,9 @@ module.exports = (id) => {
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
 
-  app.use('/js', express.static(clientDir + '/scripts'));
-  app.use('/css', express.static(clientDir + '/stylesheets'));
-  app.use('/vendor', express.static(__dirname + '../bower_components'));
+  app.use('/js', express.static(path.join(clientDir, '/scripts')));
+  app.use('/css', express.static(path.join(clientDir, '/stylesheets')));
+  app.use('/vendor', express.static(path.join(__dirname, '../bower_components')));
 
   app.use(session({
     store: new RedisStore({

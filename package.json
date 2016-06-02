@@ -8,8 +8,8 @@
     "node": "4.4.5"
   },
   "scripts": {
-    "eslint": "eslint --fix bin server",
-    "lint": "npm run eslint",
+    "eslint": "eslint . --ext .js,.jsx",
+    "fix": "eslint --fix . --ext .js,.jsx",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nf start server",
     "dev": "nf start dev",
