@@ -39,3 +39,6 @@ doc
 
 # Environment variables
 .env
+
+# Build Folder
+build
