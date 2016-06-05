@@ -15,12 +15,15 @@ module.exports = (id) => {
   const webpackHotMiddleware = require('webpack-hot-middleware');
   const config = require('../webpack.config.js');
   const historyApiFallback = require('connect-history-api-fallback');
+  const bodyParser = require('body-parser');
+  const routes = require('./routes');
+  const mongoose = require('mongoose');
 
   /**
    * Variables
    */
 
-  const app = express();
+  const app = module.exports.app = express();
   const PORT = process.env.SERVER_PORT || 3000;
   const LOG_FORMAT = process.env.LOG_FORMAT || 'combined';
   const clientDir = path.join(__dirname, '..', 'client');
@@ -29,6 +32,7 @@ module.exports = (id) => {
    * Environment
    */
 
+  mongoose.connect(process.env.MONGODB_URL || 'mongodb://localhost:27017/ariadne');
 
   if (process.env.NODE_ENV === 'development') {
     // Development Settings
@@ -55,7 +59,7 @@ module.exports = (id) => {
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
     app.get('*', (req, res) => {
-      res.write(middleware.fileSystem.readFileSync(path.resolve(__dirname, '..',
+      res.write(middleware.fileSystem.readFileSync(path.join(__dirname, '..',
        'client', 'index.html')));
       res.end();
     });
@@ -67,10 +71,19 @@ module.exports = (id) => {
     app.use(morgan(LOG_FORMAT, { stream: accessLogStream }));
 
     app.use(express.static(clientDir));
+    app.use((req, res, next) => {
+      /* eslint-disable no-param-reassign */
+      res.locals.user = req.user;
+      res.locals.authenticated = !req.user.anonymous;
+      /* eslint-enable no-param-reassign */
+      next();
+    });
+
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '..', 'build/index.html'));
     });
   }
+
 
   /**
    * Configuration
@@ -84,6 +97,9 @@ module.exports = (id) => {
   app.use('/css', express.static(path.join(clientDir, '/stylesheets')));
   app.use('/vendor', express.static(path.join(__dirname, '../bower_components')));
 
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
+
   app.use(session({
     store: new RedisStore({
       host: process.env.REDIS_HOST || '127.0.0.1',
@@ -94,13 +110,13 @@ module.exports = (id) => {
     saveUninitialized: false,
   }));
 
+  // Add Routes
+  routes(app);
+
   /**
    * Start
    */
 
-  // app.get('/', (req, res) => {
-  //   res.render('index.html')
-  // });
 
   app.listen(PORT, () => {
     console.log(`Instance ${id} on PORT ${PORT}`);
