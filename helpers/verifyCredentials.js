@@ -7,7 +7,7 @@ module.exports = (username, password, done) => {
     (err, user) => {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
-      authController.verifyPassword(password, user.password, (error, flag) => {
+      authController.verifyPassword(password, user.hash, (error, flag) => {
         if (error) { return done(error); }
         if (flag) {
           return done(null, user);
