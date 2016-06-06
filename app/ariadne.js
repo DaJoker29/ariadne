@@ -18,6 +18,10 @@ module.exports = (id) => {
   const bodyParser = require('body-parser');
   const routes = require('./routes');
   const mongoose = require('mongoose');
+  const passport = require('passport');
+  const passportLocal = require('passport-local');
+  const verifyCredentials = require('../helpers/verifyCredentials');
+  const User = require('./models/user');
 
   /**
    * Variables
@@ -71,13 +75,6 @@ module.exports = (id) => {
     app.use(morgan(LOG_FORMAT, { stream: accessLogStream }));
 
     app.use(express.static(clientDir));
-    app.use((req, res, next) => {
-      /* eslint-disable no-param-reassign */
-      res.locals.user = req.user;
-      res.locals.authenticated = !req.user.anonymous;
-      /* eslint-enable no-param-reassign */
-      next();
-    });
 
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '..', 'build/index.html'));
@@ -109,6 +106,22 @@ module.exports = (id) => {
     resave: false,
     saveUninitialized: false,
   }));
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.use(new passportLocal.Strategy(verifyCredentials));
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+  passport.deserializeUser((ident, done) => {
+    User.findOne({ _id: ident }, (err, user) => {
+      if (err) { done(err); }
+      done(null, user);
+    });
+  });
+
+  app.post('/login', passport.authenticate('local'));
 
   // Add Routes
   routes(app);
