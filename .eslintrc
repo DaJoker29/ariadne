@@ -9,7 +9,8 @@
   "extends": "airbnb",
   "rules": {
     // "react/jsx-indent": [2, 2],
-    // "react/prefer-stateless-function": 0,
+    "react/prefer-stateless-function": 1,
+    "no-underscore-dangle": 1,
     "no-console": 0
   }
 }

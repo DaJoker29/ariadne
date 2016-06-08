@@ -1,5 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.js';
+import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import Reducer from './reducers';
+import Dashboard from './components/Dashboard';
+import Layout from './components/Layout';
+import Registration from './containers/Registration';
+
+let store = createStore(Reducer);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <Redirect from="/" to="/dashboard" />
+      <Route path="/dashboard" component={Layout}>
+        <IndexRoute component={Dashboard} />
+        <Route path="registration" component={Registration} />
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('root')
+);

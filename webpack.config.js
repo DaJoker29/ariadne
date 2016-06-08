@@ -45,7 +45,7 @@ module.exports = {
   },
   plugins: debug ? [
     new HtmlWebpackPlugin({
-      template: 'client/index.html',
+      template: 'client/views/dashboard.html',
       inject: 'body',
       filename: 'index.html',
     }),
