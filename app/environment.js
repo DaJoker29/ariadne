@@ -39,9 +39,9 @@ module.exports = (app) => {
 
     app.use(middleware);
     app.use(webpackHotMiddleware(compiler));
-    app.get('*', (req, res) => {
+    app.get('/dashboard', (req, res) => {
       res.write(middleware.fileSystem.readFileSync(path.join(__dirname, '..',
-       'client', 'index.html')));
+       'client/views', 'dashboard.html')));
       res.end();
     });
   } else {
@@ -53,7 +53,7 @@ module.exports = (app) => {
 
     app.use(express.static(clientDir));
 
-    app.get('*', (req, res) => {
+    app.get('/dashboard', (req, res) => {
       res.sendFile(path.join(__dirname, '..', 'build/index.html'));
     });
   }

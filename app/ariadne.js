@@ -22,15 +22,10 @@ module.exports = (id) => {
   const clientDir = path.join(__dirname, '..', 'client');
 
   /**
-   * Environment
-   */
-
-
-  /**
    * Configuration
    */
 
-  app.set('views', clientDir);
+  app.set('views', path.join(clientDir, 'views'));
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
 

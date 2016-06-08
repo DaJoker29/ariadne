@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
@@ -14,7 +14,8 @@ let store = createStore(Reducer);
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={Layout}>
+      <Redirect from="/" to="/dashboard" />
+      <Route path="/dashboard" component={Layout}>
         <IndexRoute component={Dashboard} />
         <Route path="registration" component={Registration} />
       </Route>

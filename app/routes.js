@@ -12,6 +12,10 @@ module.exports = (app) => {
   //   }
   // });
 
+  app.get('/', (req, res) => {
+    res.redirect('/dashboard');
+  });
+
   app.use('/dashboard', ensure.auth);
 
   app.get('/register', (req, res) => {
