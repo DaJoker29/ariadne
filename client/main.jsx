@@ -2,22 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 
-import Reducer from './reducers';
+import App from './containers/App';
 import Dashboard from './components/Dashboard';
-import Layout from './components/Layout';
-import Registration from './containers/Registration';
+import configureStore from './configureStore';
 
-let store = createStore(Reducer);
+let store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Redirect from="/" to="/dashboard" />
-      <Route path="/dashboard" component={Layout}>
+      <Route path="/dashboard" component={App}>
         <IndexRoute component={Dashboard} />
-        <Route path="registration" component={Registration} />
       </Route>
     </Router>
   </Provider>,

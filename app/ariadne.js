@@ -10,9 +10,11 @@ module.exports = (id) => {
   const RedisStore = require('connect-redis')(session);
   const bodyParser = require('body-parser');
   const routes = require('./routes');
-  const auth = require('./auth');
   const environment = require('./environment');
-
+  const passport = require('passport');
+  const passportLocal = require('passport-local');
+  const verifyCredentials = require('../helpers/verifyCredentials');
+  const User = require('./models/user');
   /**
    * Variables
    */
@@ -46,12 +48,27 @@ module.exports = (id) => {
     saveUninitialized: false,
   }));
 
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.use(new passportLocal.Strategy(verifyCredentials));
+
+  passport.serializeUser((user, done) => {
+    done(null, user._id);
+  });
+
+  passport.deserializeUser((ident, done) => {
+    User.findOne({ _id: ident }, (err, user) => {
+      if (err) { done(err); }
+      done(null, user);
+    });
+  });
+
   /**
    * Start
    */
 
   // Load Modules
-  auth(app);
   routes(app);
   environment(app);
 

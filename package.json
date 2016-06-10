@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
+    "axios": "0.12.0",
     "babel-core": "6.9.1",
     "babel-helper-function-name": "6.8.0",
     "babel-helper-get-function-arity": "6.8.0",
@@ -79,7 +80,8 @@
     "react-router": "2.4.1",
     "react-transform-hmr": "1.0.4",
     "redux": "3.5.2",
-    "redux-form": "5.2.5",
+    "redux-logger": "2.6.1",
+    "redux-thunk": "2.1.0",
     "repeat-string": "1.5.4",
     "request": "2.72.0",
     "statuses": "1.2.1",

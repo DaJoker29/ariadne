@@ -40,12 +40,13 @@ module.exports = (app) => {
   app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     successRedirect: '/dashboard',
-  }));
+  }), userController.fetch);
 
   /**
    * API
    */
 
   // Users
+  app.get('/api/users', userController.fetch);
   app.post('/api/users', userController.create);
 };

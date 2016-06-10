@@ -17,3 +17,13 @@ module.exports.create = (req, res) => {
     }
   });
 };
+
+module.exports.fetch = (req, res) => {
+  User.findOne({ _id: req.user._id }, (err, result) => {
+    if (err) {
+      res.status(400).send('User Not Found');
+    } else {
+      res.send(result);
+    }
+  });
+};
