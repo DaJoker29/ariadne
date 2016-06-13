@@ -11,6 +11,7 @@
     // "react/jsx-indent": [2, 2],
     "react/prefer-stateless-function": 1,
     "no-underscore-dangle": 1,
-    "no-console": 0
+    "no-console": 0,
+    // "no-use-before-define": 1,
   }
 }

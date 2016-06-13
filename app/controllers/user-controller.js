@@ -17,3 +17,23 @@ module.exports.create = (req, res) => {
     }
   });
 };
+
+module.exports.fetch = (req, res) => {
+  User.findOne({ _id: req.user._id }, (err, result) => {
+    if (err) {
+      res.status(400).send('User Not Found');
+    } else {
+      res.send(result);
+    }
+  });
+};
+
+module.exports.update = (req, res) => {
+  User.findByIdAndUpdate(req.user._id, { $set: req.body }, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};

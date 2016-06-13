@@ -1,17 +1,35 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-const Layout = ({ children }) => (
-  <div className="container">
+const Layout = ({ children, displayName, isFetching }) => (
+  <div className="container" style={{ opacity: isFetching ? 0.5 : 1 }}>
     <div className="page-header">
-      <h1><Link to="/">Ariadne</Link> <small>Intelligent Productivity</small></h1>
+      <div className="meta pull-right">
+        <p className="text-right">
+          <strong>{displayName}</strong>
+        </p>
+        <Link to="/app/settings">Settings</Link>&nbsp;&bull;&nbsp;
+        <a href="/logout">Log Out</a>
+      </div>
+      <h1><Link to="/">Ariadne&nbsp;</Link>
+        <small>
+          Intelligent Productivity&nbsp;
+          {isFetching && <i className="fa fa-spinner fa-spin"></i>}
+        </small>
+      </h1>
     </div>
+    {
+      children.props.location.pathname === '/app'
+      && <p className="lead">Welcome {displayName}</p>
+    }
       {children}
   </div>
 );
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
+  displayName: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
 };
 
 export default Layout;

@@ -5,7 +5,15 @@ module.exports.auth = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.redirect('/login');
+    if (
+      req.xhr
+      || req.headers.accept.indexOf('json') > -1
+      || req.headers['x-requested-with'] === 'XMLHttpRequest'
+    ) {
+      res.status(403).send('Not Authorized');
+    } else {
+      res.redirect('/login');
+    }
   }
 };
 
