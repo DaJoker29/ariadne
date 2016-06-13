@@ -5,7 +5,10 @@ const Layout = ({ children, displayName, isFetching }) => (
   <div className="container" style={{ opacity: isFetching ? 0.5 : 1 }}>
     <div className="page-header">
       <div className="meta pull-right">
-        <Link to="/settings">Settings</Link>&nbsp;&bull;&nbsp;
+        <p className="text-right">
+          <strong>{displayName}</strong>
+        </p>
+        <Link to="/app/settings">Settings</Link>&nbsp;&bull;&nbsp;
         <a href="/logout">Log Out</a>
       </div>
       <h1><Link to="/">Ariadne&nbsp;</Link>
@@ -15,7 +18,10 @@ const Layout = ({ children, displayName, isFetching }) => (
         </small>
       </h1>
     </div>
-    <p className="lead">Welcome {displayName}</p>
+    {
+      children.props.location.pathname === '/app'
+      && <p className="lead">Welcome {displayName}</p>
+    }
       {children}
   </div>
 );

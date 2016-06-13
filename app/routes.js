@@ -13,10 +13,10 @@ module.exports = (app) => {
   // });
 
   app.get('/', (req, res) => {
-    res.redirect('/dashboard');
+    res.redirect('/app');
   });
 
-  app.use('/dashboard', ensure.auth);
+  app.use('/app', ensure.auth);
 
   app.get('/register', (req, res) => {
     res.render('register.html');
@@ -24,7 +24,7 @@ module.exports = (app) => {
 
   app.get('/login', (req, res) => {
     if (req.user) {
-      res.redirect('/dashboard');
+      res.redirect('/app');
     } else {
       res.render('login.html');
     }
@@ -39,14 +39,17 @@ module.exports = (app) => {
   app.post('/register', userController.create);
   app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
-    successRedirect: '/dashboard',
+    successRedirect: '/app',
   }), userController.fetch);
 
   /**
    * API
    */
 
+  app.use('/api/', ensure.auth);
+  app.use('/admin/', ensure.admin);
   // Users
   app.get('/api/users', userController.fetch);
   app.post('/api/users', userController.create);
+  app.post('/api/users/update', userController.update);
 };
