@@ -7,6 +7,7 @@ const UserSettings = ({ displayName, dispatch }) => {
 
   return (
     <div>
+      <p className="lead">Profile Settings</p>
       <form
         onSubmit={
           e => {

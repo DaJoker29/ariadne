@@ -1,4 +1,5 @@
 const userController = require('./controllers/user-controller');
+const adminController = require('./controllers/admin-controller');
 const passport = require('passport');
 const ensure = require('../helpers/ensure');
 
@@ -47,9 +48,13 @@ module.exports = (app) => {
    */
 
   app.use('/api/', ensure.auth);
-  app.use('/admin/', ensure.admin);
+  app.use('/api/admin/', ensure.admin);
+
   // Users
   app.get('/api/users', userController.fetch);
   app.post('/api/users', userController.create);
   app.post('/api/users/update', userController.update);
+
+  // Admin
+  app.get('/api/admin/users', adminController.fetchAllUsers);
 };

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import App from './containers/App';
 import Settings from './containers/Settings';
+import Admin from './containers/Admin';
 import Dashboard from './components/Dashboard';
 import configureStore from './configureStore';
 
@@ -17,6 +18,7 @@ ReactDOM.render(
       <Route path="/app" component={App}>
         <IndexRoute component={Dashboard} />
         <Route path="/app/settings" component={Settings} />
+        <Route path="/app/admin" component={Admin} />
       </Route>
     </Router>
   </Provider>,

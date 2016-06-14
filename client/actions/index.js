@@ -4,6 +4,8 @@ export const REQUEST_USER = 'REQUEST_USER';
 export const RECEIVE_USER = 'RECEIVE_USER';
 export const CHANGE_SUBMITTED = 'CHANGE_SUBMITTED';
 export const CHANGE_RESPONSE = 'CHANGE_RESPONSE';
+export const REQUEST_ALL_USERS = 'REQUEST_ALL_USERS';
+export const RECEIVE_ALL_USERS = 'RECEIVE_ALL_USERS';
 
 function changeSubmitted() {
   return {
@@ -30,6 +32,19 @@ function receiveUser(user) {
   };
 }
 
+function requestAllUsers() {
+  return {
+    type: REQUEST_ALL_USERS,
+  };
+}
+
+function receiveAllUsers(users) {
+  return {
+    type: RECEIVE_ALL_USERS,
+    users,
+  };
+}
+
 export function fetchUser() {
   return dispatch => {
     dispatch(requestUser());
@@ -47,5 +62,14 @@ export function changeSettings(setting) {
         dispatch(changeResponse());
         dispatch(fetchUser());
       });
+  };
+}
+
+export function fetchAllUsers() {
+  return dispatch => {
+    dispatch(requestAllUsers());
+    return axios.get('http://localhost:3000/api/admin/users')
+      .then(response => response.data)
+      .then(data => dispatch(receiveAllUsers(data)));
   };
 }
