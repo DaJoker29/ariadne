@@ -29,7 +29,10 @@ module.exports.fetch = (req, res) => {
 };
 
 module.exports.update = (req, res) => {
-  User.findByIdAndUpdate(req.user._id, { $set: req.body }, (err, result) => {
+  const updates = {
+    displayName: req.body.displayName,
+  };
+  User.findByIdAndUpdate(req.user._id, { $set: updates }, (err, result) => {
     if (err) {
       res.status(400).send(err);
     } else {
