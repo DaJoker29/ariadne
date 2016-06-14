@@ -10,12 +10,13 @@ class App extends Component {
   }
 
   render() {
-    const { children, displayName, isFetching } = this.props;
+    const { children, displayName, isFetching, isAdmin } = this.props;
     return (
       <Layout
         children={children}
         displayName={displayName}
         isFetching={isFetching}
+        isAdmin={isAdmin}
       />
     );
   }
@@ -26,6 +27,7 @@ App.propTypes = {
   dispatch: PropTypes.func.isRequired,
   displayName: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -33,6 +35,7 @@ function mapStateToProps(state) {
   return {
     displayName: user.displayName,
     isFetching,
+    isAdmin: user.flags.isAdmin,
   };
 }
 

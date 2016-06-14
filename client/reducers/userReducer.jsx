@@ -4,6 +4,9 @@ export default function user(state = {
   isFetching: false,
   user: {
     displayName: 'User',
+    flags: {
+      isAdmin: false,
+    },
   },
 }, action) {
   switch (action.type) {
