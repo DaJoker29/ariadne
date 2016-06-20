@@ -14,7 +14,7 @@ class Settings extends Component {
 const mapStateToProps = (state) => {
   const { user } = state.user;
   return {
-    displayName: user.displayName,
+    displayName: user.settings.displayName,
   };
 };
 

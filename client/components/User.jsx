@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const User = ({ _id, displayName, username, projects, flags }) => (
+const User = ({ userID, displayName, username, projects, teams, flags }) => (
   <li className="list-group-item">
     <p>
       <strong>{displayName} ({username}) </strong>
@@ -8,19 +8,23 @@ const User = ({ _id, displayName, username, projects, flags }) => (
       {flags.isDisabled && <span className="label label-default">Disabled</span>}
     </p>
     <p>
-      User ID: {_id}
+      User ID: {userID}
     </p>
     <p>
       Projects: {projects.join(', ')}
+    </p>
+    <p>
+      Teams: {teams.join(', ')}
     </p>
   </li>
 );
 
 User.propTypes = {
-  _id: PropTypes.string.isRequired,
+  userID: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   projects: PropTypes.array.isRequired,
+  teams: PropTypes.array.isRequired,
   flags: PropTypes.object.isRequired,
 };
 

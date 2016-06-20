@@ -3,7 +3,9 @@ import { REQUEST_USER, RECEIVE_USER, CHANGE_SUBMITTED } from '../actions';
 export default function user(state = {
   isFetching: false,
   user: {
-    displayName: 'User',
+    settings: {
+      displayName: 'User',
+    },
     flags: {
       isAdmin: false,
     },

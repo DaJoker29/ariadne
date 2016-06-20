@@ -54,10 +54,10 @@ export function fetchUser() {
   };
 }
 
-export function changeSettings(setting) {
+export function changeSettings(settings) {
   return dispatch => {
-    dispatch(changeSubmitted(setting));
-    return axios.post('http://localhost:3000/api/users/update', setting)
+    dispatch(changeSubmitted(settings));
+    return axios.post('http://localhost:3000/api/users/update', settings)
       .then(() => {
         dispatch(changeResponse());
         dispatch(fetchUser());

@@ -19,7 +19,7 @@ module.exports.create = (req, res) => {
 };
 
 module.exports.fetch = (req, res) => {
-  User.findOne({ _id: req.user._id }, (err, result) => {
+  User.findOne({ _id: req.user.userID }, (err, result) => {
     if (err) {
       res.status(400).send('User Not Found');
     } else {
@@ -30,9 +30,9 @@ module.exports.fetch = (req, res) => {
 
 module.exports.update = (req, res) => {
   const updates = {
-    displayName: req.body.displayName,
+    settings: req.body.settings,
   };
-  User.findByIdAndUpdate(req.user._id, { $set: updates }, (err, result) => {
+  User.findByIdAndUpdate(req.user.userID, { $set: updates }, (err, result) => {
     if (err) {
       res.status(400).send(err);
     } else {

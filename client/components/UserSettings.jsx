@@ -15,10 +15,12 @@ const UserSettings = ({ displayName, dispatch }) => {
             if (!nameInput.value.trim()) {
               return;
             }
-            const setting = {
-              displayName: nameInput.value,
+            const settings = {
+              settings: {
+                displayName: nameInput.value,
+              },
             };
-            dispatch(changeSettings(setting));
+            dispatch(changeSettings(settings));
             nameInput.value = '';
           }
         }
