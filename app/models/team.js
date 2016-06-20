@@ -7,7 +7,7 @@ const teamSchema = new mongoose.Schema({
   members: [String],
   projects: [String],
   settings: {
-    teamName: 'The Justice League',
+    teamName: { type: String, default: 'New Team' },
   },
 });
 
