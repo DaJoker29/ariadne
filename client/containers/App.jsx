@@ -33,7 +33,7 @@ App.propTypes = {
 function mapStateToProps(state) {
   const { user, isFetching } = state.user;
   return {
-    displayName: user.displayName,
+    displayName: user.settings.displayName,
     isFetching,
     isAdmin: user.flags.isAdmin,
   };

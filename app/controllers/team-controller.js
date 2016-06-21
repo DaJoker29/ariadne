@@ -27,3 +27,13 @@ module.exports.create = (req, res) => {
     }
   });
 };
+
+module.exports.fetch = (req, res) => {
+  Team.find({ members: req.user.userID }, (err, result) => {
+    if (err) {
+      res.status(400).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+};

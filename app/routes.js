@@ -58,6 +58,7 @@ module.exports = (app) => {
 
   // Team
   app.post('/api/team', teamController.create);
+  app.get('/api/team', teamController.fetch);
 
   // Admin
   app.get('/api/admin/users', adminController.fetchAllUsers);

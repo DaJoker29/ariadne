@@ -6,6 +6,9 @@ export const CHANGE_SUBMITTED = 'CHANGE_SUBMITTED';
 export const CHANGE_RESPONSE = 'CHANGE_RESPONSE';
 export const REQUEST_ALL_USERS = 'REQUEST_ALL_USERS';
 export const RECEIVE_ALL_USERS = 'RECEIVE_ALL_USERS';
+export const FETCH_USER_TEAMS = 'FETCH_USER_TEAMS';
+export const REQUEST_USER_TEAMS = 'REQUEST_USER_TEAMS';
+export const RECEIVE_USER_TEAMS = 'RECEIVE_USER_TEAMS';
 
 function changeSubmitted() {
   return {
@@ -45,6 +48,19 @@ function receiveAllUsers(users) {
   };
 }
 
+function requestUserTeams() {
+  return {
+    type: REQUEST_USER_TEAMS,
+  };
+}
+
+function receiveUserTeams(teams) {
+  return {
+    type: RECEIVE_USER_TEAMS,
+    teams,
+  };
+}
+
 export function fetchUser() {
   return dispatch => {
     dispatch(requestUser());
@@ -71,5 +87,14 @@ export function fetchAllUsers() {
     return axios.get('http://localhost:3000/api/admin/users')
       .then(response => response.data)
       .then(data => dispatch(receiveAllUsers(data)));
+  };
+}
+
+export function fetchUserTeams() {
+  return dispatch => {
+    dispatch(requestUserTeams());
+    return axios.get('http://localhost:3000/api/team')
+      .then(response => response.data)
+      .then(data => dispatch(receiveUserTeams(data)));
   };
 }

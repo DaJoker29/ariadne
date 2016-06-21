@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import App from './containers/App';
 import Settings from './containers/Settings';
+import Teams from './containers/Teams';
 import Admin from './containers/Admin';
 import Dashboard from './components/Dashboard';
 import configureStore from './configureStore';
@@ -19,6 +20,7 @@ ReactDOM.render(
         <IndexRoute component={Dashboard} />
         <Route path="/app/settings" component={Settings} />
         <Route path="/app/admin" component={Admin} />
+        <Route path="/app/teams" component={Teams} />
       </Route>
     </Router>
   </Provider>,

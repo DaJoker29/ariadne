@@ -9,6 +9,7 @@ const Layout = ({ children, displayName, isFetching, isAdmin }) => (
           <strong>{displayName}</strong>
         </p>
         {isAdmin && <span><Link to="/app/admin">(Admin)</Link>&nbsp;&bull;&nbsp;</span>}
+        <Link to="/app/teams">Teams</Link>&nbsp;&bull;&nbsp;
         <Link to="/app/settings">Settings</Link>&nbsp;&bull;&nbsp;
         <a href="/logout">Log Out</a>
       </div>

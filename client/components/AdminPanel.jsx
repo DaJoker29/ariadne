@@ -6,7 +6,7 @@ const AdminPanel = ({ users }) => (
     <p className="lead">Admin Settings</p>
     <div className="page-header">User List</div>
     <ul className="list-group">
-      {users.map(user => <User key={user._id} {...user} />)}
+      {users.map(user => <User key={user.userID} {...user} />)}
     </ul>
   </div>
 );
