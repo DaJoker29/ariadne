@@ -9,6 +9,8 @@ export const RECEIVE_ALL_USERS = 'RECEIVE_ALL_USERS';
 export const FETCH_USER_TEAMS = 'FETCH_USER_TEAMS';
 export const REQUEST_USER_TEAMS = 'REQUEST_USER_TEAMS';
 export const RECEIVE_USER_TEAMS = 'RECEIVE_USER_TEAMS';
+export const REQUEST_TEAM_CREATION = 'REQUEST_TEAM_CREATION';
+export const TEAM_CREATED = 'TEAM_CREATED';
 
 function changeSubmitted() {
   return {
@@ -61,6 +63,19 @@ function receiveUserTeams(teams) {
   };
 }
 
+function requestTeamCreation(teamName) {
+  return {
+    type: REQUEST_TEAM_CREATION,
+    teamName,
+  };
+}
+
+function teamCreated() {
+  return {
+    type: TEAM_CREATED,
+  };
+}
+
 export function fetchUser() {
   return dispatch => {
     dispatch(requestUser());
@@ -96,5 +111,16 @@ export function fetchUserTeams() {
     return axios.get('http://localhost:3000/api/team')
       .then(response => response.data)
       .then(data => dispatch(receiveUserTeams(data)));
+  };
+}
+
+export function createTeam(teamName) {
+  return dispatch => {
+    dispatch(requestTeamCreation());
+    return axios.post('http://localhost:3000/api/team', { teamName })
+      .then(() => {
+        dispatch(teamCreated());
+        dispatch(fetchUserTeams());
+      });
   };
 }

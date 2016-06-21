@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
+import CreateTeam from './CreateTeam';
 import Team from './Team';
 
 const UserTeams = ({ teams }) => (
   <div>
+    <p className="lead">Create New Team</p>
+    <CreateTeam />
     <p className="lead">Your Teams</p>
     <div className="page-header">Team List</div>
     <ul className="list-group">
