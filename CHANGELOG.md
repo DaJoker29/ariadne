@@ -1,6 +1,8 @@
-# Change Log
+# CHANGELOG
 
 ## [Unreleased]
+
+## [v2.0.0-0] - 2016-07-09
 ### Removed
 - Most of the project in prep for redesign
 
@@ -63,7 +65,8 @@
 - Assign Category
 - REST API
 
-[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/DaJoker29/ariadne/compare/v2.0.0-0...HEAD
+[v2.0.0-0]: https://github.com/DaJoker29/ariadne/compare/v1.0.0...v2.0.0-0
 [v1.0.0]: https://github.com/DaJoker29/ariadne/compare/v0.2.4...v1.0.0
 [v0.2.4]: https://github.com/DaJoker29/ariadne/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/DaJoker29/ariadne/compare/v0.2.2...v0.2.3
