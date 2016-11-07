@@ -3,9 +3,10 @@ Here is the official project roadmap.
 
 ### Next Release
 - [Switch to React](#switch-to-react)
+- [Projects](#projects)
+- [Chat Communication](#chat-communication)
 
 ### Release + 1
-- [Projects](#projects)
 - [Notes](#notes)
 
 ### Future
@@ -18,7 +19,6 @@ Here is the official project roadmap.
 - [Daily Scheduling](#daily-scheduling)
 - [Analysis & Prediction](#analysis--prediction)
 - [Projects & Collaborative Lists](#projects--collaborative-lists)
-- [Chat Communication](#chat-communication)
 - [File Sharing](#file-sharing)
 - [Collaborative Editing](#collaborative-editing)
 - [Continuous Integration](#continuous-integration)

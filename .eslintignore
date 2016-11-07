@@ -1,2 +1,3 @@
-# Compiled Script
-client/scripts/script.*js
+build/*
+*.json
+auth-controller.js

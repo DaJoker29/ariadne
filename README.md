@@ -1,23 +1,9 @@
+[![GitHub issues](https://img.shields.io/github/issues/dajoker29/ariadne.svg)](https://github.com/dajoker29/ariadne/issues)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/dajoker29/ariadne/develop/LICENSE)
+[![GitHub forks](https://img.shields.io/github/forks/dajoker29/ariadne.svg)](https://github.com/dajoker29/ariadne/network)
+[![GitHub stars](https://img.shields.io/github/stars/dajoker29/ariadne.svg)](https://github.com/dajoker29/ariadne/stargazers)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/dajoker29/ariadne.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
+
 # Ariadne
-> A simple tool to help manage productivity.
+> A productivity and collaboration application
 
-## Build Instructions
-
-First, use [Node/NPM](https://nodejs.org/) and [Bower](http://bower.io/) to install dependencies.
-
-```
-npm install && bower install
-```
-
-Next, use [Grunt](http://gruntjs.com/) to build the project.
-
-```
-grunt build
-```
-> *Default `grunt` command will build and launch `watch` server to jump straight into coding*
-
-Finally, launch the server via [Node](https://nodejs.org/).
-
-```
-node server
-```

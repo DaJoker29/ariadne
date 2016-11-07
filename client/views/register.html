@@ -1,34 +1,34 @@
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatiable" content="IE=edge,chrome=1">
-    <title>Ariadne &mdash; An Intelligent Task List</title>
-
-    <!-- Third-Party Stylesheets -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/superhero/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ariadne</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-OiWEn8WwtH+084y4yW2YhhH6z/qTSecHZuk/eiWtnvLtU+Z8lpDsmhOKkex6YARr" crossorigin="anonymous">
 </head>
 <body>
+  <main id="root">
     <div class="container">
-        <!-- Title -->
-        <div class="page-header">
-            <h1>Ariadne <small>An Intelligent Productivity Manager</small></h1>
+      <div class="page-header">
+        <h1><a href="/">Ariadne</a> <small>Create an Account</small></h1>
+      </div>
+      <form action="" method="post">
+        <div class="form-group">
+          <label for="username">Email Address</label>
+          <input type="email" class="form-control" name="username" placeholder="Email Address">
         </div>
-        <!-- Register Form -->
-        <h3>Register</h3>
-        <form action="" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input class="form-control" type="text" name="username" placeholder="Username">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input class="form-control" type="password" name="password" placeholder="Password">
-            </div>
-            <input class="btn btn-success" type="submit" value="Register">
-        </form>
-        <a href="/login">Already have an account? Log in.</a>
+        <div class="form-group">
+          <label for="displayName">Display Name</label>
+          <input type="text" class="form-control" name="displayName" placeholder="Display Name">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" placeholder="Password">
+        </div>
+        <input type="submit" class="btn btn-success" value="Create Account">
+      </form>
+      <a href="/register">Don't have an account? Sign up here.</a>
     </div>
+  </main>
+
 </body>
 </html>
