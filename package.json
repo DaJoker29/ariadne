@@ -1,50 +1,45 @@
 {
-  "license": "GPL-2.0",
-  "devDependencies": {
-    "autoprefixer-core": "^5.2.0",
-    "eslint-config-angular": "^0.4.0",
-    "eslint-plugin-angular": "^0.15.0",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-copy": "^0.7.0",
-    "grunt-contrib-sass": "^0.8.1",
-    "grunt-contrib-uglify": "^0.7.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-eslint": "^14.0.0",
-    "grunt-postcss": "^0.5.1",
-    "load-grunt-tasks": "3.2.0"
-  },
-  "version": "1.0.0",
   "name": "ariadne",
-  "description": "A TODO list application",
-  "main": "Gruntfile.js",
+  "version": "2.0.0-0",
+  "description": "Automated Productivity Helper",
+  "main": "ariadne.js",
+  "private": true,
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "eslint": "eslint . --ext .js",
+    "fix": "eslint --fix . --ext .js",
+    "test": "mocha -R nyan test",
+    "clean-logs": "rm *.log",
+    "start": "node ariadne.js",
+    "build": "NODE_ENV=production node ariadne.js",
+    "dev": "nodemon --config config/nodemon.json ariadne.js",
+    "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
+    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DaJoker29/ariadne.git"
   },
-  "author": "Dewitt A. Buckingham, III <captain@zerodaedalus.net> (http://zerodaedalus.com)",
+  "author": "Dewitt Buckingham (http://zerodaedalus.com)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/DaJoker29/ariadne/issues"
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
-    "body-parser": "^1.15.0",
-    "cookie-parser": "^1.4.1",
-    "ejs": "^2.4.1",
-    "express": "^4.13.4",
-    "express-session": "^1.13.0",
-    "grunt-bump": "^0.7.0",
-    "grunt-concurrent": "^2.1.0",
-    "grunt-nodemon": "^0.4.1",
-    "mongoose": "^4.4.3",
-    "morgan": "^1.6.1",
-    "node-schedule": "^1.0.0",
-    "open": "0.0.5",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "eslint": "3.9.1",
+    "graceful-fs": "4.1.10",
+    "mocha": "3.1.2",
+    "node-schedule": "1.2.0",
+    "nodemailer": "2.6.4"
+  },
+  "devDependencies": {
+    "eslint": "3.9.1",
+    "eslint-config-airbnb": "13.0.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.6.0"
   }
 }

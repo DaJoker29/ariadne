@@ -1,7 +1,0 @@
-- [ ] Deployment Script
-- [ ] Build a Feature List
-- [ ] Write Unit Tests
-- [x] Benchmark Hashing function
-- [ ] Event Models
-- [ ] Task Models
-- [ ] Notification System
