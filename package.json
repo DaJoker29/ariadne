@@ -13,8 +13,10 @@
     "test": "mocha -R nyan test",
     "clean-logs": "rm *.log",
     "start": "node ariadne.js",
-    "prod": "NODE_ENV=production node ariadne.js",
-    "dev": "nodemon --config config/nodemon.json ariadne.js"
+    "build": "NODE_ENV=production node ariadne.js",
+    "dev": "nodemon --config config/nodemon.json ariadne.js",
+    "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
+    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push"
   },
   "repository": {
     "type": "git",
