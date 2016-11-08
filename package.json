@@ -8,10 +8,13 @@
     "node": ">=6"
   },
   "scripts": {
-    "eslint": "eslint . --ext .js,.jsx",
-    "fix": "eslint --fix . --ext .js,.jsx",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean-logs": "rm *.log"
+    "eslint": "eslint . --ext .js",
+    "fix": "eslint --fix . --ext .js",
+    "test": "mocha -R nyan test",
+    "clean-logs": "rm *.log",
+    "start": "node ariadne.js",
+    "prod": "NODE_ENV=production node ariadne.js",
+    "dev": "nodemon --config config/nodemon.json ariadne.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +27,16 @@
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
+    "eslint": "3.9.1",
+    "graceful-fs": "4.1.10",
+    "node-schedule": "1.2.0",
+    "nodemailer": "2.6.4"
+  },
+  "devDependencies": {
+    "eslint": "3.9.1",
+    "eslint-config-airbnb": "13.0.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.6.0"
   }
 }
