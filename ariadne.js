@@ -1,6 +1,4 @@
-const schedule = require('node-schedule');
 const ding = require('./scripts/ding.js');
-const dingConfig = require('./config/ding-config.js');
 
 /**
  * Ariadne 2.0 - Superior Productivity
@@ -9,6 +7,12 @@ const dingConfig = require('./config/ding-config.js');
 console.log('Waking up...');
 
 console.log('Initializing Ding!...');
-const dingJob = schedule.scheduleJob(`*/${dingConfig.interval} * * * *`, () => {
-  ding();
+
+ding.init('main', (err) => {
+  if (err) {
+    console.log(`Ding! Failed to initialize: ${err}`);
+  } else {
+    ding.run();
+    console.log('Ding! Started...');
+  }
 });

@@ -1,10 +1,11 @@
 module.exports = {
+  interval: 10, // in Minutes
   transport: {
     service: 'Mailgun',
     auth: {
         // Replace with your mailgun credentials
-      user: 'user',
-      pass: 'pass',
+      user: 'testing',
+      pass: 'testing',
     },
   },
   message: {
@@ -14,5 +15,4 @@ module.exports = {
     text: 'Dong',
     html: '<b>Dong</b>',
   },
-}
-;
+};
