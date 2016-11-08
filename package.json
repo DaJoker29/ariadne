@@ -12,8 +12,8 @@
     "fix": "eslint --fix . --ext .js",
     "test": "mocha -R nyan test",
     "clean-logs": "rm *.log",
-    "start": "node ariadne.js",
-    "build": "NODE_ENV=production node ariadne.js",
+    "start": "NODE_ENV=production pm2 start ariadne.js -i max",
+    "reload": "pm2 reload all",
     "dev": "nodemon --config config/nodemon.json ariadne.js",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
     "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push"
