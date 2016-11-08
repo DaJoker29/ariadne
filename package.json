@@ -11,7 +11,8 @@
     "eslint": "eslint . --ext .js",
     "fix": "eslint --fix . --ext .js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean-logs": "rm *.log"
+    "clean-logs": "rm *.log",
+    "start": "node ariadne.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "dependencies": {
     "eslint": "3.9.1",
     "graceful-fs": "4.1.10",
+    "node-schedule": "1.2.0",
     "nodemailer": "2.6.4"
   },
   "devDependencies": {

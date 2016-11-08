@@ -1,5 +1,5 @@
 module.exports = {
-  interval: 600000, // 10 Minutes
+  interval: 10, // in Minutes
   transport: {
     service: 'Mailgun',
     auth: {
@@ -10,10 +10,10 @@ module.exports = {
   },
   message: {
     from: 'ariadne@mail.zerodaedalus.com',
-    to: [], // Email addresses you want to ping
-    subject: 'Ping',
-    text: 'Pong',
-    html: '<b>Pong</b>',
+    to: [], // Email addresses you want to ding
+    subject: 'Ding',
+    text: 'Dong',
+    html: '<b>Dong</b>',
   },
 }
 ;
