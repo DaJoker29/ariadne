@@ -8,8 +8,8 @@
     "node": ">=6"
   },
   "scripts": {
-    "eslint": "eslint . --ext .js,.jsx",
-    "fix": "eslint --fix . --ext .js,.jsx",
+    "eslint": "eslint . --ext .js",
+    "fix": "eslint --fix . --ext .js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean-logs": "rm *.log"
   },
@@ -24,5 +24,15 @@
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
+    "eslint": "3.9.1",
+    "graceful-fs": "4.1.10",
+    "nodemailer": "2.6.4"
+  },
+  "devDependencies": {
+    "eslint": "3.9.1",
+    "eslint-config-airbnb": "13.0.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.6.0"
   }
 }
