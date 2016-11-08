@@ -29,6 +29,7 @@
   "dependencies": {
     "eslint": "3.9.1",
     "graceful-fs": "4.1.10",
+    "mocha": "3.1.2",
     "node-schedule": "1.2.0",
     "nodemailer": "2.6.4"
   },
