@@ -12,7 +12,8 @@
     "fix": "eslint --fix . --ext .js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean-logs": "rm *.log",
-    "start": "node ariadne.js"
+    "prod": "NODE_ENV=production node ariadne.js",
+    "dev": "nodemon --config config/nodemon.json ariadne.js"
   },
   "repository": {
     "type": "git",

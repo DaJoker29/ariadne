@@ -8,7 +8,7 @@ const dingConfig = require('./config/ding-config.js');
  */
 console.log('Waking up...');
 
-console.log('Initializing Ding!');
+console.log('Initializing Ding!...');
 const dingJob = schedule.scheduleJob(`*/${dingConfig.interval} * * * *`, () => {
   ding();
 });
