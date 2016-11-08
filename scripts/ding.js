@@ -3,6 +3,7 @@ const schedule = require('node-schedule');
 const mainConfig = require('../config/ding-config.js');
 const noAuth = require('../test/ding/default-credentials.js');
 const noEmail = require('../test/ding/no-emails.js');
+const valid = require('../test/ding/valid-config.js');
 
 let config = mainConfig;
 /**
@@ -43,7 +44,10 @@ module.exports.init = (flag, callback) => {
       console.log('Using no-email configuration...');
       config = noEmail;
       break;
-    case 'main':
+    case 'valid':
+      console.log('Using a valid configuration...');
+      config = valid;
+      break;
     default:
       console.log('Using default configuration...');
       config = mainConfig;

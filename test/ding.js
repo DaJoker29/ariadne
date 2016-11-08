@@ -3,7 +3,7 @@ const ding = require('../scripts/ding.js');
 
 describe('Ding', () => {
   it('should complete with valid configuration', (done) => {
-    ding.init('main', (err) => {
+    ding.init('valid', (err) => {
       assert.equal(err, null);
       done();
     });
