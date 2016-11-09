@@ -5,7 +5,6 @@ const ding = require('./scripts/ding.js');
  * Copyright (C) 2016 Dewitt Buckingham (http://zerodaedalus.com)
  */
 console.log('Waking up...');
-
 console.log('Initializing Ding!...');
 
 ding.init('main', (err) => {
