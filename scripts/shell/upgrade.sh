@@ -10,6 +10,7 @@ then
 else
   echo 'Fetching'
   git pull
+  npm install
   npm test
   pm2 reload ariadne
 fi
