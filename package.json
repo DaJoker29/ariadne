@@ -12,11 +12,12 @@
     "fix": "eslint --fix . --ext .js",
     "test": "mocha -R nyan test",
     "clean-logs": "rm *.log",
-    "start": "NODE_ENV=production pm2 start ariadne.js -i max",
+    "start": "NODE_ENV=production pm2 start ariadne.js -i max --name ariadne --watch",
     "reload": "pm2 reload all",
     "dev": "nodemon --config config/nodemon.json ariadne.js",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
-    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push"
+    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push",
+    "dist": "git checkout master && git pull"
   },
   "repository": {
     "type": "git",
