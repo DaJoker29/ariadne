@@ -1,4 +1,5 @@
 const ding = require('./scripts/ding.js');
+const twitter = require('./scripts/twitter.js');
 
 /**
  * Ariadne 2.0 - Superior Productivity
@@ -15,3 +16,5 @@ ding.init('main', (err) => {
     console.log('Ding! Started...');
   }
 });
+
+console.log('Initializing Twitter...');

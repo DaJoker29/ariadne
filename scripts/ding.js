@@ -66,6 +66,7 @@ module.exports.init = (flag, callback) => {
 
 // Runs every 10 minutes
 module.exports.run = () => {
+  // eslint-disable-next-line no-unused-vars
   const job = schedule.scheduleJob('*/10 * * * *', () => {
     ding();
   });
