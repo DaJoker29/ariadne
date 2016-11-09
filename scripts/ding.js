@@ -4,6 +4,7 @@ const mainConfig = require('../config/ding-config.js');
 const noAuth = require('../test/ding/default-credentials.js');
 const noEmail = require('../test/ding/no-emails.js');
 const valid = require('../test/ding/valid-config.js');
+const twitter = require('./twitter.js');
 
 let config = mainConfig;
 /**
@@ -14,19 +15,34 @@ let config = mainConfig;
 
 const env = process.env.NODE_ENV;
 
+function buildMessage(tweet) {
+  return {
+    html: `<p>${tweet.user.name}</p><p>@${tweet.user.screen_name}</p><p>${tweet.text}</p>`,
+    text: `${tweet.user.name}\n@${tweet.user.screen_name}\n${tweet.text}\n`,
+  };
+}
+
 function ding() {
-  if ('production' === env) {
-    const transporter = nodemailer.createTransport(config.transport);
-    transporter.sendMail(config.message, (err, info) => {
-      if (err) {
-        console.log(err);
+  twitter.client.get('search/tweets', { q: 'pizza', count: 1, lang: 'en' }, (err, tweets) => {
+    if (err) {
+      console.log(`Twitter Failure: ${err.message}`);
+    } else {
+      const message = Object.assign({}, config.message, buildMessage(tweets.statuses[0]));
+
+      if ('production' === env) {
+        const transporter = nodemailer.createTransport(config.transport);
+        transporter.sendMail(message, (err, info) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(`Message Sent: ${info.response}`);
+          }
+        });
       } else {
-        console.log(`Message Sent: ${info.response}`);
+        console.log(message);
       }
-    });
-  } else {
-    console.log('MOCK: Message Sent: 250 Great success');
-  }
+    }
+  });
 }
 
 module.exports.init = (flag, callback) => {
@@ -66,6 +82,7 @@ module.exports.init = (flag, callback) => {
 
 // Runs every 10 minutes
 module.exports.run = () => {
+  // eslint-disable-next-line no-unused-vars
   const job = schedule.scheduleJob('*/10 * * * *', () => {
     ding();
   });
