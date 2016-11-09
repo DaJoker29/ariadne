@@ -1,6 +1,6 @@
 {
   "name": "ariadne",
-  "version": "2.0.15",
+  "version": "2.1.0",
   "description": "Automated Productivity Helper",
   "main": "ariadne.js",
   "private": true,
