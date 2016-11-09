@@ -1,13 +1,13 @@
 const Twitter = require('twitter');
-const config = require('../config/twitter-config.js');
+const config = require('./nonexistantfile.js'); // eslint-disable-line import/no-unresolved
 
 /**
  * Twitter API
  */
 
+const client = new Twitter(config);
 
-module.exports.init = (cb) => {
-  console.log('Initializing Twitter...');
+function init(cb) {
   console.log('Checking Twitter Configuration...');
   if (!config.consumer_key || !config.consumer_secret
     || !config.access_token_key || !config.access_token_secret) {
@@ -15,7 +15,8 @@ module.exports.init = (cb) => {
     cb(Error('No Twitter API credentials.'));
   } else {
     console.log('Twitter configured...');
-    module.exports.client = new Twitter(config);
     cb();
   }
-};
+}
+
+module.exports = Object.assign({}, { init }, client);

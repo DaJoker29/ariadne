@@ -1,19 +1,19 @@
 const assert = require('assert');
-const fs = require('fs');
 
 describe('Twitter', () => {
-  before(() => {
-    fs.rename('./config/twitter-config.js', './config/twitter-config-hidden.js');
-  });
-
-  it('should fail with no configuration', () => {
+  it('should fail if configuration file does not exist', () => {
     assert.throws(() => {
       // eslint-disable-next-line global-require
-      require('../scripts/twitter.js');
-    }, Error);
+      require('./twitter/no-config-file.js');
+    });
   });
 
-  after(() => {
-    fs.rename('./config/twitter-config-hidden.js', './config/twitter-config.js');
+  it('should fail if no configuration values are provided', (done) => {
+    // eslint-disable-next-line global-require
+    const twitter = require('./twitter/no-credentials.js');
+    twitter.init((err) => {
+      assert.equal(err.message, 'No Twitter API credentials.');
+      done();
+    });
   });
 });

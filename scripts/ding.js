@@ -23,7 +23,7 @@ function buildMessage(tweet) {
 }
 
 function ding() {
-  twitter.get('search/tweets', { q: 'pizza ?', count: 1, lang: 'en' }, (err, tweets) => {
+  twitter.client.get('search/tweets', { q: 'pizza', count: 1, lang: 'en' }, (err, tweets) => {
     if (err) {
       console.log(`Twitter Failure: ${err.message}`);
     } else {
@@ -83,7 +83,7 @@ module.exports.init = (flag, callback) => {
 // Runs every 10 minutes
 module.exports.run = () => {
   // eslint-disable-next-line no-unused-vars
-  const job = schedule.scheduleJob('*/1 * * * *', () => {
+  const job = schedule.scheduleJob('*/10 * * * *', () => {
     ding();
   });
 };
