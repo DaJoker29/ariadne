@@ -1,6 +1,6 @@
 {
   "name": "ariadne",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Automated Productivity Helper",
   "main": "ariadne.js",
   "private": true,
@@ -16,7 +16,7 @@
     "dev": "nodemon --config config/nodemon.json ariadne.js",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
     "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push",
-    "dist": "git checkout master && git pull && npm test && pm2 restart ariadne"
+    "dist": "./scripts/shell/upgrade.sh"
   },
   "repository": {
     "type": "git",
