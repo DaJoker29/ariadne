@@ -4,11 +4,11 @@
 #
 
 git fetch origin
-if [ "$(git rev-parse HEAD)" -ne "$(git rev-parse @{u})" ] ; then
+if [ `git rev-list HEAD...origin/master --count` != 0 ] ; then
+  echo "Up to date"
+else
   echo "Fetching"
   git pull
   npm test
-  pm2 restart ariadne
-else
-  echo "Up to date"
+  pm2 reload ariadne
 fi
