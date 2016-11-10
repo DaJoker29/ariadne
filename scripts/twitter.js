@@ -1,4 +1,5 @@
 const Twitter = require('twitter');
+const schedule = require('node-schedule');
 const config = require('../config/twitter-config.js');
 const _ = require('lodash');
 /**
@@ -7,6 +8,7 @@ const _ = require('lodash');
 
 let client = {};
 const tweetHandlers = [];
+const timers = {};
 const screenNames = ['_aribot'];
 
 const isTweet = _.conforms({
@@ -39,8 +41,9 @@ module.exports.init = (cb) => {
         }
       });
 
+      // Handle stream errors
       stream.on('error', (err) => {
-        console.log(`Streaming error: ${err}`);
+        console.log(`STREAMING ERROR: ${err}`);
       });
     });
 
@@ -50,6 +53,11 @@ module.exports.init = (cb) => {
 };
 
 module.exports.attach = (command, callback) => {
-  console.log(`'${command}' handler attached`);
   tweetHandlers.push({ cmd: command, cb: callback });
+  console.log(`COMMAND HANDLER ADDED: '${command}'`);
+};
+
+module.exports.schedule = (id, interval, callback) => {
+  timers[id] = schedule.scheduleJob(interval, callback);
+  console.log(`TIMER ADDED: ${id}`);
 };

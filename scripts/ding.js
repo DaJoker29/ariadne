@@ -1,10 +1,8 @@
 const nodemailer = require('nodemailer');
-const schedule = require('node-schedule');
 const mainConfig = require('../config/ding-config.js');
 const noAuth = require('../test/ding/default-credentials.js');
 const noEmail = require('../test/ding/no-emails.js');
 const valid = require('../test/ding/valid-config.js');
-const twitter = require('./twitter.js');
 
 let config = mainConfig;
 /**
@@ -22,28 +20,32 @@ function buildMessage(tweet) {
   };
 }
 
-function ding() {
-  twitter.client.get('search/tweets', { q: 'pizza', count: 1, lang: 'en' }, (err, tweets) => {
+function sendMessage(message, transport) {
+  const transporter = nodemailer.createTransport(transport);
+  transporter.sendMail(message, (err, info) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(`Message Sent: ${info.response}`);
+    }
+  });
+}
+
+module.exports.run = (client) => {
+  client.get('search/tweets', { q: 'pizza', count: 1, lang: 'en' }, (err, tweets) => {
     if (err) {
       console.log(`Twitter Failure: ${err.message}`);
     } else {
+      // Send email (or log if on development)
       const message = Object.assign({}, config.message, buildMessage(tweets.statuses[0]));
-
       if ('production' === env) {
-        const transporter = nodemailer.createTransport(config.transport);
-        transporter.sendMail(message, (err, info) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(`Message Sent: ${info.response}`);
-          }
-        });
+        sendMessage(message, config.transport);
       } else {
         console.log(message);
       }
     }
   });
-}
+};
 
 module.exports.init = (flag, callback) => {
   console.log('Configuring Ding!...');
@@ -78,12 +80,4 @@ module.exports.init = (flag, callback) => {
   } else {
     callback(null);
   }
-};
-
-// Runs every 10 minutes
-module.exports.run = () => {
-  // eslint-disable-next-line no-unused-vars
-  const job = schedule.scheduleJob('*/10 * * * *', () => {
-    ding();
-  });
 };
