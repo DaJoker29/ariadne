@@ -16,12 +16,27 @@ twitter.init((err, client) => {
     console.log('Twitter initialized...');
     /**
      * Tweet Response - Twitter @reply handler
+     *
+     * twitter.attach('Command', middleware)
+     *
+     * function middleware (arg, next) {
+     *   // do stuff to arg...
+     *
+     *   // response = string you want returned to the user
+     *   next(null, response);
+     * }
      */
     
-    // Adds a callback to response to specified command
-    twitter.attach('test', () => {
-      console.log('Ding');
+    // Testing Command
+    twitter.attach('Testing', (arg, next) => {
+      next(null, '1, 2, 3.');
     });
+
+    // Thank you Command
+    twitter.attach('Thanks', (arg, next) => {
+      next(null, 'You\'re welcome');
+    });
+
 
     /**
      * Ding - Automated Emails

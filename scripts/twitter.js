@@ -2,8 +2,10 @@ const Twitter = require('twitter');
 const schedule = require('node-schedule');
 const config = require('../config/twitter-config.js');
 const _ = require('lodash');
+
 /**
- * Twitter API
+ * Twitter API - Handles all communication between Ariadne and the Twitter 
+ * Streaming and REST APIs
  */
 
 let client = {};
@@ -15,6 +17,19 @@ const isTweet = _.conforms({
   id_str: _.isString,
   text: _.isString,
 });
+
+const sendResponse = (event, handler, res) => {
+  const replyID = event.id_str;
+  const status = `@${event.user.screen_name} ${res}`;
+
+  client.post('statuses/update', { in_reply_to_status_id: replyID, status }, (error, tweet) => {
+    if (error) {
+      console.log(`TWEET FAILURE: ${error}`);
+    } else {
+      console.log(`TWEET SUCCESS: '${handler.cmd}' response sent to @${event.user.screen_name}: ${tweet.id_str}`);
+    }
+  });
+};
 
 module.exports.init = (cb) => {
   console.log('Initializing Twitter...');
@@ -35,7 +50,13 @@ module.exports.init = (cb) => {
           const cmd = event.text.split(' ')[1];
           tweetHandlers.forEach((handler) => {
             if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-              handler.cb(event.text.split(' ').slice(2));
+              handler.cb(event.text.split(' ').slice(2), (err, res) => {
+                if (err || 'undefined' === typeof res) {
+                  console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
+                } else {
+                  sendResponse(event, handler, res);
+                }
+              });
             }
           });
         }
@@ -51,6 +72,7 @@ module.exports.init = (cb) => {
     cb(null, client);
   }
 };
+
 
 module.exports.attach = (command, callback) => {
   tweetHandlers.push({ cmd: command, cb: callback });
