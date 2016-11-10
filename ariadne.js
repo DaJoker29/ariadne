@@ -9,10 +9,23 @@ console.log('Waking up...');
 
 
 twitter.init((err) => {
+  // Check if Twitter failed to intialize.
   if (err) {
     console.log(`Twitter failed to initialize: ${err}`);
   } else {
     console.log('Twitter initialized...');
+    /**
+     * Tweet Response - Twitter @reply handler
+     */
+    
+    // Adds a callback to response to specified command
+    twitter.attach('test', () => {
+      console.log('Ding');
+    });
+
+    /**
+     * Ding - Automated Emails
+     */
     console.log('Initializing Ding...');
     ding.init('main', (err) => {
       if (err) {
@@ -22,5 +35,5 @@ twitter.init((err) => {
         console.log('Ding initialized...');
       }
     });
-  }
+  } 
 });
