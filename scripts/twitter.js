@@ -44,9 +44,21 @@ const tweet = (status, params, callback) => {
   }
 };
 
-const attach = (command, callback) => {
-  tweetHandlers.push({ cmd: command, cb: callback });
-  console.log(`COMMAND HANDLER ADDED: '${command}'`);
+const attach = (command, description, usage, callback) => {
+  /* eslint-disable no-param-reassign */
+  if ('function' === typeof description) {
+    callback = description;
+    description = 'No description provided';
+    usage = `${command} <args>`;
+  }
+  if ('function' === typeof usage) {
+    callback = usage;
+    usage = `${command} <args>`;
+  }
+  /* eslint-enable no-param-reassign */
+
+  tweetHandlers.push({ command, description, usage, callback });
+  console.log(`MODULE LOADED: '${command}'`);
 };
 
 const sendResponse = (event, handler, res) => {
@@ -55,6 +67,11 @@ const sendResponse = (event, handler, res) => {
 
   tweet(status, { in_reply_to_status_id: replyID });
 };
+
+// Checks if a specified command exist or returns a list of all valid commands.
+function commands() {
+  return tweetHandlers;
+}
 
 function restartStream() {
   if (1000 * 60 * 20 >= restartInterval) {
@@ -70,12 +87,12 @@ function activateStream() {
   stream = client.stream('statuses/filter', { track: screenName });
   stream.on('data', (event) => {
     if (isTweet(event)) {
-      const cmd = event.text.split(' ')[1];
+      const command = event.text.split(' ')[1];
       tweetHandlers.forEach((handler) => {
-        if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-          handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
+        if (handler.command.toLowerCase() === command.toLowerCase()) {
+          handler.callback(event.text.split(' ').slice(2).join(' '), (err, res) => {
             if (err || 'undefined' === typeof res) {
-              console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
+              console.log(`MIDDLEWARE FAILED: ${handler.command}`);
             } else {
               sendResponse(event, handler, res);
             }
@@ -99,13 +116,13 @@ function activateStream() {
   });  
 }
 
-const init = (cb) => {
+const init = (callback) => {
   console.log('Initializing Twitter...');
   console.log('Checking Twitter Configuration...');
   if (!config.consumer_key || !config.consumer_secret
     || !config.access_token_key || !config.access_token_secret) {
     console.log('No Twitter API credentials found...');
-    cb(Error('No Twitter API credentials.'));
+    callback(Error('No Twitter API credentials.'));
   } else {
     console.log('Twitter configured...');
     client = new Twitter(config);
@@ -126,7 +143,7 @@ const init = (cb) => {
       activateStream();
 
       // Return client for syncronous modules (Ding)
-      cb(null);
+      callback(null);
     });
   }
 };
@@ -135,6 +152,7 @@ const init = (cb) => {
 module.exports.init = init;
 module.exports.tweet = tweet;
 module.exports.attach = attach;
+module.exports.commands = commands;
 
 // Reset the rate limit timer backoff every two hours
 schedule.scheduleJob('0 */2 * * *', () => {
