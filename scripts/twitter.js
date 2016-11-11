@@ -9,9 +9,9 @@ const _ = require('lodash');
  */
 
 let client = {};
+let screenName = 'ariadnebot'; // TODO: Pull this from Database.
 const tweetHandlers = [];
 const timers = {};
-const screenNames = ['_aribot'];
 
 const isTweet = _.conforms({
   id_str: _.isString,
@@ -41,43 +41,55 @@ module.exports.init = (cb) => {
     cb(Error('No Twitter API credentials.'));
   } else {
     console.log('Twitter configured...');
-    console.log(`Watching users: ${screenNames.join(',')}`);
     client = new Twitter(config);
 
-    // Start watching stream
-    client.stream('statuses/filter', { track: screenNames.join(',') }, (stream) => {
-      stream.on('data', (event) => {
-        if (isTweet(event)) {
-          const cmd = event.text.split(' ')[1];
-          tweetHandlers.forEach((handler) => {
-            if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-              handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
-                if (err || 'undefined' === typeof res) {
-                  console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
-                } else {
-                  sendResponse(event, handler, res);
-                }
-              });
-            }
-          });
-        } else {
-          console.log('TWITTER MESSAGE:');
-          console.log(event);
-        }
+    // Fetch Username
+    client.get('account/settings', (err, data) => {
+      console.log('Fetching Twitter account info...');
+      if (err) {
+        console.log(err);
+      }
+
+      if (data && data.screen_name !== screenName) {
+        screenName = data.screen_name;
+      }
+
+      // Start watching stream
+      client.stream('statuses/filter', { track: screenName }, (stream) => {
+        console.log(`Screen Name: ${screenName}`);
+        stream.on('data', (event) => {
+          if (isTweet(event)) {
+            const cmd = event.text.split(' ')[1];
+            tweetHandlers.forEach((handler) => {
+              if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
+                handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
+                  if (err || 'undefined' === typeof res) {
+                    console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
+                  } else {
+                    sendResponse(event, handler, res);
+                  }
+                });
+              }
+            });
+          } else {
+            console.log('TWITTER MESSAGE:');
+            console.log(event);
+          }
+        });
+
+        // Handle stream errors
+        stream.on('error', (err) => {
+          if ('Status Code: 420' === err.message) {
+            console.log('Rate Limit Hit');
+          } else {
+            console.log(`STREAMING ERROR: ${err.message}`);
+          }
+        });
       });
 
-      // Handle stream errors
-      stream.on('error', (err) => {
-        if ('Status Code: 420' === err.message) {
-          console.log('Rate Limit Hit');
-        } else {
-          console.log(`STREAMING ERROR: ${err.message}`);
-        }
-      });
+      // Return client for syncronous modules (Ding)
+      cb(null, client);
     });
-
-    // Return client for syncronous modules (Ding)
-    cb(null, client);
   }
 };
 
