@@ -12,5 +12,5 @@ else
   git pull
   npm install
   npm test
-  pm2 reload ariadne
+  npm run reload
 fi
