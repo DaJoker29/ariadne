@@ -37,7 +37,7 @@ module.exports.run = (client) => {
       console.log(`Twitter Failure: ${err.message}`);
     } else {
       // Send email (or log if on development)
-      const message = Object.assign({}, config.message, buildMessage(tweets.statuses[0]));
+      const message = 'undefined' === tweets.statuses[0] ? config.message : Object.assign({}, config.message, buildMessage(tweets.statuses[0]));
       if ('production' === env) {
         sendMessage(message, config.transport);
       } else {
