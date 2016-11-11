@@ -1,5 +1,4 @@
 const Twitter = require('twitter');
-const schedule = require('node-schedule');
 const config = require('../config/twitter-config.js');
 const _ = require('lodash');
 
@@ -11,7 +10,6 @@ const _ = require('lodash');
 let client = {};
 let screenName = 'ariadnebot'; // TODO: Pull this from Database.
 const tweetHandlers = [];
-const timers = {};
 
 const isTweet = _.conforms({
   id_str: _.isString,
@@ -29,17 +27,22 @@ const tweet = (status, params, callback) => {
 
   // Check for message
   if (status || 'string' !== typeof status) {
+    console.log(`Tweeting ${status}`);
     client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
       if (err) {
-        console.log(`TWEET FAILURE: ${err}`);
-        console.log(res.body);
+        console.log(`TWEET FAILURE: Request Body: ${res.body}`);
       } else {
         console.log(`TWEET SUCCESS: ${tweet.id_str}`);
       }
     });
   } else {
-    callback(new Error('No message provided'));
+    callback(new Error('No message provided')); // Write Tests
   }
+};
+
+const attach = (command, callback) => {
+  tweetHandlers.push({ cmd: command, cb: callback });
+  console.log(`COMMAND HANDLER ADDED: '${command}'`);
 };
 
 const sendResponse = (event, handler, res) => {
@@ -49,7 +52,7 @@ const sendResponse = (event, handler, res) => {
   tweet(status, { in_reply_to_status_id: replyID });
 };
 
-module.exports.init = (cb) => {
+const init = (cb) => {
   console.log('Initializing Twitter...');
   console.log('Checking Twitter Configuration...');
   if (!config.consumer_key || !config.consumer_secret
@@ -74,7 +77,6 @@ module.exports.init = (cb) => {
       // Start watching stream
       client.stream('statuses/filter', { track: screenName }, (stream) => {
         console.log(`Screen Name: ${screenName}`);
-        tweet('Testing Tweet()');
         stream.on('data', (event) => {
           if (isTweet(event)) {
             const cmd = event.text.split(' ')[1];
@@ -106,19 +108,12 @@ module.exports.init = (cb) => {
       });
 
       // Return client for syncronous modules (Ding)
-      cb(null, client);
+      cb(null);
     });
   }
 };
 
+// Write Tests
+module.exports.init = init;
 module.exports.tweet = tweet;
-
-module.exports.attach = (command, callback) => {
-  tweetHandlers.push({ cmd: command, cb: callback });
-  console.log(`COMMAND HANDLER ADDED: '${command}'`);
-};
-
-// module.exports.schedule = (id, interval, callback) => {
-//   timers[id] = schedule.scheduleJob(interval, callback);
-//   console.log(`TIMER ADDED: ${id}`);
-// };
+module.exports.attach = attach;
