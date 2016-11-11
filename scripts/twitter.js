@@ -68,7 +68,11 @@ module.exports.init = (cb) => {
 
       // Handle stream errors
       stream.on('error', (err) => {
-        console.log(`STREAMING ERROR: ${err}`);
+        if ('Status Code: 420' === err.message) {
+          console.log('Rate Limit Hit');
+        } else {
+          console.log(`STREAMING ERROR: ${err.message}`);
+        }
       });
     });
 
@@ -77,13 +81,16 @@ module.exports.init = (cb) => {
   }
 };
 
+// module.exports.tweet = (message, time, callback) => {
+//   if (time) {}
+// };
 
 module.exports.attach = (command, callback) => {
   tweetHandlers.push({ cmd: command, cb: callback });
   console.log(`COMMAND HANDLER ADDED: '${command}'`);
 };
 
-module.exports.schedule = (id, interval, callback) => {
-  timers[id] = schedule.scheduleJob(interval, callback);
-  console.log(`TIMER ADDED: ${id}`);
-};
+// module.exports.schedule = (id, interval, callback) => {
+//   timers[id] = schedule.scheduleJob(interval, callback);
+//   console.log(`TIMER ADDED: ${id}`);
+// };
