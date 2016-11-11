@@ -1,4 +1,3 @@
-const ding = require('./scripts/ding.js');
 const twitter = require('./scripts/twitter.js');
 const math = require('mathjs');
 
@@ -9,7 +8,7 @@ const math = require('mathjs');
 console.log('Waking up...');
 
 
-twitter.init((err, client) => {
+twitter.init((err) => {
   // Check if Twitter failed to intialize.
   if (err) {
     console.log(`Twitter failed to initialize: ${err}`);
@@ -38,6 +37,7 @@ twitter.init((err, client) => {
       next(null, 'You\'re welcome');
     });
 
+    // MathJS
     twitter.attach('math', (arg, next) => {
       if ('undefined' === arg) {
         next(null, 'You didn\'t give me a problem to solve.');
@@ -58,18 +58,18 @@ twitter.init((err, client) => {
     /**
      * Ding - Automated Emails
      */
-    console.log('Initializing Ding...');
-    ding.init('main', (err) => {
-      if (err) {
-        console.log(`Ding failed to initialize: ${err}`);
-      } else {
-        const interval = 'production' === process.env.NODE_ENV ? '*/10 * * * *' : '*/2 * * * *';
-        twitter.schedule('Ding', interval, () => {
-          ding.run(client);
-        });
-        console.log('Ding initialized...');
-      }
-    });
+    // console.log('Initializing Ding...');
+    // ding.init('main', (err) => {
+    //   if (err) {
+    //     console.log(`Ding failed to initialize: ${err}`);
+    //   } else {
+    //     const interval = 'production' === process.env.NODE_ENV ? '*/10 * * * *' : '*/2 * * * *';
+    //     twitter.schedule('Ding', interval, () => {
+    //       ding.run(client);
+    //     });
+    //     console.log('Ding initialized...');
+    //   }
+    // });
   } 
 });
 
