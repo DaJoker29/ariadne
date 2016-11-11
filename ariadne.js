@@ -74,22 +74,6 @@ twitter.init((err) => {
         next(null, str.join(''));
       }
     });
-
-    /**
-     * Ding - Automated Emails
-     */
-    // console.log('Initializing Ding...');
-    // ding.init('main', (err) => {
-    //   if (err) {
-    //     console.log(`Ding failed to initialize: ${err}`);
-    //   } else {
-    //     const interval = 'production' === process.env.NODE_ENV ? '*/10 * * * *' : '*/2 * * * *';
-    //     twitter.schedule('Ding', interval, () => {
-    //       ding.run(client);
-    //     });
-    //     console.log('Ding initialized...');
-    //   }
-    // });
   } 
 });
 
