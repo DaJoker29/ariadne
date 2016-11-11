@@ -1,5 +1,6 @@
 const ding = require('./scripts/ding.js');
 const twitter = require('./scripts/twitter.js');
+const math = require('mathjs');
 
 /**
  * Ariadne 2.0 - Superior Productivity
@@ -28,13 +29,29 @@ twitter.init((err, client) => {
      */
     
     // Testing Command
-    twitter.attach('Testing', (arg, next) => {
+    twitter.attach('testing', (arg, next) => {
       next(null, '1, 2, 3.');
     });
 
     // Thank you Command
-    twitter.attach('Thanks', (arg, next) => {
+    twitter.attach('thanks', (arg, next) => {
       next(null, 'You\'re welcome');
+    });
+
+    twitter.attach('math', (arg, next) => {
+      if ('undefined' === arg) {
+        next(null, 'You didn\'t give me a problem to solve.');
+      } else {
+        const options = {
+          precision: 7,
+          exponential: {
+            lower: 1e-6,
+            upper: 1e15,
+          },
+        };
+        const result = math.eval(arg);
+        next(null, `The answer is: ${math.format(result, options)}`); // TODO: Sanitize input
+      }
     });
 
 
@@ -54,4 +71,10 @@ twitter.init((err, client) => {
       }
     });
   } 
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Caught exception:');
+  console.error(err);
+  console.trace();
 });

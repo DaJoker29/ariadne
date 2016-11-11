@@ -22,9 +22,10 @@ const sendResponse = (event, handler, res) => {
   const replyID = event.id_str;
   const status = `@${event.user.screen_name} ${res}`;
 
-  client.post('statuses/update', { in_reply_to_status_id: replyID, status }, (error, tweet) => {
-    if (error) {
-      console.log(`TWEET FAILURE: ${error}`);
+  client.post('statuses/update', { in_reply_to_status_id: replyID, status }, (err, tweet, response) => {
+    if (err) {
+      console.log(`TWEET FAILURE: ${err}`);
+      console.log(response.body);
     } else {
       console.log(`TWEET SUCCESS: '${handler.cmd}' response sent to @${event.user.screen_name}: ${tweet.id_str}`);
     }
@@ -50,7 +51,7 @@ module.exports.init = (cb) => {
           const cmd = event.text.split(' ')[1];
           tweetHandlers.forEach((handler) => {
             if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-              handler.cb(event.text.split(' ').slice(2), (err, res) => {
+              handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
                 if (err || 'undefined' === typeof res) {
                   console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
                 } else {
@@ -59,6 +60,9 @@ module.exports.init = (cb) => {
               });
             }
           });
+        } else {
+          console.log('TWITTER MESSAGE:');
+          console.log(event);
         }
       });
 
