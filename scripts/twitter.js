@@ -9,81 +9,152 @@ const _ = require('lodash');
  */
 
 let client = {};
+let stream;
+let screenName = 'ariadnebot'; // TODO: Pull this from Database.
+let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
-const timers = {};
-const screenNames = ['_aribot'];
+
 
 const isTweet = _.conforms({
   id_str: _.isString,
   text: _.isString,
 });
 
+const tweet = (status, params, callback) => {
+  // Handle in case no params are provided
+  if ('function' === typeof params) {
+    /* eslint-disable no-param-reassign */
+    params = {};
+    callback = params;
+    /* eslint-enable no-param-reassign */
+  }
+
+  // Check for message
+  if (status || 'string' !== typeof status) {
+    console.log(`Tweeting ${status}`);
+    client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
+      if (err) {
+        console.log(`TWEET FAILURE: Request Body: ${res.body}`);
+      } else {
+        console.log(`TWEET SUCCESS: ${tweet.id_str}`);
+      }
+    });
+  } else {
+    callback(new Error('No message provided')); // Write Tests
+  }
+};
+
+const attach = (command, description, usage, callback) => {
+  /* eslint-disable no-param-reassign */
+  if ('function' === typeof description) {
+    callback = description;
+    description = 'No description provided';
+    usage = `${command} <args>`;
+  }
+  if ('function' === typeof usage) {
+    callback = usage;
+    usage = `${command} <args>`;
+  }
+  /* eslint-enable no-param-reassign */
+
+  tweetHandlers.push({ command, description, usage, callback });
+  console.log(`MODULE LOADED: '${command}'`);
+};
+
 const sendResponse = (event, handler, res) => {
   const replyID = event.id_str;
   const status = `@${event.user.screen_name} ${res}`;
 
-  client.post('statuses/update', { in_reply_to_status_id: replyID, status }, (err, tweet, response) => {
-    if (err) {
-      console.log(`TWEET FAILURE: ${err}`);
-      console.log(response.body);
-    } else {
-      console.log(`TWEET SUCCESS: '${handler.cmd}' response sent to @${event.user.screen_name}: ${tweet.id_str}`);
-    }
-  });
+  tweet(status, { in_reply_to_status_id: replyID });
 };
 
-module.exports.init = (cb) => {
+// Checks if a specified command exist or returns a list of all valid commands.
+function commands() {
+  return tweetHandlers;
+}
+
+function restartStream() {
+  if (1000 * 60 * 20 >= restartInterval) {
+    restartInterval *= 2;
+  }
+  console.log(`Stopped Twitter Stream...Restarting in ${restartInterval}`);
+  stream.destroy();
+  setTimeout(activateStream, restartInterval);
+}
+
+function activateStream() {
+  console.log('Watching Twitter Stream');
+  stream = client.stream('statuses/filter', { track: screenName });
+  stream.on('data', (event) => {
+    if (isTweet(event)) {
+      const command = event.text.split(' ')[1];
+      tweetHandlers.forEach((handler) => {
+        if (handler.command.toLowerCase() === command.toLowerCase()) {
+          handler.callback(event.text.split(' ').slice(2).join(' '), (err, res) => {
+            if (err || 'undefined' === typeof res) {
+              console.log(`MIDDLEWARE FAILED: ${handler.command}`);
+            } else {
+              sendResponse(event, handler, res);
+            }
+          });
+        }
+      });
+    } else {
+      console.log('TWITTER MESSAGE:');
+      console.log(event);
+    }
+  });
+
+  // Handle stream errors
+  stream.on('error', (err) => {
+    if ('Status Code: 420' === err.message) {
+      console.log('Rate Limit Hit');
+      restartStream();
+    } else {
+      console.log(`STREAMING ERROR: ${err.message}`);
+    }
+  });  
+}
+
+const init = (callback) => {
   console.log('Initializing Twitter...');
   console.log('Checking Twitter Configuration...');
   if (!config.consumer_key || !config.consumer_secret
     || !config.access_token_key || !config.access_token_secret) {
     console.log('No Twitter API credentials found...');
-    cb(Error('No Twitter API credentials.'));
+    callback(Error('No Twitter API credentials.'));
   } else {
     console.log('Twitter configured...');
-    console.log(`Watching users: ${screenNames.join(',')}`);
     client = new Twitter(config);
 
-    // Start watching stream
-    client.stream('statuses/filter', { track: screenNames.join(',') }, (stream) => {
-      stream.on('data', (event) => {
-        if (isTweet(event)) {
-          const cmd = event.text.split(' ')[1];
-          tweetHandlers.forEach((handler) => {
-            if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-              handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
-                if (err || 'undefined' === typeof res) {
-                  console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
-                } else {
-                  sendResponse(event, handler, res);
-                }
-              });
-            }
-          });
-        } else {
-          console.log('TWITTER MESSAGE:');
-          console.log(event);
-        }
-      });
+    // Fetch Username
+    client.get('account/settings', (err, data) => {
+      console.log('Fetching Twitter account info...');
+      if (err) {
+        console.log(err);
+      }
 
-      // Handle stream errors
-      stream.on('error', (err) => {
-        console.log(`STREAMING ERROR: ${err}`);
-      });
+      if (data && data.screen_name !== screenName) {
+        screenName = data.screen_name;
+      }
+      console.log(`Screen Name: ${screenName}`);
+
+      // Watch Twitter Feed
+      activateStream();
+
+      // Return client for syncronous modules (Ding)
+      callback(null);
     });
-
-    // Return client for syncronous modules (Ding)
-    cb(null, client);
   }
 };
 
+// Write Tests
+module.exports.init = init;
+module.exports.tweet = tweet;
+module.exports.attach = attach;
+module.exports.commands = commands;
 
-module.exports.attach = (command, callback) => {
-  tweetHandlers.push({ cmd: command, cb: callback });
-  console.log(`COMMAND HANDLER ADDED: '${command}'`);
-};
-
-module.exports.schedule = (id, interval, callback) => {
-  timers[id] = schedule.scheduleJob(interval, callback);
-  console.log(`TIMER ADDED: ${id}`);
-};
+// Reset the rate limit timer backoff every two hours
+schedule.scheduleJob('0 */2 * * *', () => {
+  restartInterval = 1000 * 30;
+});
