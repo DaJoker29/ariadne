@@ -6,3 +6,8 @@
 
 # Ariadne 2.0 - Superior Productivity
 Automated Productivity Helper
+
+Build Instructions
+===================
+1. Ensure that proper config files exist in the `config` directory. Copy all `-sample.js` files removing `-sample` from the name and fill in the missing information within the code (typically API keys and sensitive information).
+2. `npm start` to launch the production server. This will launch a PM2 process which keeps the server running continuously. Make sure that PM2 is installed globally with `npm install -g pm2`.
