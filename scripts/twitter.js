@@ -18,18 +18,35 @@ const isTweet = _.conforms({
   text: _.isString,
 });
 
+const tweet = (status, params, callback) => {
+  // Handle in case no params are provided
+  if ('function' === typeof params) {
+    /* eslint-disable no-param-reassign */
+    params = {};
+    callback = params;
+    /* eslint-enable no-param-reassign */
+  }
+
+  // Check for message
+  if (status || 'string' !== typeof status) {
+    client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
+      if (err) {
+        console.log(`TWEET FAILURE: ${err}`);
+        console.log(res.body);
+      } else {
+        console.log(`TWEET SUCCESS: ${tweet.id_str}`);
+      }
+    });
+  } else {
+    callback(new Error('No message provided'));
+  }
+};
+
 const sendResponse = (event, handler, res) => {
   const replyID = event.id_str;
   const status = `@${event.user.screen_name} ${res}`;
 
-  client.post('statuses/update', { in_reply_to_status_id: replyID, status }, (err, tweet, response) => {
-    if (err) {
-      console.log(`TWEET FAILURE: ${err}`);
-      console.log(response.body);
-    } else {
-      console.log(`TWEET SUCCESS: '${handler.cmd}' response sent to @${event.user.screen_name}: ${tweet.id_str}`);
-    }
-  });
+  tweet(status, { in_reply_to_status_id: replyID });
 };
 
 module.exports.init = (cb) => {
@@ -57,6 +74,7 @@ module.exports.init = (cb) => {
       // Start watching stream
       client.stream('statuses/filter', { track: screenName }, (stream) => {
         console.log(`Screen Name: ${screenName}`);
+        tweet('Testing Tweet()');
         stream.on('data', (event) => {
           if (isTweet(event)) {
             const cmd = event.text.split(' ')[1];
@@ -93,9 +111,7 @@ module.exports.init = (cb) => {
   }
 };
 
-// module.exports.tweet = (message, time, callback) => {
-//   if (time) {}
-// };
+module.exports.tweet = tweet;
 
 module.exports.attach = (command, callback) => {
   tweetHandlers.push({ cmd: command, cb: callback });
