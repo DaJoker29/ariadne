@@ -1,4 +1,5 @@
 const Twitter = require('twitter');
+const schedule = require('node-schedule');
 const config = require('../config/twitter-config.js');
 const _ = require('lodash');
 
@@ -8,8 +9,11 @@ const _ = require('lodash');
  */
 
 let client = {};
+let stream;
 let screenName = 'ariadnebot'; // TODO: Pull this from Database.
+let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
+
 
 const isTweet = _.conforms({
   id_str: _.isString,
@@ -52,6 +56,49 @@ const sendResponse = (event, handler, res) => {
   tweet(status, { in_reply_to_status_id: replyID });
 };
 
+function restartStream() {
+  if (1000 * 60 * 20 >= restartInterval) {
+    restartInterval *= 2;
+  }
+  console.log(`Stopped Twitter Stream...Restarting in ${restartInterval}`);
+  stream.destroy();
+  setTimeout(activateStream, restartInterval);
+}
+
+function activateStream() {
+  console.log('Watching Twitter Stream');
+  stream = client.stream('statuses/filter', { track: screenName });
+  stream.on('data', (event) => {
+    if (isTweet(event)) {
+      const cmd = event.text.split(' ')[1];
+      tweetHandlers.forEach((handler) => {
+        if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
+          handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
+            if (err || 'undefined' === typeof res) {
+              console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
+            } else {
+              sendResponse(event, handler, res);
+            }
+          });
+        }
+      });
+    } else {
+      console.log('TWITTER MESSAGE:');
+      console.log(event);
+    }
+  });
+
+  // Handle stream errors
+  stream.on('error', (err) => {
+    if ('Status Code: 420' === err.message) {
+      console.log('Rate Limit Hit');
+      restartStream();
+    } else {
+      console.log(`STREAMING ERROR: ${err.message}`);
+    }
+  });  
+}
+
 const init = (cb) => {
   console.log('Initializing Twitter...');
   console.log('Checking Twitter Configuration...');
@@ -73,39 +120,10 @@ const init = (cb) => {
       if (data && data.screen_name !== screenName) {
         screenName = data.screen_name;
       }
+      console.log(`Screen Name: ${screenName}`);
 
-      // Start watching stream
-      client.stream('statuses/filter', { track: screenName }, (stream) => {
-        console.log(`Screen Name: ${screenName}`);
-        stream.on('data', (event) => {
-          if (isTweet(event)) {
-            const cmd = event.text.split(' ')[1];
-            tweetHandlers.forEach((handler) => {
-              if (handler.cmd.toLowerCase() === cmd.toLowerCase()) {
-                handler.cb(event.text.split(' ').slice(2).join(' '), (err, res) => {
-                  if (err || 'undefined' === typeof res) {
-                    console.log(`MIDDLEWARE FAILED: ${handler.cmd}`);
-                  } else {
-                    sendResponse(event, handler, res);
-                  }
-                });
-              }
-            });
-          } else {
-            console.log('TWITTER MESSAGE:');
-            console.log(event);
-          }
-        });
-
-        // Handle stream errors
-        stream.on('error', (err) => {
-          if ('Status Code: 420' === err.message) {
-            console.log('Rate Limit Hit');
-          } else {
-            console.log(`STREAMING ERROR: ${err.message}`);
-          }
-        });
-      });
+      // Watch Twitter Feed
+      activateStream();
 
       // Return client for syncronous modules (Ding)
       cb(null);
@@ -117,3 +135,8 @@ const init = (cb) => {
 module.exports.init = init;
 module.exports.tweet = tweet;
 module.exports.attach = attach;
+
+// Reset the rate limit timer backoff every two hours
+schedule.scheduleJob('0 */2 * * *', () => {
+  restartInterval = 1000 * 30;
+});

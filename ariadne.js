@@ -13,7 +13,7 @@ twitter.init((err) => {
   if (err) {
     console.log(`Twitter failed to initialize: ${err}`);
   } else {
-    console.log('Twitter initialized...');
+    console.log('Loading Modules...');
     /**
      * Tweet Response - Twitter @reply handler
      *
@@ -53,7 +53,6 @@ twitter.init((err) => {
         next(null, `The answer is: ${math.format(result, options)}`); // TODO: Sanitize input
       }
     });
-
 
     /**
      * Ding - Automated Emails
