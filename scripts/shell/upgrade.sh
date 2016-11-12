@@ -1,7 +1,5 @@
 #!/bin/sh
-#
 # Checks the repository for upgrades and restarts the server if tests are passed.
-#
 
 if [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
 sed 's/\// /g') | cut -f1) ]

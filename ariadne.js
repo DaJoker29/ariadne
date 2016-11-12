@@ -4,6 +4,9 @@ const math = require('mathjs');
 /**
  * Ariadne 2.0 - Superior Productivity
  * Copyright (C) 2016 Dewitt Buckingham (http://zerodaedalus.com)
+ *
+ * TODO: Add some better logging utility. (Winston?)
+ * TODO: Integration testing
  */
 console.log('Waking up...');
 
@@ -14,30 +17,19 @@ twitter.init((err) => {
     console.log(`Twitter failed to initialize: ${err}`);
   } else {
     console.log('Loading Modules...');
+
     /**
-     * Tweet Response - Twitter @reply handler
-     *
-     * twitter.attach('Command', middleware)
-     *
-     * function middleware (arg, next) {
-     *   // do stuff to arg...
-     *
-     *   // response = string you want returned to the user
-     *   next(null, response);
-     * }
+     * Load Modules
      */
     
-    // Testing Command
     twitter.attach('test', 'Simple test to see if Ariadne is up and running', 'test', (arg, next) => {
       next(null, '1, 2, 3.');
     });
 
-    // Thank you Command
     twitter.attach('thanks', 'Everyone appreciates a little gratitude.', 'thanks', (arg, next) => {
       next(null, 'You\'re welcome');
     });
 
-    // MathJS
     twitter.attach('math', 'Solve math problems', 'math <problem>', (arg, next) => {
       if ('undefined' === arg) {
         next(null, 'You didn\'t give me a problem to solve.');
@@ -54,12 +46,10 @@ twitter.init((err) => {
       }
     });
 
-    // Info
     twitter.attach('info', 'A little helpful information about Ariadne.', 'info', (arg, next) => {
       next(null, 'I am Ariadne, an automated productivity bot. Use \'help\' to see what I can do.');
     });
 
-    // Help
     twitter.attach('help', 'Some help with Ariadne\'s commands', 'help [command]', (arg, next) => {
       const commands = twitter.commands();
 
@@ -74,22 +64,6 @@ twitter.init((err) => {
         next(null, str.join(''));
       }
     });
-
-    /**
-     * Ding - Automated Emails
-     */
-    // console.log('Initializing Ding...');
-    // ding.init('main', (err) => {
-    //   if (err) {
-    //     console.log(`Ding failed to initialize: ${err}`);
-    //   } else {
-    //     const interval = 'production' === process.env.NODE_ENV ? '*/10 * * * *' : '*/2 * * * *';
-    //     twitter.schedule('Ding', interval, () => {
-    //       ding.run(client);
-    //     });
-    //     console.log('Ding initialized...');
-    //   }
-    // });
   } 
 });
 
