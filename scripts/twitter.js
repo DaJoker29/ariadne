@@ -10,7 +10,7 @@ const _ = require('lodash');
 
 let client = {};
 let stream;
-let screenName = 'ariadnebot'; // TODO: Pull this from Database.
+let screenName = 'ariadnebot'; // TODO: Pull this from a database.
 let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
 
@@ -22,15 +22,15 @@ const isTweet = _.conforms({
 
 const tweet = (status, params, callback) => {
   // Handle in case no params are provided
-  if ('function' === typeof params) {
+  if ('function' === typeof params && 'undefined' === typeof callback) {
     /* eslint-disable no-param-reassign */
-    params = {};
     callback = params;
+    params = {};
     /* eslint-enable no-param-reassign */
   }
 
   // Check for message
-  if (status || 'string' !== typeof status) {
+  if (status && 'string' === typeof status && '' !== status) {
     console.log(`Tweeting ${status}`);
     client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
       if (err) {
@@ -39,8 +39,10 @@ const tweet = (status, params, callback) => {
         console.log(`TWEET SUCCESS: ${tweet.id_str}`);
       }
     });
-  } else {
+  } else if (callback) {
     callback(new Error('No message provided')); // Write Tests
+  } else {
+    throw new Error('Failure with no callback');
   }
 };
 
@@ -56,6 +58,13 @@ const attach = (command, description, usage, callback) => {
     usage = `${command} <args>`;
   }
   /* eslint-enable no-param-reassign */
+  if ('undefined' === typeof command || 'function' === typeof command || '' === command || 1 < command.split(' ').length) {
+    throw new Error('No command to watch');
+  }
+  if ('undefined' === typeof callback) {
+    throw new Error('No callback to return');
+  }
+
 
   tweetHandlers.push({ command, description, usage, callback });
   console.log(`MODULE LOADED: '${command}'`);
@@ -117,34 +126,37 @@ function activateStream() {
 }
 
 const init = (callback) => {
-  console.log('Initializing Twitter...');
-  console.log('Checking Twitter Configuration...');
-  if (!config.consumer_key || !config.consumer_secret
-    || !config.access_token_key || !config.access_token_secret) {
-    console.log('No Twitter API credentials found...');
-    callback(Error('No Twitter API credentials.'));
+  if (callback) {
+    console.log('Initializing Twitter...');
+    console.log('Checking Twitter configuration...');
+    if (!config.consumer_key || !config.consumer_secret
+      || !config.access_token_key || !config.access_token_secret) {
+      console.log('No Twitter API credentials found...');
+      callback(Error('No Twitter API credentials.'));
+    } else {
+      client = new Twitter(config);
+
+      // Fetch Username
+      client.get('account/settings', (err, data) => {
+        console.log('Fetching Twitter account info...');
+        if (err) {
+          console.log(err);
+        }
+
+        if (data && data.screen_name !== screenName) {
+          screenName = data.screen_name;
+        }
+        console.log(`App Screen Name: @${screenName}`);
+
+        // Watch Twitter Feed
+        activateStream();
+
+        // Return client for syncronous modules (Ding)
+        callback(null);
+      });
+    }
   } else {
-    console.log('Twitter configured...');
-    client = new Twitter(config);
-
-    // Fetch Username
-    client.get('account/settings', (err, data) => {
-      console.log('Fetching Twitter account info...');
-      if (err) {
-        console.log(err);
-      }
-
-      if (data && data.screen_name !== screenName) {
-        screenName = data.screen_name;
-      }
-      console.log(`Screen Name: ${screenName}`);
-
-      // Watch Twitter Feed
-      activateStream();
-
-      // Return client for syncronous modules (Ding)
-      callback(null);
-    });
+    throw new Error('No Callback Provided');
   }
 };
 
