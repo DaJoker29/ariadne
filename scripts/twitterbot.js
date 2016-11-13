@@ -10,7 +10,6 @@ const _ = require('lodash');
 
 let client = {};
 let stream;
-let screenName = 'ariadnebot'; // TODO: Pull this from a database.
 let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
 
@@ -82,16 +81,18 @@ function commands() {
   return tweetHandlers;
 }
 
-function restartStream() {
+function restartStream(screenName) {
   if (1000 * 60 * 20 >= restartInterval) {
     restartInterval *= 2;
   }
   console.log(`stopped twitter stream...restarting in ${restartInterval}`);
   stream.destroy();
-  setTimeout(activateStream, restartInterval);
+  setTimeout(() => {
+    activateStream(screenName);
+  }, restartInterval);
 }
 
-function activateStream() {
+function activateStream(screenName) {
   console.log('watching twitter stream');
   stream = client.stream('statuses/filter', { track: screenName });
   stream.on('data', (event) => {
@@ -118,11 +119,39 @@ function activateStream() {
   stream.on('error', (err) => {
     if ('Status Code: 420' === err.message) {
       console.log('rate limit hit');
-      restartStream();
+      restartStream(screenName);
     } else {
       console.log(`streaming error: ${err.message}`);
     }
   });  
+}
+
+function fetchUsername(client, interval, callback) {
+  client.get('account/settings', (err, data, res) => {
+    console.log('fetching twitter account info...');
+
+    // Log non-breaking errors
+    if (err) {
+      console.log(err);
+    }
+
+    // Restart if connection limit hit
+    if (420 === res.statusCode) {
+      console.log(`connection limit exceeded...retrying in ${interval / 1000} seconds`);
+      setInterval(() => {
+        fetchUsername(client, interval * 2, () => {
+          console.log('twitter connection established...');
+        });
+      }, interval);
+    }
+
+    // Check for screen name
+    if (data && data.screen_name) {
+      callback(null, data.screen_name);
+    } else {
+      callback(Error('no screen name.'));
+    }
+  });
 }
 
 const init = (callback) => {
@@ -132,27 +161,21 @@ const init = (callback) => {
     if (!config.consumer_key || !config.consumer_secret
       || !config.access_token_key || !config.access_token_secret) {
       console.log('no twitter api credentials found...');
-      callback(Error('No Twitter API credentials.'));
+      callback(Error('no twitter api credentials.'));
     } else {
       client = new Twitter(config);
-
       // Fetch Username
-      client.get('account/settings', (err, data) => {
-        console.log('fetching twitter account info...');
+      fetchUsername(client, restartInterval, (err, screenName) => {
         if (err) {
-          console.log(err);
+          callback(Error('no screen name'));
+        } else {
+          console.log(`twitterbot screen name: @${screenName}`);
+          // Watch Twitter Feed
+          activateStream(screenName);
+
+          // Return client for syncronous modules (Ding)
+          callback(null);
         }
-
-        if (data && data.screen_name !== screenName) {
-          screenName = data.screen_name;
-        }
-        console.log(`twitterbot screen name: @${screenName}`);
-
-        // Watch Twitter Feed
-        activateStream();
-
-        // Return client for syncronous modules (Ding)
-        callback(null);
       });
     }
   } else {
