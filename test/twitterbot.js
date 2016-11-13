@@ -1,58 +1,54 @@
 const assert = require('assert');
-const twitter = require('../scripts/twitter.js');
+const twitterbot = require('../scripts/twitterbot.js');
 
-describe('Twitter', () => {
-  // before(() => {
-  //   twitter.init();
-  // });
-
+describe('Twitterbot', () => {
   describe('init()', () => {
     it('should fail if no callback is specified', () => {
-      assert.throws(twitter.init, /No Callback Provided/);
+      assert.throws(twitterbot.init, /No Callback Provided/);
     });
   });
   describe('tweet()', () => {
     it('should fail if no message is provided', (done) => {
-      twitter.tweet(null, (err) => {
+      twitterbot.tweet(null, (err) => {
         assert.deepEqual(err, Error('No Message Sent'));
         done();
       });
     });
     it('should throw an exception if it fails with no callback provided', () => {
       assert.throws(() => {
-        twitter.tweet();
+        twitterbot.tweet();
       }, /Failure with no callback/);
     });
   });
   describe('attach()', () => {
     it('should fail if no callback is specified', () => {
       assert.throws(() => {
-        twitter.attach('testing');
+        twitterbot.attach('testing');
       }, /No callback to return/);
     });
     it('should fail if no command argument is given', () => {
       assert.throws(() => {
-        twitter.attach(() => {});
+        twitterbot.attach(() => {});
       }, /No command to watch/);
     });
     it('should fail if command is an empty string', () => {
       assert.throws(() => {
-        twitter.attach('', () => {});
+        twitterbot.attach('', () => {});
       }, /No command to watch/);
     });
     it('should fail if command is multiple words', () => {
       assert.throws(() => {
-        twitter.attach('Some description', () => {});
+        twitterbot.attach('Some description', () => {});
       }, /No command to watch/);
     });
     it('should succeed if no description or usage is specified', () => {
-      twitter.attach('desc', () => {});
-      const commands = twitter.commands();
+      twitterbot.attach('desc', () => {});
+      const commands = twitterbot.commands();
       assert.ok(commands.find(e => 'desc' === e.command));
     });
     it('should succeed if no usage is specified', () => {
-      twitter.attach('usage', 'Some description', () => {});
-      const commands = twitter.commands();
+      twitterbot.attach('usage', 'Some description', () => {});
+      const commands = twitterbot.commands();
       assert.ok(commands.find(e => 'usage' === e.command));
     });
   });
