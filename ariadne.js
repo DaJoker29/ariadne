@@ -9,6 +9,8 @@ const math = require('mathjs');
  * TODO: Integration testing
  */
 console.log('waking up...');
+const db = require('./scripts/database.js');
+
 twitterbot.init((err) => {
   // Check if twitterbot failed to intialize.
   if (err) {
