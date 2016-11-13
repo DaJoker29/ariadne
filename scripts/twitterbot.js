@@ -1,6 +1,6 @@
 const Twitter = require('twitter');
 const schedule = require('node-schedule');
-const config = require('../config/twitter-config.js');
+const config = require('../config/config.js');
 const helpers = require('./helpers.js');
 
 /**
@@ -184,13 +184,13 @@ function init(callback) {
   if (callback) {
     console.log('initializing twitterbot...');
     console.log('checking twitterbot configuration...');
-    if (!config.consumer_key || !config.consumer_secret
-      || !config.access_token_key || !config.access_token_secret) {
+    if (!config.twitter.consumer_key || !config.twitter.consumer_secret
+      || !config.twitter.access_token_key || !config.twitter.access_token_secret) {
       console.log('no twitter api credentials found...');
       callback(Error('no twitter api credentials.'));
     } else {
       console.log('twitterbot configured...');
-      client = new Twitter(config);
+      client = new Twitter(config.twitter);
       // Fetch Username
       fetchUsername(client, restartInterval, (err, screenName) => {
         if (err) {
