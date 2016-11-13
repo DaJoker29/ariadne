@@ -4,7 +4,7 @@ const config = require('../config/twitter-config.js');
 const _ = require('lodash');
 
 /**
- * Twitter API - Handles all communication between Ariadne and the Twitter 
+ * Twitterbot - Handles all communication between Ariadne and the Twitter 
  * Streaming and REST APIs
  */
 
@@ -31,12 +31,12 @@ const tweet = (status, params, callback) => {
 
   // Check for message
   if (status && 'string' === typeof status && '' !== status) {
-    console.log(`Tweeting ${status}`);
+    console.log(`tweeting: ${status}`);
     client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
       if (err) {
-        console.log(`TWEET FAILURE: Request Body: ${res.body}`);
+        console.log(`tweet failed: response body: ${res.body}`);
       } else {
-        console.log(`TWEET SUCCESS: ${tweet.id_str}`);
+        console.log(`tweet success: ${tweet.id_str}`);
       }
     });
   } else if (callback) {
@@ -67,7 +67,7 @@ const attach = (command, description, usage, callback) => {
 
 
   tweetHandlers.push({ command, description, usage, callback });
-  console.log(`MODULE LOADED: '${command}'`);
+  console.log(`module loaded: '${command}'`);
 };
 
 const sendResponse = (event, handler, res) => {
@@ -86,13 +86,13 @@ function restartStream() {
   if (1000 * 60 * 20 >= restartInterval) {
     restartInterval *= 2;
   }
-  console.log(`Stopped Twitter Stream...Restarting in ${restartInterval}`);
+  console.log(`stopped twitter stream...restarting in ${restartInterval}`);
   stream.destroy();
   setTimeout(activateStream, restartInterval);
 }
 
 function activateStream() {
-  console.log('Watching Twitter Stream');
+  console.log('watching twitter stream');
   stream = client.stream('statuses/filter', { track: screenName });
   stream.on('data', (event) => {
     if (isTweet(event)) {
@@ -101,7 +101,7 @@ function activateStream() {
         if (handler.command.toLowerCase() === command.toLowerCase()) {
           handler.callback(event.text.split(' ').slice(2).join(' '), (err, res) => {
             if (err || 'undefined' === typeof res) {
-              console.log(`MIDDLEWARE FAILED: ${handler.command}`);
+              console.log(`middleware failed: ${handler.command}`);
             } else {
               sendResponse(event, handler, res);
             }
@@ -109,7 +109,7 @@ function activateStream() {
         }
       });
     } else {
-      console.log('TWITTER MESSAGE:');
+      console.log('twitter message:');
       console.log(event);
     }
   });
@@ -117,28 +117,28 @@ function activateStream() {
   // Handle stream errors
   stream.on('error', (err) => {
     if ('Status Code: 420' === err.message) {
-      console.log('Rate Limit Hit');
+      console.log('rate limit hit');
       restartStream();
     } else {
-      console.log(`STREAMING ERROR: ${err.message}`);
+      console.log(`streaming error: ${err.message}`);
     }
   });  
 }
 
 const init = (callback) => {
   if (callback) {
-    console.log('Initializing Twitter...');
-    console.log('Checking Twitter configuration...');
+    console.log('initializing twitterbot...');
+    console.log('checking twitterbot configuration...');
     if (!config.consumer_key || !config.consumer_secret
       || !config.access_token_key || !config.access_token_secret) {
-      console.log('No Twitter API credentials found...');
+      console.log('no twitter api credentials found...');
       callback(Error('No Twitter API credentials.'));
     } else {
       client = new Twitter(config);
 
       // Fetch Username
       client.get('account/settings', (err, data) => {
-        console.log('Fetching Twitter account info...');
+        console.log('fetching twitter account info...');
         if (err) {
           console.log(err);
         }
@@ -146,7 +146,7 @@ const init = (callback) => {
         if (data && data.screen_name !== screenName) {
           screenName = data.screen_name;
         }
-        console.log(`App Screen Name: @${screenName}`);
+        console.log(`twitterbot screen name: @${screenName}`);
 
         // Watch Twitter Feed
         activateStream();
