@@ -189,6 +189,7 @@ function init(callback) {
       console.log('no twitter api credentials found...');
       callback(Error('no twitter api credentials.'));
     } else {
+      console.log('twitterbot configured...');
       client = new Twitter(config);
       // Fetch Username
       fetchUsername(client, restartInterval, (err, screenName) => {
