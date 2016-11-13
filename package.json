@@ -31,10 +31,13 @@
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
     "eslint": "3.9.1",
+    "github": "6.0.4",
     "graceful-fs": "4.1.10",
     "lodash": "4.16.6",
     "mathjs": "3.7.0",
     "mocha": "3.1.2",
+    "moment": "2.16.0",
+    "mongoose": "4.6.7",
     "node-schedule": "1.2.0",
     "nodemailer": "2.6.4",
     "twitter": "1.4.0"

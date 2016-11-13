@@ -1,5 +1,10 @@
-const twitterbot = require('./scripts/twitterbot.js');
 const math = require('mathjs');
+const fs = require('fs');
+const moment = require('moment');
+const twitterbot = require('./scripts/twitterbot.js');
+const gh = require('./scripts/github.js');
+// const db = require('./scripts/database.js');
+const metadata = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 /**
  * Ariadne 2.0 - Superior Productivity
@@ -9,6 +14,7 @@ const math = require('mathjs');
  * TODO: Integration testing
  */
 console.log('waking up...');
+
 twitterbot.init((err) => {
   // Check if twitterbot failed to intialize.
   if (err) {
@@ -19,6 +25,31 @@ twitterbot.init((err) => {
     /**
      * Load Modules
      */
+    
+    // Initialize Github module
+    gh.init((err) => {
+      if (err) {
+        console.log(`failed to pull github info: ${err}`);
+      } else {
+        console.log('github info loaded');
+        // Load Info Command
+        twitterbot.attach('info', 'A little helpful information about Ariadne.', 'info', (arg, next) => {
+          gh.repository((err, data) => {
+            if (err) {
+              next(err);
+            } else {
+              const response = [];
+              response.push(`${data.name} v${metadata.version} -- ${data.description}\n`);
+              response.push(`${data.html_url}\n\n`);
+              response.push(`Created by ${metadata.author} about ${moment(data.created_at).fromNow()}\n`);
+              response.push(`Last updated ${moment(data.pushed_at).fromNow()}\n`);
+              response.push('Use \'help\' to see what I can do.');
+              next(null, response.join(''));
+            }
+          });
+        });
+      }
+    });
     
     twitterbot.attach('test', 'Simple test to see if Ariadne is up and running', 'test', (arg, next) => {
       next(null, '1, 2, 3.');
@@ -44,9 +75,6 @@ twitterbot.init((err) => {
       }
     });
 
-    twitterbot.attach('info', 'A little helpful information about Ariadne.', 'info', (arg, next) => {
-      next(null, 'I am Ariadne, an automated productivity bot. Use \'help\' to see what I can do.');
-    });
 
     twitterbot.attach('help', 'Some help with Ariadne\'s commands', 'help [command]', (arg, next) => {
       const commands = twitterbot.commands();
