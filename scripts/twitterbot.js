@@ -12,12 +12,33 @@ let client = {};
 let stream;
 let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
+const tweetMax = 140; // Max characters in a tweet
+const numberExp = /^\d*\)/;
 
 
 const isTweet = _.conforms({
   id_str: _.isString,
   text: _.isString,
 });
+
+function calcSplit(string, maxLength) {
+  const lastBlankLine = string.lastIndexOf('\n\n', maxLength);
+  const lastNewLine = string.lastIndexOf('\n', maxLength);
+  const lastPeriod = string.lastIndexOf('.', maxLength);
+  const lastWhiteSpace = string.lastIndexOf(' ', maxLength);
+
+  if (-1 !== lastBlankLine) {
+    return lastBlankLine;
+  } else if (-1 !== lastNewLine) {
+    return lastNewLine;
+  } else if (-1 !== lastPeriod) {
+    return lastPeriod;
+  } else if (-1 !== lastWhiteSpace) {
+    return lastWhiteSpace;
+  }
+  
+  return maxLength;
+}
 
 const tweet = (status, params, callback) => {
   // Handle in case no params are provided
@@ -28,14 +49,51 @@ const tweet = (status, params, callback) => {
     /* eslint-enable no-param-reassign */
   }
 
+
   // Check for message
   if (status && 'string' === typeof status && '' !== status) {
+    const nextTweet = [];
+    // Check if multiple tweets needed and add numbering to the first
+    if (-1 === status.search(numberExp) && tweetMax < status.length) {
+      status = `1) ${status}`; // eslint-disable-line no-param-reassign
+    }
+
+    // Split message in case of multiple tweets
+    if (tweetMax < status.length) {
+      console.log('splitting message into tweets...');
+      const splitIndex = calcSplit(status, tweetMax);
+
+      // Add number to next tweet
+      nextTweet.push(`${Number.parseInt(status.slice(0, status.indexOf(')')), 10) + 1})`);
+
+      // Check if @reply and add screen name
+      if (params.in_reply_to_status_id) {
+        const atIndex = status.indexOf('@');
+        nextTweet.push(status.slice(atIndex, status.indexOf(' ', atIndex)));
+      }
+
+      // Add rest of message to tweet
+      nextTweet.push(`\n${status.slice(splitIndex).trim()}`);
+
+      // Reset message of current tweet
+      status = (status.slice(0, splitIndex)); // eslint-disable-line no-param-reassign
+    }
+
+    // Send tweet
     console.log(`tweeting: ${status}`);
-    client.post('statuses/update', Object.assign({}, params, { status }), (err, tweet, res) => {
+    client.post('statuses/update', Object.assign({}, params, { status }), (err, data, res) => {
       if (err) {
         console.log(`tweet failed: response body: ${res.body}`);
       } else {
-        console.log(`tweet success: ${tweet.id_str}`);
+        console.log(`tweet success: ${data.id_str}`);
+        // Send next tweet if multiple
+        if (0 !== nextTweet.length) {
+          tweet(nextTweet.join(' '), params, (err) => {
+            if (err) {
+              console.log('Tweet series message failed');
+            }
+          });
+        }
       }
     });
   } else if (callback) {

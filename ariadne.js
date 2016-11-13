@@ -55,9 +55,9 @@ twitterbot.init((err) => {
         const result = commands.find(e => e.command === arg);
         next(null, 'undefined' === result ? 'Don\'t recognize that command' : `\n${result.description}\nUsage: ${result.usage}`);
       } else {
-        const str = ['\nCMDs: <req> [opt]\n\n'];
+        const str = ['\nHere are the available commands:\n <required> [optional]\n\n'];
         commands.forEach((e) => {
-          str.push(`${e.usage}\n`);
+          str.push(`${e.usage} -- ${e.description}\n`);
         });
         next(null, str.join(''));
       }
