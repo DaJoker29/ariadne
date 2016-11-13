@@ -1,7 +1,7 @@
 const Twitter = require('twitter');
 const schedule = require('node-schedule');
 const config = require('../config/twitter-config.js');
-const _ = require('lodash');
+const helpers = require('./helpers.js');
 
 /**
  * Twitterbot - Handles all communication between Ariadne and the Twitter 
@@ -13,34 +13,8 @@ let stream;
 let restartInterval = 1000 * 30; // Default to 30 seconds
 const tweetHandlers = [];
 const tweetMax = 140; // Max characters in a tweet
-const numberExp = /^\d*\)/;
 
-
-const isTweet = _.conforms({
-  id_str: _.isString,
-  text: _.isString,
-});
-
-function calcSplit(string, maxLength) {
-  const lastBlankLine = string.lastIndexOf('\n\n', maxLength);
-  const lastNewLine = string.lastIndexOf('\n', maxLength);
-  const lastPeriod = string.lastIndexOf('.', maxLength);
-  const lastWhiteSpace = string.lastIndexOf(' ', maxLength);
-
-  if (-1 !== lastBlankLine) {
-    return lastBlankLine;
-  } else if (-1 !== lastNewLine) {
-    return lastNewLine;
-  } else if (-1 !== lastPeriod) {
-    return lastPeriod;
-  } else if (-1 !== lastWhiteSpace) {
-    return lastWhiteSpace;
-  }
-  
-  return maxLength;
-}
-
-const tweet = (status, params, callback) => {
+function tweet(status, params, callback) {
   // Handle in case no params are provided
   if ('function' === typeof params && 'undefined' === typeof callback) {
     /* eslint-disable no-param-reassign */
@@ -49,33 +23,31 @@ const tweet = (status, params, callback) => {
     /* eslint-enable no-param-reassign */
   }
 
-
   // Check for message
   if (status && 'string' === typeof status && '' !== status) {
     const nextTweet = [];
     // Check if multiple tweets needed and add numbering to the first
-    if (-1 === status.search(numberExp) && tweetMax < status.length) {
+    if (-1 === status.search(/^\d+\)/) && tweetMax < status.length) {
       status = `1) ${status}`; // eslint-disable-line no-param-reassign
+    }
+
+    // Check if @reply and add screen name to front of message
+    if (params.in_reply_to_status_id && params.in_reply_to_screen_name) {
+      status = `@${params.in_reply_to_screen_name} ${status}`; // eslint-disable-line no-param-reassign
     }
 
     // Split message in case of multiple tweets
     if (tweetMax < status.length) {
       console.log('splitting message into tweets...');
-      const splitIndex = calcSplit(status, tweetMax);
+      const splitIndex = helpers.CALC_SPLIT(status, tweetMax);
 
-      // Add number to next tweet
-      nextTweet.push(`${Number.parseInt(status.slice(0, status.indexOf(')')), 10) + 1})`);
-
-      // Check if @reply and add screen name
-      if (params.in_reply_to_status_id) {
-        const atIndex = status.indexOf('@');
-        nextTweet.push(status.slice(atIndex, status.indexOf(' ', atIndex)));
-      }
+      // Add numbering to next tweet
+      nextTweet.push(`${Number.parseInt(status.slice(status.search(/\d+\)/), status.indexOf(')')), 10) + 1})`);
 
       // Add rest of message to tweet
       nextTweet.push(`\n${status.slice(splitIndex).trim()}`);
 
-      // Reset message of current tweet
+      // Trim to current tweet
       status = (status.slice(0, splitIndex)); // eslint-disable-line no-param-reassign
     }
 
@@ -86,7 +58,7 @@ const tweet = (status, params, callback) => {
         console.log(`tweet failed: response body: ${res.body}`);
       } else {
         console.log(`tweet success: ${data.id_str}`);
-        // Send next tweet if multiple
+        // Send next tweet if first succeeds
         if (0 !== nextTweet.length) {
           tweet(nextTweet.join(' '), params, (err) => {
             if (err) {
@@ -101,9 +73,9 @@ const tweet = (status, params, callback) => {
   } else {
     throw new Error('Failure with no callback');
   }
-};
+}
 
-const attach = (command, description, usage, callback) => {
+function attach(command, description, usage, callback) {
   /* eslint-disable no-param-reassign */
   if ('function' === typeof description) {
     callback = description;
@@ -115,6 +87,7 @@ const attach = (command, description, usage, callback) => {
     usage = `${command} <args>`;
   }
   /* eslint-enable no-param-reassign */
+
   if ('undefined' === typeof command || 'function' === typeof command || '' === command || 1 < command.split(' ').length) {
     throw new Error('No command to watch');
   }
@@ -122,17 +95,9 @@ const attach = (command, description, usage, callback) => {
     throw new Error('No callback to return');
   }
 
-
   tweetHandlers.push({ command, description, usage, callback });
   console.log(`module loaded: '${command}'`);
-};
-
-const sendResponse = (event, handler, res) => {
-  const replyID = event.id_str;
-  const status = `@${event.user.screen_name} ${res}`;
-
-  tweet(status, { in_reply_to_status_id: replyID });
-};
+}
 
 // Checks if a specified command exist or returns a list of all valid commands.
 function commands() {
@@ -154,7 +119,7 @@ function activateStream(screenName) {
   console.log('watching twitter stream');
   stream = client.stream('statuses/filter', { track: screenName });
   stream.on('data', (event) => {
-    if (isTweet(event)) {
+    if (helpers.IS_TWEET(event)) {
       const command = event.text.split(' ')[1];
       tweetHandlers.forEach((handler) => {
         if (handler.command.toLowerCase() === command.toLowerCase()) {
@@ -162,7 +127,10 @@ function activateStream(screenName) {
             if (err || 'undefined' === typeof res) {
               console.log(`middleware failed: ${handler.command}`);
             } else {
-              sendResponse(event, handler, res);
+              tweet(res, {
+                in_reply_to_status_id: event.id_str, 
+                in_reply_to_screen_name: event.user.screen_name,
+              });
             }
           });
         }
@@ -212,7 +180,7 @@ function fetchUsername(client, interval, callback) {
   });
 }
 
-const init = (callback) => {
+function init(callback) {
   if (callback) {
     console.log('initializing twitterbot...');
     console.log('checking twitterbot configuration...');
@@ -239,7 +207,7 @@ const init = (callback) => {
   } else {
     throw new Error('No Callback Provided');
   }
-};
+}
 
 // Write Tests
 module.exports.init = init;
