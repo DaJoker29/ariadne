@@ -35,7 +35,7 @@ function tweet(status, params, callback) {
     if (params.in_reply_to_status_id && params.in_reply_to_screen_name) {
       status = `@${params.in_reply_to_screen_name} ${status}`; // eslint-disable-line no-param-reassign
     }
-
+    
     // Split message in case of multiple tweets
     if (tweetMax < status.length) {
       console.log('splitting message into tweets...');
@@ -125,7 +125,7 @@ function activateStream(screenName) {
         if (handler.command.toLowerCase() === command.toLowerCase()) {
           handler.callback(event.text.split(' ').slice(2).join(' '), (err, res) => {
             if (err || 'undefined' === typeof res) {
-              console.log(`middleware failed: ${handler.command}`);
+              console.log(`${handler.command} middleware failed: ${err}`);
             } else {
               tweet(res, {
                 in_reply_to_status_id: event.id_str, 

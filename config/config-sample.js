@@ -8,10 +8,6 @@ module.exports = {
   github: {
     owner: '',
     repo: '',
-    auth: {
-      type: 'basic',
-      username: '',
-      password: '',
-    },
+    token: '',
   },
 };
