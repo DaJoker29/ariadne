@@ -48,6 +48,27 @@ twitterbot.init((err) => {
             }
           });
         });
+        // Load Github Command
+        twitterbot.attach('github', 'Get information about a specific Github user or repository', 'github <user OR user/repo>', (arg, next) => {
+          const username = arg.split(' ')[0];
+          if ('string' !== typeof username) {
+            next(Error('Invalid username'));
+          } else {
+            gh.getUser(username, (err, data) => {
+              if (err) {
+                next(err);
+              } else {
+                const response = [];
+                response.push(`${data.name} -- ${data.company || 'No affiliation'}\n`);
+                response.push(`${data.bio || data.location || data.login}\n`);
+                response.push(`${data.blog || data.html_url}\n`);
+                response.push(`Has ${data.public_repos} repos, ${data.public_gists} gists and ${data.followers} followers.\n`);
+                response.push(`Been using GitHub for ${moment(data.created_at).fromNow(true)}\n`);
+                next(null, response.join(''));
+              }
+            });
+          }
+        });
       }
     });
     
