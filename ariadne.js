@@ -50,9 +50,26 @@ twitterbot.init((err) => {
         });
         // Load Github Command
         twitterbot.attach('github', 'Get information about a specific Github user or repository', 'github <user OR user/repo>', (arg, next) => {
-          const username = arg.split(' ')[0];
-          if ('string' !== typeof username) {
+          const args = arg.split('/');
+          const username = args[0];
+          const repo = args[1];
+          if ('undefined' === typeof username || 'string' !== typeof username) {
             next(Error('Invalid username'));
+          } else if (repo) {
+            gh.getRepo(username, repo, (err, data) => {
+              if (err) {
+                next(err);
+              } else {
+                const response = [];
+                response.push(`@${data.full_name} ${data.parent ? ` (Fork of ${data.parent.full_name})` : ''}\n`);
+                response.push(`${data.description || 'No description'}\n`);
+                response.push(`${data.html_url}\n`);
+                response.push(`Has ${data.forks_count} forks, ${data.stargazers_count} stars and ${data.size} commits.\n`);
+                response.push(`Created ${moment(data.created_at).fromNow()}.\n`);
+                response.push(`Last commit was ${moment(data.pushed_at).fromNow()}.\n`);
+                next(null, response.join(''));
+              }
+            });
           } else {
             gh.getUser(username, (err, data) => {
               if (err) {

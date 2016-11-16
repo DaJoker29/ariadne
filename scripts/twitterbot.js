@@ -35,7 +35,7 @@ function tweet(status, params, callback) {
     if (params.in_reply_to_status_id && params.in_reply_to_screen_name) {
       status = `@${params.in_reply_to_screen_name} ${status}`; // eslint-disable-line no-param-reassign
     }
-
+    
     // Split message in case of multiple tweets
     if (tweetMax < status.length) {
       console.log('splitting message into tweets...');

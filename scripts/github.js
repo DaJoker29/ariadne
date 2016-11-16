@@ -39,13 +39,24 @@ function authenticate() {
 }
 
 function getUser(username, callback) {
-  console.log(username);
   github.users.getForUser({ username }, (err, res) => {
     authenticate();
     if (err) {
-      callback(Error(`problem fetching github user: ${err}\n${res}`));
+      callback(Error(`problem fetching github user: ${err}`));
     } else {
       console.log('github user successfully retrieved');
+      callback(null, res);
+    }
+  });
+}
+
+function getRepo(owner, repo, callback) {
+  github.repos.get({ owner, repo }, (err, res) => {
+    authenticate();
+    if (err) {
+      callback(Error(`problem fetching github repo: ${err}`));
+    } else {
+      console.log('github repo successfully retrieved');
       callback(null, res);
     }
   });
@@ -54,3 +65,4 @@ function getUser(username, callback) {
 module.exports.init = init;
 module.exports.repository = repository;
 module.exports.getUser = getUser;
+module.exports.getRepo = getRepo;
