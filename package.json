@@ -11,7 +11,7 @@
     "eslint": "eslint . --ext .js",
     "fix": "eslint --fix . --ext .js",
     "test": "mocha -R spec test",
-    "start": "pm2 start .pm2.js",
+    "start": "pm2 start .pm2.json",
     "reload": "./tools/reload-server.sh",
     "dev": "nodemon ariadne.js --config .nodemon.json",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
