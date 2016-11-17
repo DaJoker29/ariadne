@@ -3,7 +3,7 @@ const fs = require('fs');
 const moment = require('moment');
 const twitterbot = require('./lib/twitterbot.js');
 const gh = require('./lib/github.js');
-// const db = require('./scripts/database.js');
+
 const metadata = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
 /**
