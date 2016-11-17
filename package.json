@@ -11,13 +11,14 @@
     "eslint": "eslint . --ext .js",
     "fix": "eslint --fix . --ext .js",
     "test": "mocha -R spec test",
-    "start": "NODE_ENV=production pm2 start ariadne.js --name ariadne --log-date-format='YYYY-MM-DD HH:mm:ss.SSSS Z'",
-    "reload": "./scripts/shell/reload-server.sh",
-    "dev": "nodemon --config config/nodemon.json ariadne.js",
+    "start": "pm2 start .pm2.json",
+    "reload": "./tools/reload-server.sh",
+    "dev": "nodemon ariadne.js --config .nodemon.json",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
     "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push",
-    "dist": "./scripts/shell/upgrade.sh",
-    "coverage": "istanbul cover node_modules/.bin/_mocha -- -R spec test && xdg-open ./coverage/lcov-report/index.html"
+    "dist": "./tools/upgrade.sh",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- -R spec test && xdg-open ./coverage/lcov-report/index.html",
+    "doc": "node_modules/.bin/jsdoc -t jaguarjs-jsdoc -c .jsdoc.json && xdg-open ./docs/index.html"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,7 @@
     "eslint": "3.9.1",
     "github": "6.0.4",
     "graceful-fs": "4.1.10",
+    "jsdoc": "3.4.3",
     "lodash": "4.16.6",
     "mathjs": "3.7.0",
     "mocha": "3.1.2",
