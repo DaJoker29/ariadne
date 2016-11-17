@@ -4,8 +4,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/dajoker29/ariadne.svg)](https://github.com/dajoker29/ariadne/stargazers)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/dajoker29/ariadne.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
 
-# Ariadne 2.0 - Superior Productivity
-Automated Productivity Helper
+# Ariadne 2.0
+Twitterbot Helper
 
 Build Instructions
 ===================
