@@ -1,5 +1,5 @@
 const assert = require('assert');
-const twitterbot = require('../scripts/twitterbot.js');
+const twitterbot = require('../lib/twitterbot.js');
 
 describe('Twitterbot', () => {
   describe('init()', () => {
