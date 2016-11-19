@@ -33,6 +33,24 @@ program
   });
 
 program
+  .command('list')
+  .alias('ls')
+  .description('Show current apps and access tokens')
+  .action(() => {
+    db.listApps((err, data) => {
+      if (err) {
+        console.log(`Something went wrong.\n${err}`);
+      } else {
+        console.log('App Name - Access Token\n');
+        data.forEach((app) => {
+          console.log(`${app.appName} - ${app.token}`);
+        });
+      }
+      db.close();
+    });
+  });
+
+program
   .command('remove <name>')
   .alias('rm')
   .description('Remove an apps access to the repository')
