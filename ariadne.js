@@ -24,9 +24,6 @@ console.log('waking up...');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  res.sendStatus(200);
-});
 
 app.post('/api/tweet', confirmToken, (req, res) => {
   twitterbot.tweet(req.body.status, req.body.params, (err) => {
@@ -37,6 +34,14 @@ app.post('/api/tweet', confirmToken, (req, res) => {
       res.sendStatus(200);
     }
   });
+});
+
+app.get('/api', (req, res) => {
+  res.sendStatus(200);
+});
+
+app.get('*', (req, res) => {
+  res.redirect(301, 'http://zerodaedalus.com/portfolio/ariadne/');
 });
 
 /**
