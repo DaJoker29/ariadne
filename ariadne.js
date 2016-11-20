@@ -1,10 +1,15 @@
 const math = require('mathjs');
 const fs = require('fs');
 const moment = require('moment');
+const express = require('express');
+const bodyParser = require('body-parser');
 const twitterbot = require('./lib/twitterbot.js');
 const gh = require('./lib/github.js');
 
+const app = express();
 const metadata = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const port = process.env.PORT || 3000;
+const validToken = require('./lib/database.js').validToken;
 
 /**
  * Ariadne 2.0 - Superior Productivity
@@ -15,6 +20,32 @@ const metadata = JSON.parse(fs.readFileSync('package.json', 'utf8'));
  */
 console.log('waking up...');
 
+/**
+ * CONFIGURE SERVER
+ */
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+  res.sendStatus(200);
+});
+
+app.post('/api/tweet', confirmToken, (req, res) => {
+  twitterbot.tweet(req.body.status, req.body.params, (err) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+/**
+ * INITIALIZE TWITTERBOT AND DEPENDENCIES
+ */
+
 twitterbot.init((err) => {
   // Check if twitterbot failed to intialize.
   if (err) {
@@ -23,10 +54,9 @@ twitterbot.init((err) => {
     console.log('loading modules...');
 
     /**
-     * Load Modules
+     * INITIALIZE GITHUB
      */
     
-    // Initialize Github module
     gh.init((err) => {
       if (err) {
         console.log(`failed to pull github info: ${err}`);
@@ -113,7 +143,6 @@ twitterbot.init((err) => {
       }
     });
 
-
     twitterbot.attach('help', 'Some help with Ariadne\'s commands', 'help [command]', (arg, next) => {
       const commands = twitterbot.commands();
 
@@ -129,10 +158,35 @@ twitterbot.init((err) => {
       }
     });
   } 
+
+  // Launch REST API
+  app.listen(port, () => {
+    console.log(`Ariadne REST API started on port ${port}`);
+  });
 });
 
+/**
+ * Handle uncaught exceptions
+ */
 process.on('uncaughtException', (err) => {
   console.error('caught exception:');
   console.error(err);
   console.trace();
 });
+
+/**
+ * MIDDLEWARE
+ */
+
+function confirmToken(req, res, next) {
+  console.log('Confirming access token...');
+  validToken(req.body.auth, (err) => {
+    if (err) {
+      console.log('Token invalid...');
+      res.sendStatus(403);      
+    } else {
+      console.log('Token confirmed...');
+      next();      
+    }
+  });
+}
