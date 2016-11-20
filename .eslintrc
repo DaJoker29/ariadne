@@ -19,5 +19,8 @@
         "yoda": [2, "always"],
     },
     "globals": {},
-    "extends": "airbnb"
+    "extends": "airbnb",
+    "plugins": [
+        "json"
+    ]
 }
