@@ -41,7 +41,7 @@ app.get('/api', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-  res.redirect(301, 'http://zerodaedalus.com/portfolio/ariadne/');
+  res.redirect(301, 'https://twitter.com/ariadnebot');
 });
 
 /**
