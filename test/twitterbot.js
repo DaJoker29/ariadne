@@ -14,11 +14,6 @@ describe('Twitterbot', () => {
         done();
       });
     });
-    it('should throw an exception if it fails with no callback provided', () => {
-      assert.throws(() => {
-        twitterbot.tweet();
-      }, /Failure with no callback/);
-    });
   });
   describe('attach()', () => {
     it('should fail if no callback is specified', () => {
