@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const schedule = require('node-schedule');
 const twitterbot = require('./lib/twitterbot.js');
 const gh = require('./lib/github.js');
 const handlers = require('./lib/cmd-handlers.js');
@@ -75,6 +76,13 @@ twitterbot.init((err) => {
           console.log(`Ariadne REST API started on port ${port}`);
         });
       }
+    });
+
+    /**
+     * schedule repeating messages
+     */
+    schedule.scheduleJob('7 */6 * * *', () => {
+      twitterbot.randomQuote();
     });
   }
 });
