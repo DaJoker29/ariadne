@@ -81,7 +81,7 @@ twitterbot.init((err) => {
     /**
      * schedule repeating messages
      */
-    schedule.scheduleJob('7 */6 * * *', () => {
+    schedule.scheduleJob('0 */3 * * *', () => {
       twitterbot.randomQuote();
     });
   }
