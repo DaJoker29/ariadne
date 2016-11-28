@@ -10,4 +10,8 @@ module.exports = {
     repo: '',
     token: '',
   },
+  souls: {
+    appName: '',
+    token: '',
+  },
 };
