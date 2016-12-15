@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const schedule = require('node-schedule');
+// const schedule = require('node-schedule');
 const twitterbot = require('./lib/twitterbot.js');
 const gh = require('./lib/github.js');
 const handlers = require('./lib/cmd-handlers.js');
@@ -78,12 +78,13 @@ twitterbot.init((err) => {
       }
     });
 
-    /**
-     * schedule repeating messages
-     */
-    schedule.scheduleJob('0 */3 * * *', () => {
-      twitterbot.randomQuote();
-    });
+    // REMOVED: Because tweets are bugged if not replying to a message.
+    // /**
+    //  * schedule repeating messages
+    //  */
+    // schedule.scheduleJob('0 */3 * * *', () => {
+    //   twitterbot.randomQuote();
+    // });
   }
 });
 
