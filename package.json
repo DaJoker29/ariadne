@@ -1,6 +1,6 @@
 {
   "name": "ariadne",
-  "version": "2.10.8",
+  "version": "2.11.0",
   "description": "Twitterbot Helper",
   "main": "ariadne.js",
   "private": true,
