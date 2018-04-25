@@ -1,7 +1,7 @@
 {
   "apps": [{
     "name": "ariadne",
-    "script": "./ariadne.js",
+    "script": "./index.js",
     "watch": false,
     "env": {
       "NODE_ENV": "production"
