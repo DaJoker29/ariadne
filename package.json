@@ -1,6 +1,6 @@
 {
   "name": "ariadne",
-  "version": "2.99.0",
+  "version": "3.0.0",
   "description": "Automated Helper",
   "main": "index.js",
   "scripts": {
