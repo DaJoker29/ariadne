@@ -1,24 +1,14 @@
 {
   "name": "ariadne",
-  "version": "2.11.0",
-  "description": "Twitterbot Helper",
-  "main": "ariadne.js",
-  "private": true,
-  "engines": {
-    "node": ">=6"
-  },
+  "version": "3.0.0",
+  "description": "Automated Helper",
+  "main": "index.js",
   "scripts": {
-    "eslint": "eslint . --ext .js,.json",
-    "fix": "eslint --fix . --ext .js,.json",
-    "test": "mocha -R spec test",
-    "start": "pm2 start .pm2.json",
-    "reload": "./tools/reload-server.sh",
-    "dev": "nodemon ariadne.js --config .nodemon.json",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "fix": "eslint --fix .",
     "preversion": "git checkout master && git merge --no-ff develop -m 'Pull changes for release bump'",
-    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push",
-    "dist": "./tools/upgrade.sh",
-    "coverage": "istanbul cover node_modules/.bin/_mocha -- -R spec test && xdg-open ./coverage/lcov-report/index.html",
-    "doc": "node_modules/.bin/jsdoc -t jaguarjs-jsdoc -c .jsdoc.json && xdg-open ./docs/index.html"
+    "postversion": "git push && git push --tags && git checkout develop && git merge --no-ff master -m 'Sync Develop branch' && git push"
   },
   "repository": {
     "type": "git",
@@ -31,30 +21,13 @@
   },
   "homepage": "https://github.com/DaJoker29/ariadne#readme",
   "dependencies": {
-    "body-parser": "1.15.2",
-    "commander": "2.9.0",
-    "eslint": "3.9.1",
+    "dotenv": "5.0.1",
+    "eslint": "4.19.1",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-plugin-import": "2.11.0",
     "eslint-plugin-json": "1.2.0",
-    "express": "4.14.0",
-    "github": "6.0.4",
-    "graceful-fs": "4.1.10",
-    "jsdoc": "3.4.3",
-    "lodash": "4.16.6",
-    "mathjs": "3.7.0",
-    "mocha": "3.1.2",
-    "moment": "2.16.0",
-    "mongoose": "4.6.7",
-    "mongoose-unique-validator": "1.0.2",
-    "node-schedule": "1.2.0",
-    "nodemailer": "2.6.4",
-    "rand-token": "0.2.1",
-    "twitter": "1.4.0"
-  },
-  "devDependencies": {
-    "eslint": "3.9.1",
-    "eslint-config-airbnb": "13.0.0",
-    "eslint-plugin-import": "2.2.0",
-    "eslint-plugin-jsx-a11y": "2.2.3",
-    "eslint-plugin-react": "6.6.0"
+    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint-plugin-react": "7.7.0",
+    "twitch-bot": "1.2.5"
   }
 }
